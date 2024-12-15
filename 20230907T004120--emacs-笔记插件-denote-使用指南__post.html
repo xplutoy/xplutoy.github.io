@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2024-12-15 Sun 10:21 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Emacs 笔记插件 Denote 使用指南</title>
+<meta name="author" content="杨雪" />
+<meta name="generator" content="Org Mode" />
+<link rel='stylesheet' href='./static/org.css' type='text/css'/> 
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> | <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+</div>
+<div id="content" class="content">
+<h1 class="title">Emacs 笔记插件 Denote 使用指南</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org38f2b93">1. Intro</a></li>
+<li><a href="#org5d935b5">2. Configuration</a></li>
+<li><a href="#orgc867b17">3. Usage</a></li>
+<li><a href="#org9b4cc6b">4. Misc</a>
+<ul>
+<li><a href="#orgfa7c1a8">4.1. Add or remove keywords</a></li>
+<li><a href="#org5fd5947">4.2. Renaming files</a></li>
+<li><a href="#org0bc8100">4.3. Linking notes</a></li>
+<li><a href="#org5529619">4.4. 实现 zs 笔记命令</a></li>
+<li><a href="#orge0fe6fb">4.5. Denote 可以结合 Org 动态块来索引已有笔记</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org38f2b93" class="outline-2">
+<h2 id="org38f2b93"><span class="section-number-2">1.</span> Intro</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+用了一段时间 Org-roam 插件，但自己真的很少用到双链笔记的特性，也很少用到 org-roam-ui。可能跟我记录的笔记类型有关，自己更喜欢记录主题笔记。这类笔记内容组织较为集中，直接放到一个 Org 文件中最方便，而不是像 zs 那样分解成单个原子。所以今天还是决定使用 Denote 这个笔记插件。
+</p>
+
+<p>
+Denote 并不预设一种记笔记的方式（Org-roam 预设了双链笔记的形式），其只是简单的设定了一种及其简单的笔记文件命名约定，这种命名约定也只是为了方便笔记可以用已有的工具检索。所以 Denote 设计很简约，同时又很灵活，每个人都可以根据自己的需求来定制自己习惯的笔记流程。
+</p>
+
+<p>
+Denote 默认生成的文件名样式为如下：
+</p>
+
+<pre class="example" id="org0df3eed">
+DATE--TITLE__KEYWORDS.EXTENSION
+</pre>
+
+<p>
+注意，其中 DATE 项是一个文件或者笔记的唯一标识，不允许更改，不然会使 denote-link 破损。
+</p>
+
+<p>
+在其官网上，作者列出了其设计 denote 的原则，非常切合我最近的思考：
+</p>
+
+<dl class="org-dl">
+<dt>Predictability</dt><dd>File names must follow a consistent and descriptive naming convention.</dd>
+<dt>Composability</dt><dd>Be a good Emacs citizen, by integrating with other packages or built-in functionality instead of re-inventing functions such as for filtering or greping.</dd>
+<dt>Portability</dt><dd>Notes are plain text and should remain portable.</dd>
+<dt>Flexibility</dt><dd>Do not assume the user’s preference for a note-taking methodology.</dd>
+<dt>Hackability</dt><dd>Denote’s code base consists of small and reusable functions. They all have documentation strings. The idea is to make it easier for users of varying levels of expertise to understand what is going on and make surgical interventions where necessary.</dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-org5d935b5" class="outline-2">
+<h2 id="org5d935b5"><span class="section-number-2">2.</span> Configuration</h2>
+<div class="outline-text-2" id="text-2">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package denote
+  :after org
+  :demand t
+  :custom
+  (denote-directory yx/org-dir)
+  (denote-infer-keywords t)
+  (denote-known-keywords nil)
+  (denote-allow-multi-word-keywords t)
+  (denote-prompts '(title keywords subdirectory))
+  :hook
+  (dired-mode . denote-dired-mode-in-directories)
+  )
+</pre>
+</div>
+
+<p>
+配置很简单，注意其中 <code>denote-prompts</code> 的设置，我在默认值后面添加了 subdirectory. 这样每次新建笔记时，denote 都会提示用户选择子目录。我这样设置，是因为我把自己的笔记分为几大块，有日记，文献笔记，卡片笔记，博客文章等。这样我就能在创建笔记时，把笔记放入对应的目录下，完成第一级分类。
+</p>
+
+<p>
+我设置了可以用多个 keyword，在提示输入时，多个 keyword 用逗号分隔一次输入。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc867b17" class="outline-2">
+<h2 id="orgc867b17"><span class="section-number-2">3.</span> Usage</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+在这里，我不用 org-capture 特性来新建笔记，前者更适合用于 GTD 项的捕获。下面是我为denote 设置的快捷键，直接访问 denote 的功能：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(bind-keys
+ ("C-c n c"   . denote)
+ ("C-c n t"   . yx/denote-template)
+ ("C-c n C-c" . citar-create-note)
+ ("C-c n C-o" . citar-denote-dwim)
+ ("C-c n n"   . denote-open-or-create)
+ ("C-c n i"   . denote-link-or-create)
+ ("C-c n l"   . denote-backlinks)
+ ("C-c n f"   . denote-find-link)
+ ("C-c n b"   . denote-find-backlink))
+</pre>
+</div>
+
+<p>
+<code>denote-template</code> 可以用模版来创建笔记，应该会非常有用，其默认实现不会提示选择子目录，我依照 denote-template 改了一下：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defun yx/denote-template ()
+    "Create note while prompting for a template.
+This is equivalent to calling `denote' when `denote-prompts' is
+set to \\='(template title keywords subdirectory)."
+    (declare (interactive-only t))
+    (interactive)
+    (let ((denote-prompts '(template title keywords subdirectory)))
+      (call-interactively #'denote)))
+</pre>
+</div>
+
+<p>
+模版通过参数 denote-templates 来设置，目前的配置中没有模版，等有需要的时候再添加。
+</p>
+
+<p>
+denote-open-or-create 命令可以用来创建或打开 denote 文件，minibuffer 会有提示补全。我用它查询打开已有的笔记，几乎够用了，所以也就没有安装另一个看着还不错的插件 <a href="https://github.com/mclear-tools/consult-notes">consult-note</a>.
+</p>
+
+<p>
+其他命令看名字就几乎知道其功能了，不再多言。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9b4cc6b" class="outline-2">
+<h2 id="org9b4cc6b"><span class="section-number-2">4.</span> Misc</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+这下面的内容是其官网文档的一些总结，以及自己使用时的一些心得。
+</p>
+</div>
+
+<div id="outline-container-orgfa7c1a8" class="outline-3">
+<h3 id="orgfa7c1a8"><span class="section-number-3">4.1.</span> Add or remove keywords</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+通过 <code>denote-keywords-add</code> 和 <code>denote-keywords-remove</code> 这两个命令可以在笔记的 front-matter 添加或删除 keyword，并同时修改文件。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5fd5947" class="outline-3">
+<h3 id="org5fd5947"><span class="section-number-3">4.2.</span> Renaming files</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+denote 提供了一些保持文件命名约定和笔记 front-matter 一致的命令
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">denote-rename-file</td>
+<td class="org-left">rename a file and updates existing front matter</td>
+</tr>
+
+<tr>
+<td class="org-left">denote-dired-rename-marked-files</td>
+<td class="org-left">rename marked files in Dired</td>
+</tr>
+
+<tr>
+<td class="org-left">denote-rename-file-using-front-matter</td>
+<td class="org-left">rename a file using front matter</td>
+</tr>
+
+<tr>
+<td class="org-left">denote-dired-rename-marked-files-using-front-matter</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">denote-change-file-type</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+文件的 identifier 永远不会改变，即使修改了文件的 front-matter。其被设计成链接的唯一标识和真实性的唯一来源，防止由于打错字或类似的误操作可能引起的破损。
+</p>
+
+<p>
+如果不小心删除了front-matter，可以用 <code>denote-add-front-matter</code> 命令来重新生成font-matter.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0bc8100" class="outline-3">
+<h3 id="org0bc8100"><span class="section-number-3">4.3.</span> Linking notes</h3>
+<div class="outline-text-3" id="text-4-3">
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">denote-add-links</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">denote-link</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">denote-link-dired-marked-notes</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">denote-link-after-creating</td>
+<td class="org-left">Create new note in the background and link to it directly.</td>
+</tr>
+
+<tr>
+<td class="org-left">denote-link-or-create</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-org5529619" class="outline-3">
+<h3 id="org5529619"><span class="section-number-3">4.4.</span> 实现 zs 笔记命令</h3>
+<div class="outline-text-3" id="text-4-4">
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">denote-backlinks</td>
+<td class="org-left">open the backlinks’ buffer</td>
+</tr>
+
+<tr>
+<td class="org-left">denote-find-link</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">denote-find-backlink</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-orge0fe6fb" class="outline-3">
+<h3 id="orge0fe6fb"><span class="section-number-3">4.5.</span> Denote 可以结合 Org 动态块来索引已有笔记</h3>
+<div class="outline-text-3" id="text-4-5">
+<p>
+加载相关模块
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">;; Register Denote's Org dynamic blocks
+(require 'denote-org-dblock)
+</pre>
+</div>
+
+<p>
+动态块可以执行特定函数来获得和更新它的内容，denote 提供了 <code>denote-links</code> 和 <code>denote-backlinks</code> 两种动态块，来获得双链的链接信息。
+</p>
+
+<p>
+下面是一个denote-links的动态块：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">#+BEGIN: denote-links :regexp "_emacs"
+
+#+END:
+</pre>
+</div>
+
+<p>
+在其中按 <code>C-c C-c</code>, 就可以收集 keyword 为“emacs”的链接了。每个动态块函数还可以允许带参数，具体看官方文档。
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2024-12-15 Sun 10:13<br/></p> </div>
+</div>
+</body>
+</html>

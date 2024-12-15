@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2024-12-15 Sun 10:21 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>在 emacs 中用 dumper 提升启动速度</title>
+<meta name="author" content="杨雪" />
+<meta name="generator" content="Org Mode" />
+<link rel='stylesheet' href='./static/org.css' type='text/css'/> 
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> | <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+</div>
+<div id="content" class="content">
+<h1 class="title">在 emacs 中用 dumper 提升启动速度</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orge6b91dd">1. Config</a>
+<ul>
+<li><a href="#org478a58a">1.1. 定制需要 dump 的包</a></li>
+<li><a href="#org3f70651">1.2. 加载 dump-file 启动 emacs</a></li>
+<li><a href="#orge60a1a5">1.3. Protable-dumper的一些问题</a></li>
+</ul>
+</li>
+<li><a href="#org76393bc">2. 结语</a></li>
+</ul>
+</div>
+</div>
+<p>
+今天尝试了一下 emacs 的 protable dumper 功能，它把加载的 package 导出到一个外部文件中，然后启动 emacs 时直接
+加载这个文件，这样比一个一个 package 的加载速度快很多。lazyload 是延迟到首次调用时才加载 package，这会导致两个问题：
+</p>
+
+<dl class="org-dl">
+<dt>首次调用的延迟很恼人</dt><dd>在首次进入 prog-mode 或者 org-mode 时，停顿很明显。</dd>
+<dt>刚启动 emacs 时响应延迟</dt><dd>一些通过timer或者延迟 <code>after-init-hook</code> 实现的 lazyload 会导致一些包在启动 emacs 后扎堆加载。</dd>
+</dl>
+
+<p>
+protable dumper却可以规避这两个问题，因为在加载 dump-file 后，所有包已经准备就绪。
+</p>
+
+<p>
+不过当前 protable dumper 也并不完美：
+</p>
+
+<ol class="org-ol">
+<li>比正常启动 emacs 要多出一个导出 dump-file 的过程。</li>
+<li>一些包导出时会出错等等。</li>
+</ol>
+<p>
+所以，我当前的方案是把 protable dumper 作为补充方案，解决 lazyload 的上述两个问题。
+</p>
+
+<div id="outline-container-orge6b91dd" class="outline-2">
+<h2 id="orge6b91dd"><span class="section-number-2">1.</span> Config</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+主要参考了网上的这篇文章：<a href="https://archive.casouri.cc/note/2020/painless-transition-to-portable-dumper/index.html">Painless Transition to Portable Dumper</a> 。这篇文章写得很详尽，把配置思路和踩的一些坑都说的很清楚。下面的内容只是它的一个简述和总结。
+</p>
+</div>
+
+<div id="outline-container-org478a58a" class="outline-3">
+<h3 id="org478a58a"><span class="section-number-3">1.1.</span> 定制需要 dump 的包</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+有两类包是我需要dump的：
+</p>
+
+<ul class="org-ul">
+<li>首次加载延迟很久的包</li>
+<li>启动emacs马上需要用到的包</li>
+</ul>
+
+<p>
+Emacs 提供了 <code>dump-emacs-portable</code> 函数把当前已经加载的包导出到 dump-file。为了只导出特定的包，可以单独提供一个为 dump 所需的配置文件，然后执行下面命令导出 dump-file：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">emacs --batch -q -l dump.el
+</pre>
+</div>
+
+<p>
+在 <code>dump.el</code> 中只加载特定的 package，然后调用 <code>dump-emacs-portable</code> 函数。
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(require 'package)
+(package-initialize)
+(setq yx/dumped-load-path load-path
+      yx/dumped t)
+(dolist (package
+         '(elec-pair
+           savehist
+           winner
+           flyspell
+           flymake
+           eglot
+           use-package
+           ;; evil
+           evil
+           evil-owl
+           evil-mc
+           evil-escape
+           evil-surround
+           evil-matchit
+           evil-visualstar
+           vimish-fold
+           evil-vimish-fold
+           ef-themes))
+  (require package))
+;; pre-load themes
+(load-theme 'ef-duo-light t t)
+;; dump image
+(dump-emacs-portable (expand-file-name "emacs.pdmp" user-emacs-directory))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3f70651" class="outline-3">
+<h3 id="org3f70651"><span class="section-number-3">1.2.</span> 加载 dump-file 启动 emacs</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+Emacs 提供了 <code>--dump-file</code> 命令行参数，用来在启动 emacs 加载制定 dump-file：
+</p>
+
+<pre class="example">
+emacs --dump-file="/User/yx/.emaorg-super-agenda cs.d/emacs.pdmp"
+</pre>
+
+<p>
+为了不影响 emacs 的正常启动方式，即执行 <code>emacs</code> 命令仍按之前的方式启动，需要在 <code>init.el</code> 文件中添加dump-file启动的条件分支。在上面的 <code>dump.el</code> 中添加了 <code>yx/dumped</code> 变量，并且设置为 <code>t</code> ，这样在导出的dump-file中也会有这个变量，然后在启动过程中就能通过判断这个变量来判断启动方式。下面是 <code>init.el</code> 中的判断逻辑：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-elisp">(if yx/dumped
+    (dumped-run)
+  (normal-run)
+  )
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge60a1a5" class="outline-3">
+<h3 id="orge60a1a5"><span class="section-number-3">1.3.</span> Protable-dumper的一些问题</h3>
+<div class="outline-text-3" id="text-1-3">
+<ul class="org-ul">
+<li>一些包导出报错（global-undo-tree, org-super-agenda ）</li>
+<li>一些默认模式没有启动（transient-mark-mode, global-font-lock-mode）</li>
+<li><code>--dump-file</code> 后的路径名中不能使用 <code>~</code></li>
+<li><code>scratch buffer</code> 有点异常</li>
+</ul>
+
+<p>
+这些问题在<a href="https://archive.casouri.cc/note/2020/painless-transition-to-portable-dumper/index.html">Painless Transition to Portable Dumper</a> 都有解决。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org76393bc" class="outline-2">
+<h2 id="org76393bc"><span class="section-number-2">2.</span> 结语</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+由于之前的配置几乎都是懒加载的，启动速度已经在 0.7 ~ 0.8 左右了，加上 dumper 后速度稍微变慢了一点，在 0.85 左右。不过整个使用过程比以前丝滑了不少。
+</p>
+
+<p>
+最后再说说自己使用中一个不好的感受吧：
+</p>
+
+<p>
+每次添加 package 后都要 dump 一次，很麻烦，而且性能提升感受并不明显。
+想了一些改进的办法
+</p>
+
+<ol class="org-ol">
+<li>隔一段时间 dump 一次，不要每次添加软件都 dump</li>
+<li>坚持只 dump 启动延时很高的 package</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2024-12-15 Sun 10:17<br/></p> </div>
+</div>
+</body>
+</html>

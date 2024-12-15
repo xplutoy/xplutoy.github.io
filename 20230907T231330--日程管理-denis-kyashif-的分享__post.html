@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2024-12-15 Sun 10:21 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>日程管理: Denis Kyashif 的分享</title>
+<meta name="author" content="杨雪" />
+<meta name="generator" content="Org Mode" />
+<link rel='stylesheet' href='./static/org.css' type='text/css'/> 
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> | <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+</div>
+<div id="content" class="content">
+<h1 class="title">日程管理: Denis Kyashif 的分享</h1>
+<p>
+Denis Kyashif 分享了他的<a href="https://deniskyashif.com/2023/08/28/task-management-using-emacs-and-org-mode/">日程管理理念</a>，其中有两条最重要的性质：
+</p>
+
+<dl class="org-dl">
+<dt>1. Easy Writing</dt><dd>Maintaining my tasks should not cause me extra effort.</dd>
+<dt>2. Easy Reading</dt><dd>I should quickly get the needed information and never miss anything.</dd>
+</dl>
+
+<p>
+我的观点是，现实环境总是比较复杂，计划也总是在计划之外。清晰简洁的计划并不现实，日程安排不可避免的会反应出这种计划外的变化和混乱。
+</p>
+
+<p>
+因此对自己而言， <b>Easy Writing</b> 和 <b>Easy Reading</b> 不如改为 <b>Quick Writing</b> 和 <b>Quick Reading</b>. 很多计划并不需要深思熟虑，只需要简单的记下来，然后去做，如果中途有什么变更，也可以随时停下来，重新安排协调。
+</p>
+
+<p>
+当然，如何在计划与变化之间找到恰当的平衡是一门艺术，或者就是那些时间管理大师真正的看家本领。这门技艺需要在实践中反复练习，只要在做计划时朝着「Get Thing Done」的目标去做，事情就会变得很简单。
+</p>
+
+<dl class="org-dl">
+<dt>3. Not everything must be a Task</dt><dd>有些事并不需要列入日程安排，而是直接去做</dd>
+</dl>
+
+<p>
+我很认同这一点，我想如果一个人明白了这句话的真实含义，或许根本就不需要日程管理。
+</p>
+
+<p>
+作者分享了其GTD的组织结构：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-org">└──  Root
+   └──  [Project]      :Tag:
+     └──  [Task]
+      ...
+   ...
+</pre>
+</div>
+
+<p>
+这结构跟我的很类似，任务按 Topic 分类，每个 Topic 可以看做一个没有截止日期的 Project. 每个 Topic 下面是具体的任务，一般而言，Topic 下面极少会超过二级结构。我的做法类似，TODO 只用在 Topic 下的子任务，子任务下面是具体的 CheckList，这样能保证 OrgAgenda 界面的简洁。我用 project 标签（子树不继承）来标识项目，结合 CATEGORY 属性来标识任务具体所属 Topic 和任务检索。
+</p>
+
+<p>
+关于 OrgMode 的 deadline/schedule 关键字的使用，作者给的建议是
+</p>
+
+<ol class="org-ol">
+<li>只对时间敏感的任务设置截止日期</li>
+<li>只对完成时间需要超过一天的任务设置 schedule-time</li>
+</ol>
+
+<p>
+非常忠实的建议。作者还列了其常用的 Org-agenda 操作：
+</p>
+
+<ul class="org-ul">
+<li>Checking my Tasks for the day/week using the <code>d/w</code> keys.</li>
+<li>Checking the tasks for a project by using <code>\</code> and input <code>+{TagName}</code></li>
+<li>Updating a Task’s state by pressing <code>t</code>.</li>
+<li>Editing a Task by placing the caret on it and pressing <code>[Tab]</code>.</li>
+<li>Switching to next/previous week by pressing <code>f/b</code> respectively.</li>
+</ul>
+
+<p>
+很感谢 Denis Kyashif 的分享，没有过多的技巧，复杂的流程，全是实用且真诚的建议。
+</p>
+</div>
+<div id="postamble" class="status">
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2024-12-15 Sun 10:04<br/></p> </div>
+</div>
+</body>
+</html>

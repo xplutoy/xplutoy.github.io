@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2024-12-15 Sun 10:21 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Meow 使用指南</title>
+<meta name="author" content="杨雪" />
+<meta name="generator" content="Org Mode" />
+<link rel='stylesheet' href='./static/org.css' type='text/css'/> 
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> | <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+</div>
+<div id="content" class="content">
+<h1 class="title">Meow 使用指南</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org30dfe96">1. Intro</a>
+<ul>
+<li><a href="#org8d5e7ab">1.1. Normal模态</a></li>
+<li><a href="#org0b77f19">1.2. Insert模态</a></li>
+<li><a href="#org4a3db43">1.3. 选择命令</a></li>
+<li><a href="#org8488de3">1.4. 扩展选择</a></li>
+<li><a href="#orgbf39f78">1.5. 依对象扩展选择区域</a></li>
+<li><a href="#org8f14040">1.6. Find/Till</a></li>
+<li><a href="#orgb1babbc">1.7. 修改命令</a></li>
+<li><a href="#org3d56e18">1.8. BEACON (BATCHED KEYBOARD MACROS)</a>
+<ul>
+<li><a href="#orgcef4cd3">1.8.1. Beacon 可以结合 emacs 的 keyboard-macros 系统完成复杂的编辑任务</a></li>
+</ul>
+</li>
+<li><a href="#orgd39bf7d">1.9. 快速访问和搜索</a></li>
+</ul>
+</li>
+<li><a href="#org6ad6caf">2. Conceptions</a>
+<ul>
+<li><a href="#org6881ee2">2.1. 模态</a>
+<ul>
+<li><a href="#org0d5871a">2.1.1. Motion 模态</a></li>
+<li><a href="#org5f09d14">2.1.2. Keypad 模态</a></li>
+<li><a href="#org2b9c642">2.1.3. Beacon模态</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org78a8019">3. Config</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org30dfe96" class="outline-2">
+<h2 id="org30dfe96"><span class="section-number-2">1.</span> Intro</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Meow 是一个模态编辑模式，与 evil 类似，其命令与具体的模式有关，其大致思想就是把文本编辑大致分为插入和编辑模态，不同的模特完成不同的任务，这可以减少每个操作的按键次数，达到高效快速编辑的作用。
+</p>
+
+<p>
+以移动命令举例，在 emacs 中，向前移动一个字符的快捷键为 <code>C-f</code> ，但在 vim 中，或者 meow 中，只要切换到Nornal模态中，按一个键 <code>f</code> 就可以了。
+</p>
+
+<p>
+我们现在来考虑，这两种编辑方式哪一种更有优势。
+</p>
+
+<p>
+如果文本插入和文本编辑之间相互穿插的很频繁，那么来回切换模式就很麻烦，这时候用 emacs 的编辑方式就很方便，可以省去很多模态切换的操作；如果文本插入和文本编辑之间切换的时间间隔很长，这时候模态编辑方式就更方便，一次模态切换，可以省去很多的 modifier-key 的按键操作，高效又省力。
+</p>
+
+<p>
+所以结合这两种方式才是最好的，这也是 evil 这个插件设计的原则，不要把 emacs 和 vim 放在对立面上，而是把各自的优点结合在一起。这是一种很好的实用主义的观点和设想。不过 evil 更偏重于引入 vim 的编辑方式到 emacs 世界中，但没有太考虑如何更好的结合这两种方式，这些需要你自己去思考和设计。所以安装 evil 后，如果不经过快捷按键的精心设计，那么则会导致按键配置的冗余和混乱。比如我刚开始用 evil 时，引入了 evil 的 leader-key 的按键配置的同时也保留着 emacs 的原始按键配置，经常一个命令对应多个快捷按键，增加了很多记忆负担，也容易引起编辑时的选择困难。
+</p>
+
+<p>
+如何结合 emacs 和模态编辑呢，一种简单的想法是，在插入模态中，保留 emacs 的编辑命令，这有点像 spacemacs 的 hybrid 模态，这样在实际编辑时，就可以根据当前编辑任务的具体情况，选择切换到 Normal 模式进行集中编辑，还是就在 Insert 模态中直接用 emacs 的编辑命令编辑，然后继续插入。
+</p>
+
+<p>
+Meow 没有 vim 的包袱，更加纯粹，而且在设计之初就考虑了如何与 emacs 的按键设计兼容与结合。所以引入 meow 并不会增加多余的记忆负担和按键冗余。同时，它不用考虑 vim 的兼容问题，所以可以只配置自己需要的按键。
+</p>
+
+<p>
+如不是考虑到放弃 vim 的成本，可能自己早就迁移过来了，看这次学习的情况如何吧，如果顺利，后面就完全迁移到这个上面来。
+</p>
+</div>
+
+<div id="outline-container-org8d5e7ab" class="outline-3">
+<h3 id="org8d5e7ab"><span class="section-number-3">1.1.</span> Normal模态</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li>移动</li>
+</ul>
+
+<p>
+Normal模态下的基于字符的移动，与 vim 一致，使用 <code>h,j,k,l</code> 。
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">h</td>
+<td class="org-left">move left</td>
+</tr>
+
+<tr>
+<td class="org-left">j</td>
+<td class="org-left">move down</td>
+</tr>
+
+<tr>
+<td class="org-left">k</td>
+<td class="org-left">move up</td>
+</tr>
+
+<tr>
+<td class="org-left">l</td>
+<td class="org-left">move right</td>
+</tr>
+</tbody>
+</table>
+
+<ul class="org-ul">
+<li>删除</li>
+</ul>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">d</td>
+<td class="org-left">向前删除一个字符</td>
+</tr>
+
+<tr>
+<td class="org-left">D</td>
+<td class="org-left">向后删除一个字符</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-org0b77f19" class="outline-3">
+<h3 id="org0b77f19"><span class="section-number-3">1.2.</span> Insert模态</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+按 <code>i</code> 进入「Insert模态」，按 <code>ESC</code> 键退出「Insert」进入「Normal」。一些其他进入「Insert」的快捷方式
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">i</td>
+<td class="org-left">Insert cursor before the selection</td>
+</tr>
+
+<tr>
+<td class="org-left">a</td>
+<td class="org-left">Insert cursor after the selection</td>
+</tr>
+
+<tr>
+<td class="org-left">I</td>
+<td class="org-left">Insert new line above the current line</td>
+</tr>
+
+<tr>
+<td class="org-left">A</td>
+<td class="org-left">Insert new line below the current line</td>
+</tr>
+
+<tr>
+<td class="org-left">m a</td>
+<td class="org-left">Insert cursor at the start of the line</td>
+</tr>
+
+<tr>
+<td class="org-left">x a</td>
+<td class="org-left">Insert cursor at the end of the lin</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+其中 <code>m</code> 是向后选择当前行的开头直到非空行的结尾， <code>a</code> 是在当前选择后面插入，组合在一起就是在当前行的开头插入。同样 <code>x</code> 是向前选择当前行到其结尾，然后 <code>a</code> 在选择后插入，结合起来就是在当前行结尾处插入。
+</p>
+
+<p>
+在这里可以看到 meow 的编辑模式，选择 + 动作。这一点跟 vim 刚好是反过来的。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org4a3db43" class="outline-3">
+<h3 id="org4a3db43"><span class="section-number-3">1.3.</span> 选择命令</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+除了上面的 <code>x</code> 和 <code>m</code> 外，还有其他一些选择命令，跟 vim 一样，也是按照语义来定义的：
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">e</td>
+<td class="org-left">向前选择，直到当前word末尾</td>
+</tr>
+
+<tr>
+<td class="org-left">E</td>
+<td class="org-left">向前选择，直到当前符号末尾</td>
+</tr>
+
+<tr>
+<td class="org-left">b</td>
+<td class="org-left">向后选择，直到当前单词开头</td>
+</tr>
+
+<tr>
+<td class="org-left">B</td>
+<td class="org-left">向后选择，直到当前符号开头</td>
+</tr>
+
+<tr>
+<td class="org-left">s</td>
+<td class="org-left">删除当前选择，如果当前没有任何选择，则删除当前位置到该行结尾，类似于emacs的C-k</td>
+</tr>
+
+<tr>
+<td class="org-left">d</td>
+<td class="org-left">删除当前char</td>
+</tr>
+
+<tr>
+<td class="org-left">w</td>
+<td class="org-left">选择当前光标下的整个单词</td>
+</tr>
+
+<tr>
+<td class="org-left">W</td>
+<td class="org-left">选择当前光标下的整个符号</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+符号只用空格隔开，单词可以用其他字符隔开。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8488de3" class="outline-3">
+<h3 id="org8488de3"><span class="section-number-3">1.4.</span> 扩展选择</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+当按了上面选择命令后，可以接着进行选择扩展，比如按了 <code>w</code> 选择当前单词，在按 <code>e</code> 向前继续扩展选择到下一个单词末尾。大致模式是，选择命令后面继续接选择命令为扩展选择区域。
+</p>
+
+<p>
+可以按 <code>;</code> 调转光标在选择区域中的方向， <code>z</code> 是 undo 之前的选择， <code>g</code> 是清楚当前所有选择。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbf39f78" class="outline-3">
+<h3 id="orgbf39f78"><span class="section-number-3">1.5.</span> 依对象扩展选择区域</h3>
+<div class="outline-text-3" id="text-1-5">
+<p>
+除了上面的选择扩展，还有更加通用的基于对象的扩展选择操作：
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">[</td>
+<td class="org-left">expand before cursor until beginning of&#x2026;</td>
+</tr>
+
+<tr>
+<td class="org-left">]</td>
+<td class="org-left">expand after cursor until end of&#x2026;</td>
+</tr>
+
+<tr>
+<td class="org-left">,</td>
+<td class="org-left">select the inner part of&#x2026;</td>
+</tr>
+
+<tr>
+<td class="org-left">.</td>
+<td class="org-left">select the whole part of&#x2026;</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+这些操作后面接不同的对象，完成不同编辑区域的选择：
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">r</td>
+<td class="org-left">round parenthesis</td>
+</tr>
+
+<tr>
+<td class="org-left">s</td>
+<td class="org-left">square parenthesis</td>
+</tr>
+
+<tr>
+<td class="org-left">c</td>
+<td class="org-left">curly parenthesis</td>
+</tr>
+
+<tr>
+<td class="org-left">g</td>
+<td class="org-left">string</td>
+</tr>
+
+<tr>
+<td class="org-left">p</td>
+<td class="org-left">paragraph</td>
+</tr>
+
+<tr>
+<td class="org-left">l</td>
+<td class="org-left">line</td>
+</tr>
+
+<tr>
+<td class="org-left">d</td>
+<td class="org-left">defun</td>
+</tr>
+
+<tr>
+<td class="org-left">b</td>
+<td class="org-left">buffer</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Meow 为这些操作提供了方面的操作界面，在 Normal 模态按下操作，比如 <code>]</code> ，meow 会马上弹出对象选择菜单，而不用完全把这些对象记住，其在可用性方面做得比 vim 更好。
+</p>
+
+<p>
+Meow 的在做选择操作的同时也移动光标，比如要移动到整个 buffer 的开头，可以按 <code>[b</code> ，这对应于 vim 的 <code>gg</code> 命令，以及 emacs 的 <code>M-&lt;</code> 命令。但这种统一选择移动的设计，让这种方式更容易理解和记忆，这是 vim 和 emacs 之前所缺失的。
+</p>
+
+<p>
+要回到之前的位置，只需按 <code>z</code> 取消之前的选择就可以了。
+</p>
+
+<p>
+注意，有些对象必须在对应的 major-mode 中才有用，比如 defun 对象，一般而言要在 prog-mode 中才能正确识别。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8f14040" class="outline-3">
+<h3 id="org8f14040"><span class="section-number-3">1.6.</span> Find/Till</h3>
+<div class="outline-text-3" id="text-1-6">
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">t</td>
+<td class="org-left">select until the next specific characte</td>
+</tr>
+
+<tr>
+<td class="org-left">f</td>
+<td class="org-left">same to t, but jump over that character</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+这个命令类似于 vim 的 t，f 命令，向前跳转到某个字符，可以通过 <code>-</code> 指定向后的方向，在 vim 中则是用大写字母 T，F 来向后查找。用 <code>-</code> 这种方式指定方向的思想来自 emacs 的 universal-args，这是 meow 结合 vim 和 emacs 两个世界的优势的一个例证。
+</p>
+
+<p>
+在 emacs 中要完成这些操作，需要调用 <code>zap-uo-to-word</code> 命令，一般绑定到 <code>M-z</code> ，可以通过 <code>C-u -</code> 或者 <code>M--</code> 来指定方向。
+</p>
+
+<p>
+与 vim 和 emacs 比较而言，meow 的方式更加简洁高效。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb1babbc" class="outline-3">
+<h3 id="orgb1babbc"><span class="section-number-3">1.7.</span> 修改命令</h3>
+<div class="outline-text-3" id="text-1-7">
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">c</td>
+<td class="org-left">delete the current selection and switch to Insert mode</td>
+</tr>
+
+<tr>
+<td class="org-left">d i</td>
+<td class="org-left">与 c d 等同</td>
+</tr>
+
+<tr>
+<td class="org-left">s</td>
+<td class="org-left">kill，剪切复制当前选择区域</td>
+</tr>
+
+<tr>
+<td class="org-left">y</td>
+<td class="org-left">yank,复制当前区域</td>
+</tr>
+
+<tr>
+<td class="org-left">p</td>
+<td class="org-left">在当前光标插入复制内容</td>
+</tr>
+
+<tr>
+<td class="org-left">u</td>
+<td class="org-left">undo</td>
+</tr>
+
+<tr>
+<td class="org-left">U</td>
+<td class="org-left">只 undo 当前选中区域的内容</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-org3d56e18" class="outline-3">
+<h3 id="org3d56e18"><span class="section-number-3">1.8.</span> BEACON (BATCHED KEYBOARD MACROS)</h3>
+<div class="outline-text-3" id="text-1-8">
+<p>
+Meow 这种先选择后操作的模式，可以让其执行 multi-editing 像内置操作一样容易。
+</p>
+
+<ol class="org-ol">
+<li>首先选择一块区域，可以通过任何选择操作</li>
+<li>按 <code>G</code> 进入 BEACON 模态</li>
+<li>执行选择（子选择），修改操作（这会在所有子区域同时执行修改操作）。</li>
+<li>退出Insert模态，并按 <code>G</code> 退出 Beacon 模态</li>
+<li>完成编辑</li>
+</ol>
+
+<p>
+这是 meow 与 vim 之间最大的不同，其强大简洁的 multi-editing 能力，是其最吸引我的地方。
+</p>
+</div>
+
+<div id="outline-container-orgcef4cd3" class="outline-4">
+<h4 id="orgcef4cd3"><span class="section-number-4">1.8.1.</span> Beacon 可以结合 emacs 的 keyboard-macros 系统完成复杂的编辑任务</h4>
+<div class="outline-text-4" id="text-1-8-1">
+<p>
+下面是一个例子：
+</p>
+
+<pre class="example" id="org50ef1c2">
+1 2 3
+=&gt;
+[| "1" |] [| "2" |] [| "3" |]
+</pre>
+
+<p>
+具体操作：
+</p>
+
+<ol class="org-ol">
+<li>把光标放到例子的第一行，按 <code>x</code> 选择要编辑的行</li>
+<li>按 <code>G</code> 进入 Beacon 模态</li>
+<li>按 <code>b</code> 在每个单词的前段插入伪光标</li>
+<li>按 <code>F3</code> 启动 emacs 的 key-marco 记录</li>
+<li>编辑</li>
+<li>按 <code>F4</code> 介绍宏记录并应用</li>
+<li>按 <code>G</code> 结束 Beacon 模态</li>
+<li>编辑结束</li>
+</ol>
+
+<p>
+另一个例子：
+</p>
+
+<pre class="example" id="org69752a7">
+x-y-foo-bar-baz
+=&gt;
+x_y_foo_bar_baz
+</pre>
+
+<p>
+具体操作：
+</p>
+
+<ol class="org-ol">
+<li>按 <code>W</code> 选中第一行的整个符号</li>
+<li>按 <code>G</code> 激活第二选择区域</li>
+<li>按 <code>f -</code> 查找每个“-”字符，并在字符“-”处自动插入伪光标</li>
+<li>按 <code>c</code> 修改字符“-”，meow 会自动进行记录</li>
+<li>输入“-”</li>
+<li>按 <code>ESC</code> 退出 Insert 模态，进入 Normal 模态，这时 meow 会在所有伪光标处应用记录</li>
+<li>按 <code>G</code> 退出 Beacon 模态，完成编辑</li>
+</ol>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd39bf7d" class="outline-3">
+<h3 id="orgd39bf7d"><span class="section-number-3">1.9.</span> 快速访问和搜索</h3>
+<div class="outline-text-3" id="text-1-9">
+<p>
+按 <code>v</code> 启动快速访问，它会在 minibuffer 中提示用户输入要快速访问的符号，然后在当前 buffer 中定位到这个符号，可以通过命令 <code>n</code> 跳转到下一个匹配的符号。可以通过 <code>;</code> 来改变查找方向。 <code>n</code> 操作会遵循当前方向进行查找。
+</p>
+
+<p>
+另外，只要你有选择某块区域，就可以直接用 <code>n</code> 操作进行快速搜索，比如用 <code>w</code> 选中当前单词，然后按 <code>n</code> 进行搜索。
+</p>
+
+<p>
+用快速访问实现 emacs 中的 serach-replace 操作:
+</p>
+<ol class="org-ol">
+<li>按 <code>v</code> 快速访问要查找的单词</li>
+<li>按 <code>c</code> 修改查找到的单词，然后按 <code>ESC</code> 进入 Normal 模式</li>
+<li>按 <code>y</code> 保存替换的内容</li>
+<li>按 <code>n r</code> ，查找下一个并替换</li>
+</ol>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6ad6caf" class="outline-2">
+<h2 id="org6ad6caf"><span class="section-number-2">2.</span> Conceptions</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-org6881ee2" class="outline-3">
+<h3 id="org6881ee2"><span class="section-number-3">2.1.</span> 模态</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Emacs 里面分 major-mode 和 mirror-mode，vim 中有插入模态和 Normal 模态，这两者有交叉，但也有很大不同。
+</p>
+
+<p>
+在 emacs 中，major-mode 是跟文件类型相关联的，每一种特定的文件类型对应一种 major-mode，其中定义了大部分与这类文件相关的操作和定义。其他一些通用的特性通过很多不同的 mirror-mode 提供，比如 hl-line-mode 可以高亮当前行，display-line-numbers-mode 可以在当前 buffer 显示行号。这种设计赋予了其极强的扩展能力。
+</p>
+
+<p>
+Vim 中的模态只针对编辑而言，其中不包括与当前载入 buffer 文档类型相关的东西，因此其扩展性要差一些。不过这不算其缺点，文本编辑本就是其主要业务，而 vim 把这一块做到了极致。更加高效更加细粒度的编辑方式是 vim 的最主要优势。由于其功能内聚，所以其小巧干练，这是它最吸引我的地方。
+</p>
+
+<p>
+Meow 是 emacs 极强扩展能力的一个强有力的例证，它结合了 emacs 和 vim 的各自优势。
+</p>
+
+<p>
+为了区分 emacs 的 mode 和 vim 的模式，在 meow 中，类 vim 的模式称之为模态， emacs 的 major-mode 和 mirror-mode 叫做主模式和副模式。这两种不同模式结合在一起，使得我们可以根据实际需求，使用各自的功能。以前的 emacs 编辑模式可以看做这种结合下的 Insert 模态，在这种模式下可以直接输入内容，同时也可以用 modifier-key 的方式调用 emacs 的编辑功能。另一方面，在 Normal 模式下，也可以同时调用更简短的 vim 式的快速编辑命令，也可以直接用 modifier-key 的方式或者 leader-key（keypad） 的方式调用 emacs 的命令。
+</p>
+
+<p>
+Evil 的目标是在 emacs 上完全模拟 vim，怎么把 evil 整合到 emacs 的工作流中，需要用户自己思考和配置。比如在 evil 中的 Insert 下，为了模仿 vim 中的按键，因此覆盖了许多 emacs 原本的按键，这些冲突的地方，都需要用户自己去留意和配置。也因此，在 evil 中，Insert 模态与 emacs 的编辑模态不一样，为了解决这个问题，又单独增加了一个 emacs 模态，以和 evil 的 Insert 模态做区分。这样在 evil 中就包含了两种输入模态，搞得挺麻烦，而且这种设计还割裂了 emacs 和 vim 的各自优点。在 emacspace 这个 start-kit 发行版中又单独引入 hybird 模态，来融合这两者。总之，evil 背负太多的 vim 的负担了，导致其有些臃肿。
+</p>
+
+<p>
+Emacs 中，除了编辑模式，还有很多 special-mode，比如 dired，ibuffer 等功能所使用的 major-mode 都继承于 speical-mode。因为这些模式中的操作不同于文本插入和文本编辑，所以在 vim 和 meow 中都引入 motion 模态来处理这种情况。
+</p>
+</div>
+
+<div id="outline-container-org0d5871a" class="outline-4">
+<h4 id="org0d5871a"><span class="section-number-4">2.1.1.</span> Motion 模态</h4>
+<div class="outline-text-4" id="text-2-1-1">
+<p>
+在 meow 中，MOTION 模态默认使用 <code>SPC</code> 作为 leader-key，原本的 <code>SPC</code> 可以通过 <code>SPC SPC</code> 访问，除此之外就再没有绑定其他快捷键了。在 MOTION 模态下，如果定义的快捷键覆盖了 emacs 已有的快捷键，那么 emacs 原本的快捷键被重新绑定到 <code>H-&lt;key&gt;</code> 上。比如为了在 MOTION 模态中也使用 <code>j,k</code> 进行上下移动，可以通过如下配置达成：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(meow-motion-overwrite-define-key '("j" . next-line))
+(meow-leader-define-key '("j" . "H-j"))
+</pre>
+</div>
+
+<p>
+访问 emacs 原本 j 绑定的功能，可以通过 <code>H-j</code> ，或者 <code>SPC j</code> .
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5f09d14" class="outline-4">
+<h4 id="org5f09d14"><span class="section-number-4">2.1.2.</span> Keypad 模态</h4>
+<div class="outline-text-4" id="text-2-1-2">
+<p>
+这个模态类似于 vim 的 leader-key，但又很不同，它实现了不用按 modifier-key 来复用 emacs 的 modifier-keybings。在 Normal 模态中按 <code>SPC</code> 进入 kaypad 模态，然后用户的按键会按下面的规则进行转换：
+</p>
+
+<ol class="org-ol">
+<li>首字母除了「x，c，h，m，g」，会被转换成 <code>C-c &lt;key&gt;</code></li>
+<li>m 会转换成 <code>M-</code> ，后接另一个字母，则为 <code>M-&lt;key&gt;</code> ，比如 <code>SPC m h</code> 会转换成 <code>M-h</code></li>
+<li>g 会转换成 <code>C-M-</code></li>
+<li>中间的 <code>SPC</code> 表示下一个输入没有特殊含义，有点类似转义字符，比如 <code>m g SPC g =&gt; M-g g</code></li>
+<li>其他情况下，输入会转换成 <code>C-&lt;key&gt;</code> ，比如 <code>x f =&gt; C-x C-f</code></li>
+</ol>
+
+<p>
+这个模式很有用处：
+</p>
+<ol class="org-ol">
+<li>它可以简化按键，比如上面的（5）中，用 <code>SPC x f =&gt; C-x C-f</code> 可以减少一个按键，关键的是少了两次 modifier-key 按键，这对小拇指的健康很重要。</li>
+<li>它复用了 emacs 本身的按键，而不是单独新增一种按键设置，所以在我们新增 key-bindings 时，可以完全按照 emacs 的方式设计 key-bindings，然后就同时获得了一种 leader-key 按键的方式。</li>
+</ol>
+
+<p>
+这又是 meow 结合 vim 和 emacs 两社区优势的另一个例证。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2b9c642" class="outline-4">
+<h4 id="org2b9c642"><span class="section-number-4">2.1.3.</span> Beacon模态</h4>
+<div class="outline-text-4" id="text-2-1-3">
+<p>
+其也叫做 Batch-KMacro，在这种模式下，可以把键盘宏应用到多个地方。
+</p>
+
+<p>
+当光标移动到 secondary-selection 中，Beacon 模态会自动启动了；如果光标移出 secondary-selection 或者 secondary-selection 去激活，Beacon 模态自动退出。
+</p>
+
+<p>
+当处在 Beacon 模态下，可以通过移动命令创建伪光标：
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">meow-left/right</td>
+<td class="org-left">在当前列创建伪光标</td>
+</tr>
+
+<tr>
+<td class="org-left">meow-next/back-word/symbol</td>
+<td class="org-left">在词的开头或者结尾处创建伪光标</td>
+</tr>
+
+<tr>
+<td class="org-left">meow-mark-word/symbol</td>
+<td class="org-left">will create regions for every same words</td>
+</tr>
+
+<tr>
+<td class="org-left">meow-visit/search</td>
+<td class="org-left">will create regions for every same regexp</td>
+</tr>
+
+<tr>
+<td class="org-left">meow-find/till</td>
+<td class="org-left">will create cursors for every same characters</td>
+</tr>
+
+<tr>
+<td class="org-left">meow-line</td>
+<td class="org-left">will create regions for every N lines</td>
+</tr>
+
+<tr>
+<td class="org-left">meow-join</td>
+<td class="org-left">will create cursors for each indentation beginning</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+一旦创建了伪光标，就可以做如下操作：
+</p>
+
+<ol class="org-ol">
+<li>简单进入 Insert 模态（自动启动宏记录），完成编辑退出 Insert 模态（自动结束宏记录，并应用该宏到所有光标或区域处）</li>
+<li>一般的启动宏记录（按 F3），完成编辑，（按 F4）结束宏记录并应用</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org78a8019" class="outline-2">
+<h2 id="org78a8019"><span class="section-number-2">3.</span> Config</h2>
+<div class="outline-text-2" id="text-3">
+<div class="org-src-container">
+<pre class="src src-elisp">(require 'meow)
+(defun meow-setup ()
+  (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
+  (meow-motion-overwrite-define-key
+   '("j" . meow-next)
+   '("k" . meow-prev)
+   '("&lt;escape&gt;" . ignore))
+  (meow-leader-define-key
+   ;; SPC j/k will run the original command in MOTION state.
+   '("j" . "H-j")
+   '("k" . "H-k")
+   ;; Use SPC (0-9) for digit arguments.
+   '("1" . meow-digit-argument)
+   '("2" . meow-digit-argument)
+   '("3" . meow-digit-argument)
+   '("4" . meow-digit-argument)
+   '("5" . meow-digit-argument)
+   '("6" . meow-digit-argument)
+   '("7" . meow-digit-argument)
+   '("8" . meow-digit-argument)
+   '("9" . meow-digit-argument)
+   '("0" . meow-digit-argument)
+   '("/" . meow-keypad-describe-key)
+   '("?" . meow-cheatsheet)
+   ;; windows
+   '("o" . delete-other-windows)
+   '("=" . split-window-right)
+   '("-" . split-window-below)
+   ;; high frequency
+   '("e" . "C-x C-e")
+   '("&lt;SPC&gt;" . "C-x C-s")
+   '(";" . comment-dwim)
+   '("k" . kill-this-buffer)
+   '("p" . project-find-file)
+   '("b" . switch-to-buffer)
+   '("f" . find-file)
+   '("i" . imenu)
+   '("F" . toggle-frame-maximized)
+   '("r" . recentf-open)
+   )
+  (meow-normal-define-key
+   '("0" . meow-expand-0)
+   '("9" . meow-expand-9)
+   '("8" . meow-expand-8)
+   '("7" . meow-expand-7)
+   '("6" . meow-expand-6)
+   '("5" . meow-expand-5)
+   '("4" . meow-expand-4)
+   '("3" . meow-expand-3)
+   '("2" . meow-expand-2)
+   '("1" . meow-expand-1)
+   '("-" . negative-argument)
+   '(";" . meow-reverse)
+   '("," . meow-inner-of-thing)
+   '("." . meow-bounds-of-thing)
+   '("[" . meow-beginning-of-thing)
+   '("]" . meow-end-of-thing)
+   '("a" . meow-append)
+   '("A" . meow-open-below)
+   '("b" . meow-back-word)
+   '("B" . meow-back-symbol)
+   '("c" . meow-change)
+   '("d" . meow-delete)
+   '("D" . meow-backward-delete)
+   '("e" . meow-next-word)
+   '("E" . meow-next-symbol)
+   '("f" . meow-find)
+   '("g" . meow-cancel-selection)
+   '("G" . meow-grab)
+   '("h" . meow-left)
+   '("H" . meow-left-expand)
+   '("i" . meow-insert)
+   '("I" . meow-open-above)
+   '("j" . meow-next)
+   '("J" . meow-next-expand)
+   '("k" . meow-prev)
+   '("K" . meow-prev-expand)
+   '("l" . meow-right)
+   '("L" . meow-right-expand)
+   '("m" . meow-join)
+   '("n" . meow-search)
+   '("N" . meow-pop-search)
+   '("o" . meow-block)
+   '("O" . meow-to-block)
+   '("p" . meow-yank)
+   '("P" . meow-yank-pop)
+   '("q" . meow-quit)
+   '("Q" . meow-goto-line)
+   '("r" . meow-replace)
+   '("R" . meow-swap-grab)
+   '("s" . meow-kill)
+   '("t" . meow-till)
+   '("T" . meow-till-expand)
+   '("u" . meow-undo)
+   '("U" . meow-undo-in-selection)
+   '("v" . meow-visit)
+   '("V" . meow-kmacro-matches)
+   '("w" . meow-mark-word)
+   '("W" . meow-mark-symbol)
+   '("x" . meow-line)
+   '("X" . meow-kmacro-lines)
+   '("y" . meow-save)
+   '("Y" . meow-sync-grab)
+   '("z" . meow-pop-selection)
+   '("Z" . meow-pop-all-selection)
+   '("&amp;" . meow-query-replace)
+   '("%" . meow-query-replace-regexp)
+   '("'" . repeat)
+   '("\\" . quoted-insert)
+   '("&lt;escape&gt;" . ignore)))
+
+(when window-system
+  (setq meow-replace-state-name-list
+        '((normal . "🅝")
+          (beacon . "🅑")
+          (insert . "🅘")
+          (motion . "🅜")
+          (keypad . "🅚")))
+  )
+(setq
+ meow-esc-delay 0.001
+ meow-select-on-change t
+ meow-cursor-type-normal 'box
+ meow-cursor-type-insert '(bar . 4)
+ meow-keypad-describe-delay 0.5
+ meow-keypad-leader-dispatch "C-c"
+ meow-expand-hint-remove-delay 2.0)
+(meow-setup)
+(meow-setup-indicator)
+(meow-setup-line-number)
+(unless (bound-and-true-p meow-global-mode)
+  (meow-global-mode 1))
+(meow-esc-mode 1)
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2024-12-15 Sun 09:43<br/></p> </div>
+</div>
+</body>
+</html>
