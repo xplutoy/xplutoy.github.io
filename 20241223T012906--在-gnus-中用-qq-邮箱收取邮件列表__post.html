@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2024-12-23 Mon 02:23 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>在 GNUS 中用 QQ 邮箱收取邮件列表</title>
+<meta name="author" content="杨雪" />
+<meta name="generator" content="Org Mode" />
+<link rel='stylesheet' href='./static/org.css' type='text/css'/> 
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> | <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+</div>
+<div id="content" class="content">
+<h1 class="title">在 GNUS 中用 QQ 邮箱收取邮件列表</h1>
+<p>
+最近 <span class="timestamp-wrapper"><span class="timestamp">[2024-12-23 Mon]  </span></span>  Gnus 无法正常收取 outlook 邮件了，原因是 outlook 禁用 app password，强制使用 oauth2 认证来登陆邮箱。网上能找到一些<a href="https://emacs-china.org/t/mbsync-oauth2-outlook/28048">方案</a>，不过配置都比较麻烦还不跨平台。鉴于此，我也暂时放弃用 Gnus 中收取 outlook 邮件了。好消息是 QQ 邮件仍能正常使用。
+</p>
+
+<p>
+最近我也同时对 Emacs 的开发感兴趣，想近距离看看这个古老的项目是如何进行项目管理和软件开发的。他们用的是一种古老的技术：邮件列表。所以我准备配置下 Gnus ，用 QQ 邮箱来读取 emacs-devel 邮件列表。
+</p>
+
+<p>
+邮件列表里每天会有很多邮件，最好把其过滤到单独的文件夹中。在 QQ 邮箱中，这些过滤邮件文件夹都默认放在“我的文件夹”下，需要在 QQ 邮箱中打开“收取我的文件夹”这个开关，这样 Gnus 才能收取这些目录下的邮件。
+</p>
+
+
+<div id="org437a3d4" class="figure">
+<p><img src="./images/20241223004838_qq_folder.png" alt="20241223004838_qq_folder.png">
+</p>
+</div>
+
+<p>
+然后是邮件过滤。目前有两种方案，一种是使用 Gnus 的 <a href="https://www.gnu.org/software/emacs/manual///html_node/gnus/Client_002dSide-IMAP-Splitting.html">Client-Side IMAP Splitting</a>，下面是一个完整的样例配置：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setopt gnus-select-method
+	'(nnimap "foxmail.cs"
+		 (nnimap-address "imap.qq.com")
+		 (nnimap-inbox "INBOX")
+		 (nnimap-split-fancy (| (any "emacs-devel@gnu.org" "emacs-devel")
+					(any "help-gnu-emacs@gnu.org" "emacs-help")
+					"INBOX"))))
+</pre>
+</div>
+
+<p>
+这种方式有时候过滤不准确，而且也不通用。
+</p>
+
+<p>
+另一种是直接设置 QQ 邮箱的收信规则，也是我打算使用的方式。这种方式配置简单直观，看着界面就知道怎么配置，同时也很通用。
+</p>
+
+<p>
+最后，我的整个 Gnus 的 QQ 邮箱配置就一行：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setopt gnus-select-method '(nnimap "foxmail.cs" (nnimap-address "imap.qq.com")))
+</pre>
+</div>
+
+<p>
+是的，这样就行了。
+</p>
+</div>
+<div id="postamble" class="status">
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2024-12-23 Mon 02:23<br/></p> </div>
+</div>
+</body>
+</html>

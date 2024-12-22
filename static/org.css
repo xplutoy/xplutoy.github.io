@@ -43,7 +43,7 @@ blockquote {
 }
 
 .org-src-container {
-    font-size: small;
+    font-size: 85%;
     background: #f9f9f9;
     border: 1px solid #ddd;
     box-shadow: 5px 5px 5px #eee;
@@ -97,5 +97,5 @@ pre span.org-diff-removed                {color:#A60000;}
 }
 
 #bibliography {
-    font-size: small;
+    font-size: 85%;
 }
