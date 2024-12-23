@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2024-12-24 Tue 01:25 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>改进 Emacs 的窗口切换工作流</title>
+<meta name="author" content="杨雪" />
+<meta name="generator" content="Org Mode" />
+<link rel='stylesheet' href='./static/org.css' type='text/css'/> 
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> | <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+</div>
+<div id="content" class="content">
+<h1 class="title">改进 Emacs 的窗口切换工作流</h1>
+<p>
+我自己使用多窗口的情况不多，利用 Emacs 内部提供的 <code>other-window (C-x o)</code> 和 <code>windmove</code> 来切换窗口基本也够用了。最近看到这篇文章 (<a href="https://emacs.dyerdwelling.family/emacs/20241213115239-emacs--emacs-core-window-jumping-between-two-windows/">Emacs Quick Window Pt 3</a>)，其提供的窗口切换函数 <code>my/quick-window-jump</code> 甚是方便，加上以前用过类似的 ace-window 插件，也有些怀念，所以打算把它加入到自己的配置中。
+</p>
+
+<p>
+我大部分时间只在一个窗口中工作（屏幕较小），经常需要来回在两个不同的 buffer 之间相互切换，可以单独写一个函数来做这件事，比如：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defun yx/other-buffer ()
+  "Switch to the two most recently open buffers"
+  (interactive)
+  (switch-to-buffer (other-buffer (current-buffer) 1)))
+</pre>
+</div>
+
+<p>
+但把它绑定到哪个快捷键让我比较为难。在 Emacs 中，简短的快捷键是一项稀缺资源。最终，我想到的是把该功能集成到 <code>my/quick-window-jump</code> 中，当只有一个窗口时就默认执行 <code>yx/other-buffer</code> 的功能。
+</p>
+
+<p>
+虽然这违背了编程原则里的职责单一原则，但其非常贴合自己的工作流，那也就无伤大雅了。下面是我按自己工作流修改后的代码：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defun yx/quick-window-jump ()
+  "My DWIM window jumping.
+
+If there is only one windows, switch to the other buffer.
+If there are only two windows, jump directly to the other window.
+Otherwise jump to a window by typing its assigned character label."
+  (interactive)
+  (let* ((window-lst (window-list nil 'no-mini))
+	 (window-num (length window-lst)))
+    (cond ((= window-num 1)
+	   (switch-to-buffer (other-buffer (current-buffer))))
+	  ((= window-num 2)
+	   (select-window (other-window-for-scrolling)))
+	  (t
+	   (let* ((my-quick-window-overlays nil)
+		  (sorted-windows (sort window-lst
+					(lambda (w1 w2)
+					  (let ((edges1 (window-edges w1))
+						(edges2 (window-edges w2)))
+					    (or (&lt; (car edges1) (car edges2))
+						(and (= (car edges1) (car edges2))
+						     (&lt; (cadr edges1) (cadr edges2))))))))
+		  (window-keys (seq-take '("j" "k" "l" ";" "a" "s" "d" "f") window-num))
+		  (window-map (cl-pairlis window-keys sorted-windows)))
+	     (setq my-quick-window-overlays
+		   (mapcar (lambda (entry)
+			     (let* ((key (car entry))
+				    (window (cdr entry))
+				    (start (window-start window))
+				    (overlay (make-overlay start start (window-buffer window))))
+			       (overlay-put overlay 'after-string
+					    (propertize (format "[%s]" key)
+							'face '(:foreground "white" :background "blue" :weight bold)))
+			       (overlay-put overlay 'window window)
+			       overlay))
+			   window-map))
+	     (let ((key (read-key (format "Select window [%s]: " (string-join window-keys ", ")))))
+	       (mapc #'delete-overlay my/quick-window-overlays)
+	       (setq my-quick-window-overlays nil)
+	       (when-let ((selected-window (cdr (assoc (char-to-string key) window-map))))
+		 (select-window selected-window))))))))
+</pre>
+</div>
+</div>
+<div id="postamble" class="status">
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2024-12-24 Tue 01:25<br/></p> </div>
+</div>
+</body>
+</html>

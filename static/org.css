@@ -1,10 +1,19 @@
 body {
-    width: 800px;
-    margin: auto;
-    line-height: 1.5em;
+    width: 710px;
+    margin: 2% auto;
     padding: lem;
-    font-size: 16px;
-    font-family: Helvetica, Arial, sans-serif;
+    line-height: 1.4em;
+    font-size: 15px;
+    font-family: Georgia, serif;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: Helvetica, sans-serif;
+}
+
+
+p {
+    margin: 1em auto;
 }
 
 p.verse {
