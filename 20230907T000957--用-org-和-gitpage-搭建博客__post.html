@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2024-12-24 Tue 01:25 -->
+<!-- 2024-12-28 Sat 00:28 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>用 Org 和 GitPage 搭建博客</title>
@@ -14,8 +14,9 @@
 <nav class='nav'> <a href='/about.html' class='button'>HOME</a> | <a href='/index.html' class='button'>BLOG</a></nav><hr/>
 </div>
 <div id="content" class="content">
+<header>
 <h1 class="title">用 Org 和 GitPage 搭建博客</h1>
-<div id="table-of-contents" role="doc-toc">
+</header><nav id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
@@ -26,7 +27,7 @@
 <li><a href="#orgb5e8ed6">5. Supplement</a></li>
 </ul>
 </div>
-</div>
+</nav>
 
 <div id="outline-container-org86a3436" class="outline-2">
 <h2 id="org86a3436"><span class="section-number-2">1.</span> Intro</h2>
@@ -49,7 +50,7 @@
 </pre>
 </div>
 
-<pre class="example" id="org75487b8">
+<pre class="example" id="org4928541">
 .
 ├── 20230209T052037--常用工具集合__tool.org
 ├── 20230209T055812--zoxide__tool.org
@@ -83,7 +84,7 @@
 </pre>
 </div>
 
-<pre class="example" id="org3c72b40">
+<pre class="example" id="org4f661cb">
 : .github
 : └── workflows
 :     └── org-denotes-publish.yml
@@ -187,17 +188,17 @@ jobs:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-makefile"># Makefile for myblog
-.PHONY: all publish publish_no_init
+<pre class="src src-makefile"><span style="color: #505050;"># </span><span style="color: #505050;">Makefile for myblog</span>
+<span style="color: #721045;">.PHONY</span>: all publish publish_no_init
 
-all: publish
+<span style="color: #721045;">all</span>: publish
 
-publish: publish.el
-  @echo "Publishing..."
+<span style="color: #721045;">publish</span>: publish.el
+  @echo <span style="color: #2544bb;">"Publishing..."</span>
   emacs --batch -q --script publish.el
 
-clean:
-  @echo "Cleaning up.."
+<span style="color: #721045;">clean</span>:
+  @echo <span style="color: #2544bb;">"Cleaning up.."</span>
   @rm -rvf *.elc
   @rm -rvf ./public_html/
   @rm -rvf ~/.org-timestamps/*
@@ -212,66 +213,66 @@ clean:
 接下来就是最重要的 publish.el 文件了：
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">;;; publish.el --- notes setting. -*- lexical-binding: t no-byte-compile: t -*-
-(require 'package)
+<pre class="src src-emacs-lisp"><span style="color: #505050;">;;; </span><span style="color: #505050;">publish.el --- notes setting. -*- lexical-binding: t no-byte-compile: t -*-</span>
+(<span style="color: #5317ac;">require</span> '<span style="color: #0000c0;">package</span>)
 (package-initialize)
-(unless package-archive-contents
+(<span style="color: #5317ac;">unless</span> package-archive-contents
   (package-refresh-contents))
-(dolist (pkg '(denote
+(<span style="color: #5317ac;">dolist</span> (pkg '(denote
                htmlize))
-  (unless (package-installed-p pkg)
+  (<span style="color: #5317ac;">unless</span> (package-installed-p pkg)
     (package-install pkg)))
-(require 'denote)
-(require 'htmlize)
-(require 'ox-publish)
-(setq denote-directory "../")
+(<span style="color: #5317ac;">require</span> '<span style="color: #0000c0;">denote</span>)
+(<span style="color: #5317ac;">require</span> '<span style="color: #0000c0;">htmlize</span>)
+(<span style="color: #5317ac;">require</span> '<span style="color: #0000c0;">ox-publish</span>)
+(<span style="color: #5317ac;">setq</span> denote-directory <span style="color: #2544bb;">"../"</span>)
 
-(setq org-export-with-section-numbers t
+(<span style="color: #5317ac;">setq</span> org-export-with-section-numbers t
       org-export-htmlize-output-type 'css
       org-export-with-smart-quotes t
       org-export-with-sub-superscripts nil)
-(setq org-html-doctype "html5"
+(<span style="color: #5317ac;">setq</span> org-html-doctype <span style="color: #2544bb;">"html5"</span>
       org-html-html5-fancy t
       org-html-checkbox-type 'html
       org-html-htmlize-output-type 'css
-      org-html-container-element "section"
+      org-html-container-element <span style="color: #2544bb;">"section"</span>
       org-html-head-include-default-style nil)
 
-(defvar yx/html-head "&lt;link rel='stylesheet' href='./css/org.css' type='text/css'/&gt;")
-(defvar yx/html-postamble "&lt;div id='postamble' class='status'&gt; &lt;hr/&gt; &lt;p class='author'&gt;Created with %c by %a &lt;br\&gt;Updated: %C&lt;br/&gt;&lt;/p&gt; &lt;/div&gt;")
-(setq org-publish-project-alist
-      `(("yx-notes"
-         :components ("yx-notes-page" "yx-notes-static"))
-        ("yx-notes-page"
-         :base-directory "../"
-         :base-extension "org"
-         :publishing-directory "./public_html/"
-         :recursive nil
-         :publishing-function org-html-publish-to-html
-         :headline-levels 4
-         :auto-preamble t
-         :auto-sitemap t
-         :sitemap-filename "index.org"
-         :sitemap-sort-files anti-chronologically ;sort the posts from newest to oldest.
+(<span style="color: #5317ac;">defvar</span> <span style="color: #00538b;">yx/html-head</span> <span style="color: #2544bb;">"&lt;link rel='</span><span style="color: #0000c0;">stylesheet</span><span style="color: #2544bb;">' href='</span><span style="color: #0000c0;">./css/org.css</span><span style="color: #2544bb;">' type='</span><span style="color: #0000c0;">text/css</span><span style="color: #2544bb;">'/&gt;"</span>)
+(<span style="color: #5317ac;">defvar</span> <span style="color: #00538b;">yx/html-postamble</span> <span style="color: #2544bb;">"&lt;div id='</span><span style="color: #0000c0;">postamble</span><span style="color: #2544bb;">' class='</span><span style="color: #0000c0;">status</span><span style="color: #2544bb;">'&gt; &lt;hr/&gt; &lt;p class='</span><span style="color: #0000c0;">author</span><span style="color: #2544bb;">'&gt;Created with %c by %a &lt;br</span><span style="color: #813e00;">\</span><span style="color: #2544bb;">&gt;Updated: %C&lt;br/&gt;&lt;/p&gt; &lt;/div&gt;"</span>)
+(<span style="color: #5317ac;">setq</span> org-publish-project-alist
+      `((<span style="color: #2544bb;">"yx-notes"</span>
+         <span style="color: #8f0075;">:components</span> (<span style="color: #2544bb;">"yx-notes-page"</span> <span style="color: #2544bb;">"yx-notes-static"</span>))
+        (<span style="color: #2544bb;">"yx-notes-page"</span>
+         <span style="color: #8f0075;">:base-directory</span> <span style="color: #2544bb;">"../"</span>
+         <span style="color: #8f0075;">:base-extension</span> <span style="color: #2544bb;">"org"</span>
+         <span style="color: #8f0075;">:publishing-directory</span> <span style="color: #2544bb;">"./public_html/"</span>
+         <span style="color: #8f0075;">:recursive</span> nil
+         <span style="color: #8f0075;">:publishing-function</span> org-html-publish-to-html
+         <span style="color: #8f0075;">:headline-levels</span> 4
+         <span style="color: #8f0075;">:auto-preamble</span> t
+         <span style="color: #8f0075;">:auto-sitemap</span> t
+         <span style="color: #8f0075;">:sitemap-filename</span> <span style="color: #2544bb;">"index.org"</span>
+         <span style="color: #8f0075;">:sitemap-sort-files</span> anti-chronologically <span style="color: #505050;">;</span><span style="color: #505050;">sort the posts from newest to oldest.</span>
 
-         :html-link-home "/yx-notes"
-         :html-link-up "/yx-notes"
-         :html-head-include-scripts nil
-         :html-head-include-default-style nil
-         :html-head ,yx/html-head
-         :html-postamble ,yx/html-postamble
+         <span style="color: #8f0075;">:html-link-home</span> <span style="color: #2544bb;">"/yx-notes"</span>
+         <span style="color: #8f0075;">:html-link-up</span> <span style="color: #2544bb;">"/yx-notes"</span>
+         <span style="color: #8f0075;">:html-head-include-scripts</span> nil
+         <span style="color: #8f0075;">:html-head-include-default-style</span> nil
+         <span style="color: #8f0075;">:html-head</span> ,yx/html-head
+         <span style="color: #8f0075;">:html-postamble</span> ,yx/html-postamble
          )
-        ("yx-notes-static"
-         :base-directory "./"
-         :base-extension "css\\|js\\|png\\|jpg\\|gif"
-         :publishing-directory "./public_html/"
-         :recursive t
-         :publishing-function org-publish-attachment
+        (<span style="color: #2544bb;">"yx-notes-static"</span>
+         <span style="color: #8f0075;">:base-directory</span> <span style="color: #2544bb;">"./"</span>
+         <span style="color: #8f0075;">:base-extension</span> <span style="color: #2544bb;">"css</span><span style="color: #654d0f;">\\</span><span style="color: #8b1030;">|</span><span style="color: #2544bb;">js</span><span style="color: #654d0f;">\\</span><span style="color: #8b1030;">|</span><span style="color: #2544bb;">png</span><span style="color: #654d0f;">\\</span><span style="color: #8b1030;">|</span><span style="color: #2544bb;">jpg</span><span style="color: #654d0f;">\\</span><span style="color: #8b1030;">|</span><span style="color: #2544bb;">gif"</span>
+         <span style="color: #8f0075;">:publishing-directory</span> <span style="color: #2544bb;">"./public_html/"</span>
+         <span style="color: #8f0075;">:recursive</span> t
+         <span style="color: #8f0075;">:publishing-function</span> org-publish-attachment
          ))
       )
 
-(org-publish "yx-notes" t nil)
-;;; publish.el ends here
+(org-publish <span style="color: #2544bb;">"yx-notes"</span> t nil)
+<span style="color: #505050;">;;; </span><span style="color: #505050;">publish.el ends here</span>
 </pre>
 </div>
 

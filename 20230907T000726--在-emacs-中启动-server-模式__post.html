@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2024-12-24 Tue 01:25 -->
+<!-- 2024-12-28 Sat 00:28 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>在 Emacs 中启动 Server 模式</title>
@@ -14,8 +14,9 @@
 <nav class='nav'> <a href='/about.html' class='button'>HOME</a> | <a href='/index.html' class='button'>BLOG</a></nav><hr/>
 </div>
 <div id="content" class="content">
+<header>
 <h1 class="title">在 Emacs 中启动 Server 模式</h1>
-<div id="table-of-contents" role="doc-toc">
+</header><nav id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
@@ -35,7 +36,7 @@
 <li><a href="#org9512474">3. Comment</a></li>
 </ul>
 </div>
-</div>
+</nav>
 
 <div id="outline-container-org15e6e98" class="outline-2">
 <h2 id="org15e6e98"><span class="section-number-2">1.</span> Intro</h2>
@@ -76,9 +77,9 @@
 </ol>
 
 <div class="org-src-container">
-<pre class="src src-shell"># 图形界面
+<pre class="src src-shell"><span style="color: #505050;"># </span><span style="color: #505050;">&#22270;&#24418;&#30028;&#38754;</span>
 emacsclient -s server -n -c
-# 终端界面
+<span style="color: #505050;"># </span><span style="color: #505050;">&#32456;&#31471;&#30028;&#38754;</span>
 emacsclient -s server -t
 </pre>
 </div>
@@ -111,7 +112,7 @@ emacsclient -s server -t
 </ol>
 
 <div class="org-src-container">
-<pre class="src src-shell">/usr/local/bin/emacsclient -s server -n -c  "$@"
+<pre class="src src-shell">/usr/local/bin/emacsclient -s server -n -c  <span style="color: #2544bb;">"$@"</span>
 </pre>
 </div>
 </div>
@@ -137,12 +138,12 @@ TERM=xterm-256color 解决问题。</li>
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(unless (server-running-p)
+<pre class="src src-elisp">(<span style="color: #5317ac;">unless</span> (server-running-p)
   (server-start))
-;; 或者
-(use-package server
-  :ensure nil
-  :hook (after-init . server-mode))
+<span style="color: #505050;">;; </span><span style="color: #505050;">&#25110;&#32773;</span>
+(<span style="color: #5317ac;">use-package</span> <span style="color: #0000c0;">server</span>
+  <span style="color: #8f0075;">:ensure</span> nil
+  <span style="color: #8f0075;">:hook</span> (after-init . server-mode))
 </pre>
 </div>
 </div>

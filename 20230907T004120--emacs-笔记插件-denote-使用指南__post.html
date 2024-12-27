@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2024-12-24 Tue 01:25 -->
+<!-- 2024-12-28 Sat 00:28 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Emacs 笔记插件 Denote 使用指南</title>
@@ -14,8 +14,9 @@
 <nav class='nav'> <a href='/about.html' class='button'>HOME</a> | <a href='/index.html' class='button'>BLOG</a></nav><hr/>
 </div>
 <div id="content" class="content">
+<header>
 <h1 class="title">Emacs 笔记插件 Denote 使用指南</h1>
-<div id="table-of-contents" role="doc-toc">
+</header><nav id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
@@ -33,7 +34,7 @@
 </li>
 </ul>
 </div>
-</div>
+</nav>
 
 <div id="outline-container-org38f2b93" class="outline-2">
 <h2 id="org38f2b93"><span class="section-number-2">1.</span> Intro</h2>
@@ -50,7 +51,7 @@ Denote 并不预设一种记笔记的方式（Org-roam 预设了双链笔记的�
 Denote 默认生成的文件名样式为如下：
 </p>
 
-<pre class="example" id="org3de6d1b">
+<pre class="example" id="org6f9cbb0">
 DATE--TITLE__KEYWORDS.EXTENSION
 </pre>
 
@@ -76,16 +77,16 @@ DATE--TITLE__KEYWORDS.EXTENSION
 <h2 id="org5d935b5"><span class="section-number-2">2.</span> Configuration</h2>
 <div class="outline-text-2" id="text-2">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(use-package denote
-  :after org
-  :demand t
-  :custom
+<pre class="src src-emacs-lisp">(<span style="color: #5317ac;">use-package</span> <span style="color: #0000c0;">denote</span>
+  <span style="color: #8f0075;">:after</span> org
+  <span style="color: #8f0075;">:demand</span> t
+  <span style="color: #8f0075;">:custom</span>
   (denote-directory yx/org-dir)
   (denote-infer-keywords t)
   (denote-known-keywords nil)
   (denote-allow-multi-word-keywords t)
   (denote-prompts '(title keywords subdirectory))
-  :hook
+  <span style="color: #8f0075;">:hook</span>
   (dired-mode . denote-dired-mode-in-directories)
   )
 </pre>
@@ -109,16 +110,16 @@ DATE--TITLE__KEYWORDS.EXTENSION
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(bind-keys
- ("C-c n c"   . denote)
- ("C-c n t"   . yx/denote-template)
- ("C-c n C-c" . citar-create-note)
- ("C-c n C-o" . citar-denote-dwim)
- ("C-c n n"   . denote-open-or-create)
- ("C-c n i"   . denote-link-or-create)
- ("C-c n l"   . denote-backlinks)
- ("C-c n f"   . denote-find-link)
- ("C-c n b"   . denote-find-backlink))
+<pre class="src src-emacs-lisp">(<span style="color: #5317ac;">bind-keys</span>
+ (<span style="color: #2544bb;">"C-c n c"</span>   . denote)
+ (<span style="color: #2544bb;">"C-c n t"</span>   . yx/denote-template)
+ (<span style="color: #2544bb;">"C-c n C-c"</span> . citar-create-note)
+ (<span style="color: #2544bb;">"C-c n C-o"</span> . citar-denote-dwim)
+ (<span style="color: #2544bb;">"C-c n n"</span>   . denote-open-or-create)
+ (<span style="color: #2544bb;">"C-c n i"</span>   . denote-link-or-create)
+ (<span style="color: #2544bb;">"C-c n l"</span>   . denote-backlinks)
+ (<span style="color: #2544bb;">"C-c n f"</span>   . denote-find-link)
+ (<span style="color: #2544bb;">"C-c n b"</span>   . denote-find-backlink))
 </pre>
 </div>
 
@@ -127,13 +128,13 @@ DATE--TITLE__KEYWORDS.EXTENSION
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(defun yx/denote-template ()
-    "Create note while prompting for a template.
-This is equivalent to calling `denote' when `denote-prompts' is
-set to \\='(template title keywords subdirectory)."
-    (declare (interactive-only t))
-    (interactive)
-    (let ((denote-prompts '(template title keywords subdirectory)))
+<pre class="src src-emacs-lisp">(<span style="color: #5317ac;">defun</span> <span style="color: #721045;">yx/denote-template</span> ()
+    <span style="color: #2a486a;">"Create note while prompting for a template.</span>
+<span style="color: #2a486a;">This is equivalent to calling `</span><span style="color: #0000c0;">denote</span><span style="color: #2a486a;">' when `</span><span style="color: #0000c0;">denote-prompts</span><span style="color: #2a486a;">' is</span>
+<span style="color: #2a486a;">set to </span><span style="color: #8f0075;">\\=</span><span style="color: #2a486a;">'(template title keywords subdirectory)."</span>
+    (<span style="color: #5317ac;">declare</span> (interactive-only t))
+    (<span style="color: #5317ac;">interactive</span>)
+    (<span style="color: #5317ac;">let</span> ((denote-prompts '(template title keywords subdirectory)))
       (call-interactively #'denote)))
 </pre>
 </div>
@@ -302,8 +303,8 @@ denote 提供了一些保持文件命名约定和笔记 front-matter 一致的�
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">;; Register Denote's Org dynamic blocks
-(require 'denote-org-dblock)
+<pre class="src src-emacs-lisp"><span style="color: #505050;">;; </span><span style="color: #505050;">Register Denote's Org dynamic blocks</span>
+(<span style="color: #5317ac;">require</span> '<span style="color: #0000c0;">denote-org-dblock</span>)
 </pre>
 </div>
 
@@ -316,7 +317,7 @@ denote 提供了一些保持文件命名约定和笔记 front-matter 一致的�
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">#+BEGIN: denote-links :regexp "_emacs"
+<pre class="src src-emacs-lisp">#+BEGIN: denote-links <span style="color: #8f0075;">:regexp</span> <span style="color: #2544bb;">"_emacs"</span>
 
 #+END:
 </pre>

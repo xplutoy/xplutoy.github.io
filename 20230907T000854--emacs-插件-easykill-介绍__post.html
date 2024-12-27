@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2024-12-24 Tue 01:25 -->
+<!-- 2024-12-28 Sat 00:28 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Emacs 插件 EasyKill 介绍</title>
@@ -14,8 +14,9 @@
 <nav class='nav'> <a href='/about.html' class='button'>HOME</a> | <a href='/index.html' class='button'>BLOG</a></nav><hr/>
 </div>
 <div id="content" class="content">
+<header>
 <h1 class="title">Emacs 插件 EasyKill 介绍</h1>
-<div id="table-of-contents" role="doc-toc">
+</header><nav id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
@@ -26,7 +27,7 @@
 <li><a href="#org66537d4">5. Comment</a></li>
 </ul>
 </div>
-</div>
+</nav>
 
 <div id="outline-container-org4140fbd" class="outline-2">
 <h2 id="org4140fbd"><span class="section-number-2">1.</span> Intro</h2>
@@ -41,8 +42,8 @@
 <h2 id="org14bb1c0"><span class="section-number-2">2.</span> Setup</h2>
 <div class="outline-text-2" id="text-2">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(use-package easy-kill
-  :bind (([remap kill-ring-save] . easy-kill)
+<pre class="src src-emacs-lisp">(<span style="color: #5317ac;">use-package</span> <span style="color: #0000c0;">easy-kill</span>
+  <span style="color: #8f0075;">:bind</span> (([remap kill-ring-save] . easy-kill)
          ([remap mark-sexp] . easy-mark))
   )
 </pre>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2024-12-24 Tue 01:25 -->
+<!-- 2024-12-28 Sat 00:28 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>在 emacs 中用 dumper 提升启动速度</title>
@@ -14,8 +14,9 @@
 <nav class='nav'> <a href='/about.html' class='button'>HOME</a> | <a href='/index.html' class='button'>BLOG</a></nav><hr/>
 </div>
 <div id="content" class="content">
+<header>
 <h1 class="title">在 emacs 中用 dumper 提升启动速度</h1>
-<div id="table-of-contents" role="doc-toc">
+</header><nav id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
@@ -29,7 +30,7 @@
 <li><a href="#org1503a36">2. 结语</a></li>
 </ul>
 </div>
-</div>
+</nav>
 <p>
 今天尝试了一下 emacs 的 protable dumper 功能，它把加载的 package 导出到一个外部文件中，然后启动 emacs 时直接
 加载这个文件，这样比一个一个 package 的加载速度快很多。lazyload 是延迟到首次调用时才加载 package，这会导致两个问题：
@@ -90,11 +91,11 @@ Emacs 提供了 <code>dump-emacs-portable</code> 函数把当前已经加载的�
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(require 'package)
+<pre class="src src-emacs-lisp">(<span style="color: #5317ac;">require</span> '<span style="color: #0000c0;">package</span>)
 (package-initialize)
-(setq yx/dumped-load-path load-path
+(<span style="color: #5317ac;">setq</span> yx/dumped-load-path load-path
       yx/dumped t)
-(dolist (package
+(<span style="color: #5317ac;">dolist</span> (package
          '(elec-pair
            savehist
            winner
@@ -102,7 +103,7 @@ Emacs 提供了 <code>dump-emacs-portable</code> 函数把当前已经加载的�
            flymake
            eglot
            use-package
-           ;; evil
+           <span style="color: #505050;">;; </span><span style="color: #505050;">evil</span>
            evil
            evil-owl
            evil-mc
@@ -113,11 +114,11 @@ Emacs 提供了 <code>dump-emacs-portable</code> 函数把当前已经加载的�
            vimish-fold
            evil-vimish-fold
            ef-themes))
-  (require package))
-;; pre-load themes
+  (<span style="color: #5317ac;">require</span> <span style="color: #0000c0;">package</span>))
+<span style="color: #505050;">;; </span><span style="color: #505050;">pre-load themes</span>
 (load-theme 'ef-duo-light t t)
-;; dump image
-(dump-emacs-portable (expand-file-name "emacs.pdmp" user-emacs-directory))
+<span style="color: #505050;">;; </span><span style="color: #505050;">dump image</span>
+(dump-emacs-portable (expand-file-name <span style="color: #2544bb;">"emacs.pdmp"</span> user-emacs-directory))
 </pre>
 </div>
 </div>
@@ -139,7 +140,7 @@ emacs --dump-file="/User/yx/.emaorg-super-agenda cs.d/emacs.pdmp"
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(if yx/dumped
+<pre class="src src-elisp">(<span style="color: #5317ac;">if</span> yx/dumped
     (dumped-run)
   (normal-run)
   )

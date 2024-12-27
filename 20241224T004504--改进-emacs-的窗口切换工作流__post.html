@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2024-12-24 Tue 01:25 -->
+<!-- 2024-12-28 Sat 00:28 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>改进 Emacs 的窗口切换工作流</title>
@@ -14,8 +14,9 @@
 <nav class='nav'> <a href='/about.html' class='button'>HOME</a> | <a href='/index.html' class='button'>BLOG</a></nav><hr/>
 </div>
 <div id="content" class="content">
+<header>
 <h1 class="title">改进 Emacs 的窗口切换工作流</h1>
-<p>
+</header><p>
 我自己使用多窗口的情况不多，利用 Emacs 内部提供的 <code>other-window (C-x o)</code> 和 <code>windmove</code> 来切换窗口基本也够用了。最近看到这篇文章 (<a href="https://emacs.dyerdwelling.family/emacs/20241213115239-emacs--emacs-core-window-jumping-between-two-windows/">Emacs Quick Window Pt 3</a>)，其提供的窗口切换函数 <code>my/quick-window-jump</code> 甚是方便，加上以前用过类似的 ace-window 插件，也有些怀念，所以打算把它加入到自己的配置中。
 </p>
 
@@ -24,9 +25,9 @@
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(defun yx/other-buffer ()
-  "Switch to the two most recently open buffers"
-  (interactive)
+<pre class="src src-emacs-lisp">(<span style="color: #5317ac;">defun</span> <span style="color: #721045;">yx/other-buffer</span> ()
+  <span style="color: #2a486a;">"Switch to the two most recently open buffers"</span>
+  (<span style="color: #5317ac;">interactive</span>)
   (switch-to-buffer (other-buffer (current-buffer) 1)))
 </pre>
 </div>
@@ -40,47 +41,47 @@
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(defun yx/quick-window-jump ()
-  "My DWIM window jumping.
+<pre class="src src-emacs-lisp">(<span style="color: #5317ac;">defun</span> <span style="color: #721045;">yx/quick-window-jump</span> ()
+  <span style="color: #2a486a;">"My DWIM window jumping.</span>
 
-If there is only one windows, switch to the other buffer.
-If there are only two windows, jump directly to the other window.
-Otherwise jump to a window by typing its assigned character label."
-  (interactive)
-  (let* ((window-lst (window-list nil 'no-mini))
-	 (window-num (length window-lst)))
-    (cond ((= window-num 1)
-	   (switch-to-buffer (other-buffer (current-buffer))))
-	  ((= window-num 2)
-	   (select-window (other-window-for-scrolling)))
-	  (t
-	   (let* ((my-quick-window-overlays nil)
-		  (sorted-windows (sort window-lst
-					(lambda (w1 w2)
-					  (let ((edges1 (window-edges w1))
-						(edges2 (window-edges w2)))
-					    (or (&lt; (car edges1) (car edges2))
-						(and (= (car edges1) (car edges2))
-						     (&lt; (cadr edges1) (cadr edges2))))))))
-		  (window-keys (seq-take '("j" "k" "l" ";" "a" "s" "d" "f") window-num))
-		  (window-map (cl-pairlis window-keys sorted-windows)))
-	     (setq my-quick-window-overlays
-		   (mapcar (lambda (entry)
-			     (let* ((key (car entry))
-				    (window (cdr entry))
-				    (start (window-start window))
-				    (overlay (make-overlay start start (window-buffer window))))
-			       (overlay-put overlay 'after-string
-					    (propertize (format "[%s]" key)
-							'face '(:foreground "white" :background "blue" :weight bold)))
-			       (overlay-put overlay 'window window)
-			       overlay))
-			   window-map))
-	     (let ((key (read-key (format "Select window [%s]: " (string-join window-keys ", ")))))
-	       (mapc #'delete-overlay my/quick-window-overlays)
-	       (setq my-quick-window-overlays nil)
-	       (when-let ((selected-window (cdr (assoc (char-to-string key) window-map))))
-		 (select-window selected-window))))))))
+<span style="color: #2a486a;">If there is only one windows, switch to the other buffer.</span>
+<span style="color: #2a486a;">If there are only two windows, jump directly to the other window.</span>
+<span style="color: #2a486a;">Otherwise jump to a window by typing its assigned character label."</span>
+  (<span style="color: #5317ac;">interactive</span>)
+  (<span style="color: #5317ac;">let*</span> ((window-lst (window-list nil 'no-mini))
+         (window-num (length window-lst)))
+    (<span style="color: #5317ac;">cond</span> ((= window-num 1)
+           (switch-to-buffer (other-buffer (current-buffer))))
+          ((= window-num 2)
+           (select-window (other-window-for-scrolling)))
+          (t
+           (<span style="color: #5317ac;">let*</span> ((my-quick-window-overlays nil)
+                  (sorted-windows (sort window-lst
+                                        (<span style="color: #5317ac;">lambda</span> (w1 w2)
+                                          (<span style="color: #5317ac;">let</span> ((edges1 (window-edges w1))
+                                                (edges2 (window-edges w2)))
+                                            (<span style="color: #5317ac;">or</span> (&lt; (car edges1) (car edges2))
+                                                (<span style="color: #5317ac;">and</span> (= (car edges1) (car edges2))
+                                                     (&lt; (cadr edges1) (cadr edges2))))))))
+                  (window-keys (seq-take '(<span style="color: #2544bb;">"j"</span> <span style="color: #2544bb;">"k"</span> <span style="color: #2544bb;">"l"</span> <span style="color: #2544bb;">";"</span> <span style="color: #2544bb;">"a"</span> <span style="color: #2544bb;">"s"</span> <span style="color: #2544bb;">"d"</span> <span style="color: #2544bb;">"f"</span>) window-num))
+                  (window-map (cl-pairlis window-keys sorted-windows)))
+             (<span style="color: #5317ac;">setq</span> my-quick-window-overlays
+                   (mapcar (<span style="color: #5317ac;">lambda</span> (entry)
+                             (<span style="color: #5317ac;">let*</span> ((key (car entry))
+                                    (window (cdr entry))
+                                    (start (window-start window))
+                                    (overlay (make-overlay start start (window-buffer window))))
+                               (overlay-put overlay 'after-string
+                                            (propertize (format <span style="color: #2544bb;">"[%s]"</span> key)
+                                                        'face '(<span style="color: #8f0075;">:foreground</span> <span style="color: #2544bb;">"white"</span> <span style="color: #8f0075;">:background</span> <span style="color: #2544bb;">"blue"</span> <span style="color: #8f0075;">:weight</span> bold)))
+                               (overlay-put overlay 'window window)
+                               overlay))
+                           window-map))
+             (<span style="color: #5317ac;">let</span> ((key (read-key (format <span style="color: #2544bb;">"Select window [%s]: "</span> (string-join window-keys <span style="color: #2544bb;">", "</span>)))))
+               (mapc #'delete-overlay my/quick-window-overlays)
+               (<span style="color: #5317ac;">setq</span> my-quick-window-overlays nil)
+               (<span style="color: #5317ac;">when-let</span> ((selected-window (cdr (assoc (char-to-string key) window-map))))
+                 (select-window selected-window))))))))
 </pre>
 </div>
 </div>

@@ -1,16 +1,44 @@
+/* A Mordern CSS Reset */
+
+*, *::befor, *::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: : 0;
+}
+
 body {
-    width: 710px;
+    line-height: 1.5;
+}
+
+img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+    overflow-wrap: break-word;
+}
+
+p {
+    text-wrap: pretty;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance;
+}
+
+/* End */
+
+body {
+    width: 680px;
     margin: 2% auto;
     padding: lem;
-    line-height: 1.4em;
     font-size: 15px;
-    font-family: Georgia, serif;
-}
+    font-family: sans-serif;
 
-h1,h2,h3,h4,h5,h6 {
-    font-family: Helvetica, sans-serif;
 }
-
 
 p {
     margin: 1em auto;
@@ -20,8 +48,8 @@ p.verse {
     margin-left: 3%;
 }
 
-img, iframe, video {
-    max-width: 80%;
+img {
+    margin: auto;
 }
 
 table {
@@ -51,15 +79,26 @@ blockquote {
     margin: 0.8em auto;
 }
 
-.org-src-container {
-    font-size: 85%;
+pre {
+    font-size: 90%;
+    font-family: monospace;
     background: #f9f9f9;
     border: 1px solid #ddd;
     box-shadow: 5px 5px 5px #eee;
-    font-family: Lucida Console, monospace;
     margin: 1em auto;
     padding: 0.1em 0.5em;
     position: relative;
+    page-break-before: avoid;
+}
+
+:not(pre) > code {
+    font-size: 90%;
+    font-family: monospace;
+    padding: 2px 5px;
+    margin: auto 1px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background-clip: padding-box;
 }
 
 /* Set the colors in <pre> blocks from the Leuven theme */
