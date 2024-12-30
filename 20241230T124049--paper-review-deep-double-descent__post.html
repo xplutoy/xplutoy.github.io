@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2024-12-30 Mon 14:23 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Paper Review: Deep Double Descent</title>
+<meta name="author" content="杨雪" />
+<meta name="generator" content="Org Mode" />
+<link rel='stylesheet' href='./static/org.css' type='text/css'/> 
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> | <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+</div>
+<div id="content" class="content">
+<header>
+<h1 class="title">Paper Review: Deep Double Descent</h1>
+</header><nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgeae4417">1. 参考</a></li>
+</ul>
+</div>
+</nav>
+<p>
+发表在 ICLR 2020 上的这篇论文(1)发现一个有趣的现象：在许多深度学习任务中，当增加模型规模，训练过程中的模型性能会先变差，再变好。
+</p>
+
+<p>
+偏差-方差权衡是经典统计学习理论中的一个基本概念。其想法是更高复杂度的模型具有更低偏差和更高方差。当模型容量超过一个阈值，模型过拟合，损失函数中的方差项起主要作用。从这一点来看，增加模型复杂度只会降低性能。但是现代深度神经网络却不是这样，模型越大性能反而越好。
+</p>
+
+<p>
+该如何调和上述矛盾的现象呢？这篇论文发现在许多深度学习的设置中存在两个不同的区域。当处于 under-parameterized 区域时，测试误差是模型复杂度的函数，与经典的偏差-方差权衡预测一致呈现 U 型。而当模型充分大时，增加模型复杂度只会减少测试误差。
+</p>
+
+<p>
+文章进一步发现 double descent 现象不仅与模型的尺寸的函数，还与训练的 epoch 数相关。综合上述观察，作者提出了一种新的叫做 effective model complexity (EMC) 的复杂度测量方法，并可以通过该复杂性指标来识别这两个不同的深度学习设置区域。
+</p>
+
+<p>
+更多内容请参考原文。
+</p>
+
+<div id="outline-container-orgeae4417" class="outline-2">
+<h2 id="orgeae4417"><span class="section-number-2">1.</span> 参考</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+[1] Nakkiran, Preetum and Kaplun, Gal and Bansal, Yamini and Yang, Tristan and Barak, Boaz and Sutskever, Ilya, <i>Deep {{Double Descent}}: {{Where Bigger Models}} and {{More Data Hurt}}</i>, 2019.</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2024-12-30 Mon 14:22<br/></p> </div>
+</div>
+</body>
+</html>
