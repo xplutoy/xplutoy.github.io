@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2024-12-30 Mon 17:19 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Paper Review: Large Language Models Cannot Self-Correct  Reasoning Yet</title>
+<meta name="author" content="杨雪" />
+<meta name="generator" content="Org Mode" />
+<link rel='stylesheet' href='./static/org.css' type='text/css'/> 
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> | <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+</div>
+<div id="content" class="content">
+<header>
+<h1 class="title">Paper Review: Large Language Models Cannot Self-Correct  Reasoning Yet</h1>
+</header><nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org3f11149">1. 参考</a></li>
+</ul>
+</div>
+</nav>
+<p>
+大模型是否具有自我修正的能力一直是当前 “LLM 热” 的研究重点。这篇来自 ICLR 2024 的论文(1)重新评估了当前一些关于大模型 self-correction 的研究结果，得出如下结论：
+</p>
+
+<ul class="org-ul">
+<li><b>目前的 LLMs 很难在没有外部反馈的情况下做到“自我纠正”。</b></li>
+</ul>
+
+<p>
+作者观察到，当前研究中 LLMs 的 self-correction 能力提升几乎全来自于用真实标签 (oracle label) 来指导模型的自我纠正过程。如果不提供这些真实标签，也就不再能复现这种提升。
+</p>
+
+<p>
+实践中很难获取高质量的外部反馈，有效的自我纠正也更应该由 LLMs 自己不依赖外部反馈做出，即 intrinsic self-correction 。论文考察了当前大获成功的模型是否具备这种 intrinsic self-correction 能力，结果并不理想，根本问题是 LLMs 无法判断其推理的正确性。
+</p>
+
+<p>
+这个方向 (intrinsic self-correction) 还有很大的研究空间。
+</p>
+
+<p>
+当然，如果能为 LLMs 提供可靠的外部反馈，那么模型的推理能力将得到很大的提升。很多领域都有可靠的外部反馈，比如代码生成任务，其对应语言的解释器可以立马执行生成的代码，并给予模型反馈。因此，如何使 LLMs 与外部环境交互并从不同类型的可用反馈中学习将会是一个很有前景的研究方向。
+</p>
+
+<p>
+一篇非常不错且具有指导性的文章，对于仍在入门或者有些迷茫的同学可以认真看看。
+</p>
+
+
+<div id="outline-container-org3f11149" class="outline-2">
+<h2 id="org3f11149"><span class="section-number-2">1.</span> 参考</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+[1] Huang, Jie and Chen, Xinyun and Mishra, Swaroop and Zheng, Huaixiu Steven and Yu, Adams Wei and Song, Xinying and Zhou, Denny, <i>Large {{Language Models Cannot Self-Correct Reasoning Yet}}</i>, 2023.</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2024-12-30 Mon 17:19<br/></p> </div>
+</div>
+</body>
+</html>
