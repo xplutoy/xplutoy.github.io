@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2025-01-01 Wed 02:21 -->
+<!-- 2025-01-01 Wed 03:32 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>在 Emacs 中用 Dumper 提升启动速度</title>
@@ -16,22 +16,7 @@
 <div id="content" class="content">
 <header>
 <h1 class="title">在 Emacs 中用 Dumper 提升启动速度</h1>
-</header><nav id="table-of-contents" role="doc-toc">
-<h2>Table of Contents</h2>
-<div id="text-table-of-contents" role="doc-toc">
-<ul>
-<li><a href="#org1e9da2c">1. Config</a>
-<ul>
-<li><a href="#org09d45bf">1.1. 定制需要 dump 的包</a></li>
-<li><a href="#org1ff4803">1.2. 加载 dump-file 启动 emacs</a></li>
-<li><a href="#org0ee5745">1.3. Protable-dumper的一些问题</a></li>
-</ul>
-</li>
-<li><a href="#orgae48a20">2. 结语</a></li>
-</ul>
-</div>
-</nav>
-<p>
+</header><p>
 今天尝试了一下 emacs 的 protable dumper 功能，它把加载的 package 导出到一个外部文件中，然后启动 emacs 时直接
 加载这个文件，这样比一个一个 package 的加载速度快很多。lazyload 是延迟到首次调用时才加载 package，这会导致两个问题：
 </p>

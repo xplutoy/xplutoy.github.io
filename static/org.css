@@ -68,9 +68,10 @@ a:hover {
     text-decoration-color: var(--link);
 }
 
-img {
+img, picture {
     max-width: 100%;
     height: auto;
+    display: block;
 }
 
 button, .button, input[type=submit] {
@@ -160,6 +161,11 @@ button + button, .button + .button, input[type=submit] + input[type=submit] {
 
 
 /* ======= Customisation ============= */
+
+.title {
+    text-align: center;
+    margin: 1.2em auto;
+}
 
 table {
     margin: auto;
