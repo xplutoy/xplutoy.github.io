@@ -1,107 +1,186 @@
-/* A Mordern CSS Reset */
+/* neat css, https://github.com/codazoda/neatcss/tree/master */
 
-*, *::befor, *::after {
+* {
     box-sizing: border-box;
 }
 
-* {
-    margin: : 0;
+:root {
+    color-scheme: light dark;
+    --light: #fff;
+    --lesslight: #efefef;
+    --dark: #404040;
+    --moredark: #000;
+    --link: royalblue;
+    border-top: 5px solid var(--dark);
+    line-height: 1.5em;
+    font-family: system-ui, sans-serif;
+    font-size: 16px;
+    color: var(--dark);
 }
 
-body {
-    line-height: 1.5;
+h1 {
+    line-height: 1em;
 }
 
-img, picture, video, canvas, svg {
-    display: block;
-    max-width: 100%;
+button, input {
+    font-size: 1em; /* Override browser default font shrinking*/
 }
 
-p, h1, h2, h3, h4, h5, h6 {
-    overflow-wrap: break-word;
-}
-
-p {
-    text-wrap: pretty;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    text-wrap: balance;
-}
-
-/* End */
-
-body {
-    width: 680px;
-    margin: 2% auto;
-    padding: lem;
-    font-size: 15px;
-    font-family: sans-serif;
-
-}
-
-p {
-    margin: 1em auto;
-}
-
-p.verse {
-    margin-left: 3%;
-}
-
-img {
-    margin: auto;
-}
-
-table {
-    margin: auto;
-    border-top: 1px solid #666;
-    border-bottom: 1px solid #666;
-    border-collapse: collapse;
-}
-
-table tr {
-    border-top: 0.5px solid gray;
-}
-
-table td,th {
-    padding: 0.3em 0.6em;
-    vertical-align: middle;
-}
-
-blockquote {
-    margin: 1em 2em;
-    padding-left: 1em;
-    border-left: 3px solid #ddd;
-}
-
-.title {
-    text-align: center;
-    margin: 0.8em auto;
+input {
+    border: 1px solid var(--dark);
+    background-color: var(--lesslight);
+    border-radius: .25em;
+    padding: .5em;
 }
 
 pre {
     font-size: 90%;
-    font-family: monospace;
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-    box-shadow: 5px 5px 5px #eee;
-    margin: 1em auto;
-    padding: 0.1em 0.5em;
-    position: relative;
-    page-break-before: avoid;
+    background-color: var(--lesslight);
+    margin: 0.5em 0 0.5em 0;
+    padding: 0.5em;
+    overflow: auto;
 }
 
-:not(pre) > code {
-    font-size: 90%;
-    font-family: monospace;
-    padding: 2px 5px;
-    margin: auto 1px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    background-clip: padding-box;
+code {
+    background-color: var(--lesslight);
 }
 
-/* Set the colors in <pre> blocks from the Leuven theme */
+blockquote {
+    border-left: 0.25rem solid var(--dark);
+    padding-left: 1rem;
+}
+
+body {
+    background-color: var(--light);
+    margin: 0;
+    max-width: 800px;
+    padding: 0 20px 20px 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+a {
+    outline: none;
+    color: var(--dark);
+}
+
+a:hover {
+    text-decoration-color: var(--link);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+button, .button, input[type=submit] {
+    display: inline-block;
+    background-color: var(--dark);
+    color: var(--light);
+    text-align: center;
+    padding: .5em;
+    border-radius: .25em;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover, .button:hover, input[type=submit]:hover {
+    color: var(--lesslight);
+    background-color: var(--moredark);
+}
+
+button + button, .button + .button, input[type=submit] + input[type=submit] {
+    margin-left: 1em;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.bordered {
+    border: 3px solid;
+}
+
+.home {
+    display: inline-block;
+    background-color: var(--dark);
+    color: var(--light);
+    margin-top: 20px;
+    padding: 5px 10px 5px 10px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+@media (min-width: 600px) {
+    ol.twocol {
+	column-count: 2;
+    }
+
+    .row {
+	display: flex;
+	flex-direction: row;
+	padding: 0;
+	width: 100%;
+    }
+
+    .row > * {
+	display: block;
+	flex: 1 1 auto;
+	max-width: 100%;
+	width: 100%;
+    }
+
+    .row > *:not(:last-child) {
+	margin-right: 10px;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+	--light: #222;
+	--lesslight: #333;
+	--dark: #eee;
+	--moredark: #fefefe;
+    }
+    *:focus {
+	outline: var(--light);
+	box-shadow: 0 0 0 .25em var(--link);
+    }
+}
+
+@media print {
+    .home {
+	display: none;
+    }
+}
+
+
+/* ======= Customisation ============= */
+
+table {
+    margin: auto;
+    border-top: 2px solid gray;
+    border-bottom: 2px solid gray;
+    border-collapse: collapse;
+}
+
+table tr {
+    border-top: 1px solid gray;
+}
+
+table td, table th {
+    padding: 0.2em 0.4em;
+    vertical-align: left;
+}
+
+table td + td, table th + th {
+    border-left: 1px solid gray;
+}
+
 pre span.org-builtin                     {color:#006FE0;font-weight:bold;}
 pre span.org-string                      {color:#008000;}
 pre span.org-doc                         {color:#008000;}

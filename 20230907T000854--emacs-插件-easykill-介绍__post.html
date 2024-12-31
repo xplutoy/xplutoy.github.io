@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2024-12-28 Sat 00:28 -->
+<!-- 2025-01-01 Wed 02:21 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Emacs 插件 EasyKill 介绍</title>
@@ -11,7 +11,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<nav class='nav'> <a href='/about.html' class='button'>HOME</a> | <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> <a href='/index.html' class='button'>BLOG</a></nav><hr/>
 </div>
 <div id="content" class="content">
 <header>
@@ -20,17 +20,17 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org4140fbd">1. Intro</a></li>
-<li><a href="#org14bb1c0">2. Setup</a></li>
-<li><a href="#orgf21b44a">3. Usage</a></li>
-<li><a href="#org4757f4a">4. Case</a></li>
-<li><a href="#org66537d4">5. Comment</a></li>
+<li><a href="#org69899d9">1. Intro</a></li>
+<li><a href="#orgb9c807c">2. Setup</a></li>
+<li><a href="#org847db7c">3. Usage</a></li>
+<li><a href="#org5f7f254">4. Case</a></li>
+<li><a href="#org7bdb357">5. Comment</a></li>
 </ul>
 </div>
 </nav>
 
-<div id="outline-container-org4140fbd" class="outline-2">
-<h2 id="org4140fbd"><span class="section-number-2">1.</span> Intro</h2>
+<div id="outline-container-org69899d9" class="outline-2">
+<h2 id="org69899d9"><span class="section-number-2">1.</span> Intro</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 <a href="https://github.com/leoliu/easy-kill">Easy-kill</a> 是一个编辑增强插件，主要提升 emacs 标记复制等操作的效率。
@@ -38,8 +38,8 @@
 </div>
 </div>
 
-<div id="outline-container-org14bb1c0" class="outline-2">
-<h2 id="org14bb1c0"><span class="section-number-2">2.</span> Setup</h2>
+<div id="outline-container-orgb9c807c" class="outline-2">
+<h2 id="orgb9c807c"><span class="section-number-2">2.</span> Setup</h2>
 <div class="outline-text-2" id="text-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #5317ac;">use-package</span> <span style="color: #0000c0;">easy-kill</span>
@@ -51,8 +51,8 @@
 </div>
 </div>
 
-<div id="outline-container-orgf21b44a" class="outline-2">
-<h2 id="orgf21b44a"><span class="section-number-2">3.</span> Usage</h2>
+<div id="outline-container-org847db7c" class="outline-2">
+<h2 id="org847db7c"><span class="section-number-2">3.</span> Usage</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Easy-kill 提供了 easy-kill 和 easy-mark 两个命令。按如上配置替换对应原生命令后，现在 M-w 既是一个命令，也同时是一个命令前缀。当单独按下 M-w 时，依次按 region，url ，email，current-line，来判断光标下的内容，如有满足则选择（selection）并复制。当作为命令前缀，可接本对象，直接进行复制：
@@ -161,8 +161,8 @@ Easy-kill 提供了 easy-kill 和 easy-mark 两个命令。按如上配置替换
 </div>
 </div>
 
-<div id="outline-container-org4757f4a" class="outline-2">
-<h2 id="org4757f4a"><span class="section-number-2">4.</span> Case</h2>
+<div id="outline-container-org5f7f254" class="outline-2">
+<h2 id="org5f7f254"><span class="section-number-2">4.</span> Case</h2>
 <div class="outline-text-2" id="text-4">
 <table>
 
@@ -202,8 +202,8 @@ Easy-kill 提供了 easy-kill 和 easy-mark 两个命令。按如上配置替换
 </div>
 </div>
 
-<div id="outline-container-org66537d4" class="outline-2">
-<h2 id="org66537d4"><span class="section-number-2">5.</span> Comment</h2>
+<div id="outline-container-org7bdb357" class="outline-2">
+<h2 id="org7bdb357"><span class="section-number-2">5.</span> Comment</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 编辑思想跟 <a href="https://github.com/mawww/kakoune">kakoune</a> 类比较类似，选择 + 操作。是一种很高效直观的编辑方式。

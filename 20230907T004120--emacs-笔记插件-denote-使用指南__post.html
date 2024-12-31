@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2024-12-28 Sat 00:28 -->
+<!-- 2025-01-01 Wed 02:21 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Emacs 笔记插件 Denote 使用指南</title>
@@ -11,7 +11,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<nav class='nav'> <a href='/about.html' class='button'>HOME</a> | <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> <a href='/index.html' class='button'>BLOG</a></nav><hr/>
 </div>
 <div id="content" class="content">
 <header>
@@ -20,24 +20,24 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org38f2b93">1. Intro</a></li>
-<li><a href="#org5d935b5">2. Configuration</a></li>
-<li><a href="#orgc867b17">3. Usage</a></li>
-<li><a href="#org9b4cc6b">4. Misc</a>
+<li><a href="#org6e88e9b">1. Intro</a></li>
+<li><a href="#orgee8321e">2. Configuration</a></li>
+<li><a href="#orgdb7f01a">3. Usage</a></li>
+<li><a href="#org9278dae">4. Misc</a>
 <ul>
-<li><a href="#orgfa7c1a8">4.1. Add or remove keywords</a></li>
-<li><a href="#org5fd5947">4.2. Renaming files</a></li>
-<li><a href="#org0bc8100">4.3. Linking notes</a></li>
-<li><a href="#org5529619">4.4. 实现 zs 笔记命令</a></li>
-<li><a href="#orge0fe6fb">4.5. Denote 可以结合 Org 动态块来索引已有笔记</a></li>
+<li><a href="#org29f7b62">4.1. Add or remove keywords</a></li>
+<li><a href="#org36d4ef4">4.2. Renaming files</a></li>
+<li><a href="#org0c49a8a">4.3. Linking notes</a></li>
+<li><a href="#org59465f3">4.4. 实现 zs 笔记命令</a></li>
+<li><a href="#org2ccfeac">4.5. Denote 可以结合 Org 动态块来索引已有笔记</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </nav>
 
-<div id="outline-container-org38f2b93" class="outline-2">
-<h2 id="org38f2b93"><span class="section-number-2">1.</span> Intro</h2>
+<div id="outline-container-org6e88e9b" class="outline-2">
+<h2 id="org6e88e9b"><span class="section-number-2">1.</span> Intro</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 用了一段时间 Org-roam 插件，但自己真的很少用到双链笔记的特性，也很少用到 org-roam-ui。可能跟我记录的笔记类型有关，自己更喜欢记录主题笔记。这类笔记内容组织较为集中，直接放到一个 Org 文件中最方便，而不是像 zs 那样分解成单个原子。所以今天还是决定使用 Denote 这个笔记插件。
@@ -51,7 +51,7 @@ Denote 并不预设一种记笔记的方式（Org-roam 预设了双链笔记的�
 Denote 默认生成的文件名样式为如下：
 </p>
 
-<pre class="example" id="org6f9cbb0">
+<pre class="example" id="orgb59e668">
 DATE--TITLE__KEYWORDS.EXTENSION
 </pre>
 
@@ -73,8 +73,8 @@ DATE--TITLE__KEYWORDS.EXTENSION
 </div>
 </div>
 
-<div id="outline-container-org5d935b5" class="outline-2">
-<h2 id="org5d935b5"><span class="section-number-2">2.</span> Configuration</h2>
+<div id="outline-container-orgee8321e" class="outline-2">
+<h2 id="orgee8321e"><span class="section-number-2">2.</span> Configuration</h2>
 <div class="outline-text-2" id="text-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #5317ac;">use-package</span> <span style="color: #0000c0;">denote</span>
@@ -102,8 +102,8 @@ DATE--TITLE__KEYWORDS.EXTENSION
 </div>
 </div>
 
-<div id="outline-container-orgc867b17" class="outline-2">
-<h2 id="orgc867b17"><span class="section-number-2">3.</span> Usage</h2>
+<div id="outline-container-orgdb7f01a" class="outline-2">
+<h2 id="orgdb7f01a"><span class="section-number-2">3.</span> Usage</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 在这里，我不用 org-capture 特性来新建笔记，前者更适合用于 GTD 项的捕获。下面是我为denote 设置的快捷键，直接访问 denote 的功能：
@@ -153,16 +153,16 @@ denote-open-or-create 命令可以用来创建或打开 denote 文件，minibuff
 </div>
 </div>
 
-<div id="outline-container-org9b4cc6b" class="outline-2">
-<h2 id="org9b4cc6b"><span class="section-number-2">4.</span> Misc</h2>
+<div id="outline-container-org9278dae" class="outline-2">
+<h2 id="org9278dae"><span class="section-number-2">4.</span> Misc</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 这下面的内容是其官网文档的一些总结，以及自己使用时的一些心得。
 </p>
 </div>
 
-<div id="outline-container-orgfa7c1a8" class="outline-3">
-<h3 id="orgfa7c1a8"><span class="section-number-3">4.1.</span> Add or remove keywords</h3>
+<div id="outline-container-org29f7b62" class="outline-3">
+<h3 id="org29f7b62"><span class="section-number-3">4.1.</span> Add or remove keywords</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 通过 <code>denote-keywords-add</code> 和 <code>denote-keywords-remove</code> 这两个命令可以在笔记的 front-matter 添加或删除 keyword，并同时修改文件。
@@ -170,8 +170,8 @@ denote-open-or-create 命令可以用来创建或打开 denote 文件，minibuff
 </div>
 </div>
 
-<div id="outline-container-org5fd5947" class="outline-3">
-<h3 id="org5fd5947"><span class="section-number-3">4.2.</span> Renaming files</h3>
+<div id="outline-container-org36d4ef4" class="outline-3">
+<h3 id="org36d4ef4"><span class="section-number-3">4.2.</span> Renaming files</h3>
 <div class="outline-text-3" id="text-4-2">
 <p>
 denote 提供了一些保持文件命名约定和笔记 front-matter 一致的命令
@@ -223,8 +223,8 @@ denote 提供了一些保持文件命名约定和笔记 front-matter 一致的�
 </div>
 </div>
 
-<div id="outline-container-org0bc8100" class="outline-3">
-<h3 id="org0bc8100"><span class="section-number-3">4.3.</span> Linking notes</h3>
+<div id="outline-container-org0c49a8a" class="outline-3">
+<h3 id="org0c49a8a"><span class="section-number-3">4.3.</span> Linking notes</h3>
 <div class="outline-text-3" id="text-4-3">
 <table>
 
@@ -264,8 +264,8 @@ denote 提供了一些保持文件命名约定和笔记 front-matter 一致的�
 </div>
 </div>
 
-<div id="outline-container-org5529619" class="outline-3">
-<h3 id="org5529619"><span class="section-number-3">4.4.</span> 实现 zs 笔记命令</h3>
+<div id="outline-container-org59465f3" class="outline-3">
+<h3 id="org59465f3"><span class="section-number-3">4.4.</span> 实现 zs 笔记命令</h3>
 <div class="outline-text-3" id="text-4-4">
 <table>
 
@@ -295,8 +295,8 @@ denote 提供了一些保持文件命名约定和笔记 front-matter 一致的�
 </div>
 </div>
 
-<div id="outline-container-orge0fe6fb" class="outline-3">
-<h3 id="orge0fe6fb"><span class="section-number-3">4.5.</span> Denote 可以结合 Org 动态块来索引已有笔记</h3>
+<div id="outline-container-org2ccfeac" class="outline-3">
+<h3 id="org2ccfeac"><span class="section-number-3">4.5.</span> Denote 可以结合 Org 动态块来索引已有笔记</h3>
 <div class="outline-text-3" id="text-4-5">
 <p>
 加载相关模块
@@ -331,7 +331,7 @@ denote 提供了一些保持文件命名约定和笔记 front-matter 一致的�
 </div>
 </div>
 <div id="postamble" class="status">
-<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2024-12-15 Sun 10:13<br/></p> </div>
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-01 Wed 01:50<br/></p> </div>
 </div>
 </body>
 </html>

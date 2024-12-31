@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2024-12-31 Tue 12:48 -->
+<!-- 2025-01-01 Wed 02:21 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>L1 正则为何导致稀疏性</title>
@@ -43,7 +43,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<nav class='nav'> <a href='/about.html' class='button'>HOME</a> | <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> <a href='/index.html' class='button'>BLOG</a></nav><hr/>
 </div>
 <div id="content" class="content">
 <header>
@@ -74,21 +74,21 @@ L1 正则与 L2 正则的区别是一个老生长谈的问题。我记得自己�
 </p>
 
 
-<figure id="org3be80fa">
+<figure id="org9a96008">
 <img src="./images/20241231121314_l1l2.png" alt="20241231121314_l1l2.png">
 
 </figure>
 
 <p>
-方形表示约束区域，红线是优化函数性能曲面的等高线，两者边界接触那点就是该优化问题的解。我们可以看到，L1 正则的约束区域是方形，其角所对应的解就是某种程度的稀疏解（解的某些维度为 0）。对比 L2 正则的右子图，由于左子图的约束区域是方形（有角），其角更容易（概率更大）与优化函数性能曲面的等高线优先接触，因此也就更容易得到稀疏解。在高维情况下，这种概率会更大，因为高维的超方体很像一个浑身长满尖刺的河豚。
+方形表示约束区域，红线是优化函数性能曲面的等高线，两者边界接触那点就是该优化问题的解。我们可以看到，L1 正则的约束区域是方形，其角所对应的解就是某种程度的稀疏解（解的某些维度为 0）。对比 L2 正则的右子图，由于左子图的约束区域是方形（有角），其角处的区域更容易（概率更大）与优化函数性能曲面的等高线优先接触。因此最后也就更容易得到稀疏解。在高维情况下，这种概率会更大，因为高维的超方体很像一个浑身长满尖刺的海胆。
 </p>
 
 <p>
-如果对最后一点有疑问，可以看下这篇文章： <a href="https://maitbayev.github.io/posts/why-l1-loss-encourage-coefficients-to-shrink-to-zero/">Why does L1 regularization encourage coefficients to shrink to zero?</a>。文章里有很多直观的动画可以帮助理解，自己也是看了其生动直观的动画才有感而发。
+如果对最后一点有疑问，推荐看下这篇文章： <a href="https://maitbayev.github.io/posts/why-l1-loss-encourage-coefficients-to-shrink-to-zero/">Why does L1 regularization encourage coefficients to shrink to zero?</a>。文章里有很多直观的动画帮助理解，自己也是看了其生动直观的动画才有感而发。
 </p>
 </div>
 <div id="postamble" class="status">
-<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2024-12-31 Tue 12:47<br/></p> </div>
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2024-12-31 Tue 12:59<br/></p> </div>
 </div>
 </body>
 </html>
