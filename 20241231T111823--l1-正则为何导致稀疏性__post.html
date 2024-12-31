@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2024-12-31 Tue 12:48 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>L1 正则为何导致稀疏性</title>
+<meta name="author" content="杨雪" />
+<meta name="generator" content="Org Mode" />
+<link rel='stylesheet' href='./static/org.css' type='text/css'/> 
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> | <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+</div>
+<div id="content" class="content">
+<header>
+<h1 class="title">L1 正则为何导致稀疏性</h1>
+</header><p>
+L1 正则与 L2 正则的区别是一个老生长谈的问题。我记得自己刚读研究生时就对这个问题感兴趣，实验室也常有同学讨论。
+</p>
+
+<p>
+那时的理解比较浅显，主要从梯度的角度来看这个问题的。L1 正则项和 L2 正则项都在原点取得极值，但各自对输入的导数却不同。 L1 正则项的梯度恒为 1 ，在优化过程中，所有变量会同时以 1 的速率趋于极值点； L2 正则项梯度的大小与自身成比例，值越大，趋近零的速率就越快，结果就是最后所有变量都很接近且在零附近。
+</p>
+
+<p>
+上面的解释也只是说明了一些 L2 正则化的特性，但不能对 L1 正则化为何导致稀疏性这个问题作答。后面我查阅资料，在《统计学习基础》这本书中找到了答案。
+</p>
+
+<p>
+要说的直观点，我们回到简单的 Lasso 回归问题上：
+</p>
+
+\begin{align}
+\hat{\beta}^{\mathrm{lasso}}=\;&\underset{\beta}{\operatorname*{\operatorname*{argmin}}}\sum_{i=1}^{N}\left(y_{i}-\beta_{0}-\sum_{j=1}^{p}x_{ij}\beta_{j}\right)^{2}\\&\mathrm{subject~to}\sum_{j=1}^{p}|\beta_{j}|\leq t.
+\end{align}
+
+
+<p>
+它是一个带约束条件的凸优化问题，可以用拉格朗日算子法求解。在二维情形，其优化可用下图的左子图示意。
+</p>
+
+
+<figure id="org3be80fa">
+<img src="./images/20241231121314_l1l2.png" alt="20241231121314_l1l2.png">
+
+</figure>
+
+<p>
+方形表示约束区域，红线是优化函数性能曲面的等高线，两者边界接触那点就是该优化问题的解。我们可以看到，L1 正则的约束区域是方形，其角所对应的解就是某种程度的稀疏解（解的某些维度为 0）。对比 L2 正则的右子图，由于左子图的约束区域是方形（有角），其角更容易（概率更大）与优化函数性能曲面的等高线优先接触，因此也就更容易得到稀疏解。在高维情况下，这种概率会更大，因为高维的超方体很像一个浑身长满尖刺的河豚。
+</p>
+
+<p>
+如果对最后一点有疑问，可以看下这篇文章： <a href="https://maitbayev.github.io/posts/why-l1-loss-encourage-coefficients-to-shrink-to-zero/">Why does L1 regularization encourage coefficients to shrink to zero?</a>。文章里有很多直观的动画可以帮助理解，自己也是看了其生动直观的动画才有感而发。
+</p>
+</div>
+<div id="postamble" class="status">
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2024-12-31 Tue 12:47<br/></p> </div>
+</div>
+</body>
+</html>
