@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2025-01-01 Wed 13:15 -->
+<!-- 2025-01-02 Thu 13:02 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>在 Emacs 中用 Dumper 提升启动速度</title>
@@ -42,8 +42,8 @@ protable dumper却可以规避这两个问题，因为在加载 dump-file 后，
 所以，我当前的方案是把 protable dumper 作为补充方案，解决 lazyload 的上述两个问题。
 </p>
 
-<div id="outline-container-org1e9da2c" class="outline-2">
-<h2 id="org1e9da2c"><span class="section-number-2">1.</span> Config</h2>
+<div id="outline-container-orgd718bfc" class="outline-2">
+<h2 id="orgd718bfc"><span class="section-number-2">1.</span> Config</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 主要参考了网上的这篇文章：<a href="https://archive.casouri.cc/note/2020/painless-transition-to-portable-dumper/index.html">Painless Transition to Portable Dumper</a> 。这篇文章写得很详尽，把配置思路和踩的一些坑都说的很清楚。下面的内容只是它的一个简述和总结。
@@ -51,8 +51,8 @@ protable dumper却可以规避这两个问题，因为在加载 dump-file 后，
 </div>
 
 
-<div id="outline-container-org09d45bf" class="outline-3">
-<h3 id="org09d45bf"><span class="section-number-3">1.1.</span> 定制需要 dump 的包</h3>
+<div id="outline-container-org2d85e7b" class="outline-3">
+<h3 id="org2d85e7b"><span class="section-number-3">1.1.</span> 定制需要 dump 的包</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 有两类包是我需要dump的：
@@ -110,8 +110,8 @@ Emacs 提供了 <code>dump-emacs-portable</code> 函数把当前已经加载的�
 </div>
 </div>
 
-<div id="outline-container-org1ff4803" class="outline-3">
-<h3 id="org1ff4803"><span class="section-number-3">1.2.</span> 加载 dump-file 启动 emacs</h3>
+<div id="outline-container-org5c41a1e" class="outline-3">
+<h3 id="org5c41a1e"><span class="section-number-3">1.2.</span> 加载 dump-file 启动 emacs</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 Emacs 提供了 <code>--dump-file</code> 命令行参数，用来在启动 emacs 加载制定 dump-file：
@@ -135,8 +135,8 @@ emacs --dump-file="/User/yx/.emaorg-super-agenda cs.d/emacs.pdmp"
 </div>
 </div>
 
-<div id="outline-container-org0ee5745" class="outline-3">
-<h3 id="org0ee5745"><span class="section-number-3">1.3.</span> Protable-dumper的一些问题</h3>
+<div id="outline-container-org4ed54b3" class="outline-3">
+<h3 id="org4ed54b3"><span class="section-number-3">1.3.</span> Protable-dumper的一些问题</h3>
 <div class="outline-text-3" id="text-1-3">
 <ul class="org-ul">
 <li>一些包导出报错（global-undo-tree, org-super-agenda ）</li>
@@ -153,8 +153,8 @@ emacs --dump-file="/User/yx/.emaorg-super-agenda cs.d/emacs.pdmp"
 </div>
 
 
-<div id="outline-container-orgae48a20" class="outline-2">
-<h2 id="orgae48a20"><span class="section-number-2">2.</span> 结语</h2>
+<div id="outline-container-org985f9b8" class="outline-2">
+<h2 id="org985f9b8"><span class="section-number-2">2.</span> 结语</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 由于之前的配置几乎都是懒加载的，启动速度已经在 0.7 ~ 0.8 左右了，加上 dumper 后速度稍微变慢了一点，在 0.85 左右。不过整个使用过程比以前丝滑了不少。
@@ -177,7 +177,7 @@ emacs --dump-file="/User/yx/.emaorg-super-agenda cs.d/emacs.pdmp"
 </div>
 </div>
 <div id="postamble" class="status">
-<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2024-12-31 Tue 19:01<br/></p> </div>
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-02 Thu 13:01<br/></p> </div>
 </div>
 </body>
 </html>
