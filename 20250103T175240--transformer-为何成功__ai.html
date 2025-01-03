@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2025-01-03 Fri 18:02 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Transformer 为何成功</title>
+<meta name="author" content="杨雪" />
+<meta name="generator" content="Org Mode" />
+<link rel='stylesheet' href='./static/org.css' type='text/css'/> 
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+</div>
+<div id="content" class="content">
+<header>
+<h1 class="title">Transformer 为何成功</h1>
+</header><p>
+最近面试被问到这个问题：LSTM vs Transformer 。
+</p>
+
+<p>
+循环神经网络（RNN、LSTM）是生成式序列建模最自然的方式。其模型结构和序列的生成过程可以用序列全概率分解公式来表述。考虑 <code>m</code> 个词组成的序列 \(\{w_{1},\cdots,w_{m}\}\) ，其全概率分解式为：
+</p>
+
+<p>
+\[P(w_1,...,w_m)=\prod_{i=1}^{i=m}P(w_i|w_1,...,w_{i-1}).\]
+</p>
+
+<p>
+但在实际的使用中，LSTM 的效果比 Transformer 差很多。我的看法是 LSTM 难于对长程关联进行建模，而长程关联是产生“智能”的关键（另一个关键是压缩）。
+</p>
+
+<p>
+LSTM 只是部分解决了 RNN 梯度消失的问题。当序列中两个 Token 相距超过一定距离，梯度消失导致两者之间的关联信号被噪声淹没。也就是说，传统递归神经网络所能建模的上下文很短。这也就很难见到长程关联甚至跳跃关联制造出来的“智能”的假象。
+</p>
+
+<p>
+在 Transformer 中，Tokens 之间的关联由注意力矩阵进行建模，通过网上海量的数据（差不多包含了人类的大部分知识）进行学习。Transformer 中没有循环结构，注意力机制下的所有 Tokens 是平权的，不存在 LSTM 结构中距离越近的 Tokens 越重要的先验。还有就是相较于 LSTM，Transformer 优化难度更小，更利于把网络做大容纳更多的知识。
+</p>
+
+<p>
+在这些（我认为的）主要因素的促成下，基于 Transformer 的 LLMs 诞生！不过，我相信只要其他模型能做到下面总结的两点，也能达到与 Transformer 差不多的效果并产生“智能”：
+</p>
+
+<ul class="org-ul">
+<li>容易建立 Tokens 间的长程关联，可以仿照 Transformer 的平权设计。</li>
+<li>模型容易训练和扩展，增加深度或宽度对模型的优化和收敛影响不大。</li>
+</ul>
+</div>
+<div id="postamble" class="status">
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-03 Fri 18:01<br/></p> </div>
+</div>
+</body>
+</html>

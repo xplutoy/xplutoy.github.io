@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2025-01-03 Fri 18:02 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>In-Context Learning as Implicit Bayesian Inference</title>
+<meta name="author" content="杨雪" />
+<meta name="generator" content="Org Mode" />
+<link rel='stylesheet' href='./static/org.css' type='text/css'/> 
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+</div>
+<div id="content" class="content">
+<header>
+<h1 class="title">In-Context Learning as Implicit Bayesian Inference</h1>
+</header><p>
+In-Context Learning (ICL) 是 LLMs 中涌现出来的一种 <code>few-shot</code> 学习的能力，通过在 Prompt 中添加一些“示例”就能让 LLMs 遵循与示例相同的指令。LLMs 并没有经过从示例中学习的训练，其仅仅是以网上海量的数据在给定上下文的情况下来预测下一个标记的方式来训练的。这是 ICL 最令人迷惑的地方。
+</p>
+
+<p>
+只需在 Prompt 中增加少量的“示例”就能到达用更多标注数据训练出来模型相当的效果，这为 LLMs 的落地和使用打开了方便的大门。各行业人士不需要 LLMs 专业的知识（微调、模型训练），就可以利用 ICL 为各自的业务快速构建模型。可以说 ICL 是当前 LLMs 繁荣的基石。
+</p>
+
+<p>
+如何理解 ICL 很重要，这篇论文(1) (对应的<a href="https://ai.stanford.edu/blog/understanding-incontext/">博文</a>) 从贝叶斯推断的视角提供了一种解释。
+</p>
+
+<div id="outline-container-orgaf3f389" class="outline-2">
+<h2 id="orgaf3f389"><span class="section-number-2">1.</span> References</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+[1] Xie, Sang Michael and Raghunathan, Aditi and Liang, Percy and Ma, Tengyu, <i>An {{Explanation}} of {{In-context Learning}} as {{Implicit Bayesian Inference}}</i>, 2021.</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-03 Fri 15:47<br/></p> </div>
+</div>
+</body>
+</html>
