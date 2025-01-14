@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2025-01-15 Wed 03:16 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Paper Review: Circle Loss</title>
+<meta name="author" content="杨雪" />
+<meta name="generator" content="Org Mode" />
+<link rel='stylesheet' href='./static/org.css' type='text/css'/> 
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+</div>
+<div id="content" class="content">
+<header>
+<h1 class="title">Paper Review: Circle Loss</h1>
+</header><p>
+这篇论文(1)发现大多数损失函数，如 <code>cross-entropy loss</code>, <code>triplet loss</code>, <code>N-pair loss</code> 等，都可以统一为如下表达式：
+</p>
+
+\begin{aligned}
+\mathcal{L}_{uni} & =\log\left[1+\sum_{i=1}^K\sum_{j=1}^L\exp(\gamma(s_n^j-s_p^i+m))\right] \\
+ & =\log\left[1+\sum_{j=1}^L\exp(\gamma(s_n^j+m))\sum_{i=1}^K\exp(\gamma(-s_p^i))\right],
+\end{aligned}
+
+<p>
+其中 \(\gamma\) 是一个缩放因子， \(m\) 是分离的边距， \(s_{n}\) 是类间相似性， \(s_{p}\) 是类内相似性。优化它也就是在减少 \((s_{n}-s_{p})\)，即最小化类间相似性 (\(s_{n}\)) 最大化类内相似性 (\(s_{p}\)) 。该式是对两类看起来很不一样的学习方式的统一表述：基于类级标签的学习和基于成对标签的学习。
+</p>
+
+<p>
+论文指出这些基于优化 \(s_{n}-s_{p}\) 的损失函数有如下两个问题：（1）缺乏优化的灵活性，类间相似性和类内相似性在损失函数中的权重是严格对称相等的；（2）不明确的收敛状态。直觉上，不同的相似性等分应该有不同的惩罚权重，并且相似性得分离最优值越远其惩罚权重应该越大。
+</p>
+
+<p>
+基于上述分析和洞见，作者提出如下基于 <code>Self-paced Weighting</code> 的损失函数：
+</p>
+
+\begin{aligned}
+\mathcal{L}_{circle} & =\log\left[1+\sum_{i=1}^K\sum_{j=1}^L\exp\left(\gamma(\alpha_n^js_n^j-\alpha_p^is_p^i)\right)\right] \\
+ & =\log\left[1+\sum_{i=1}^L\exp(\gamma\alpha_n^js_n^j)\sum_{i=1}^K\exp(-\gamma\alpha_p^is_p^i)\right],
+\end{aligned}
+
+<p>
+其中 \(\alpha_p^i=[O_p-s_p^i]_+, \quad\alpha_n^j=[s_n^j-O_n]_+\) 。
+</p>
+
+<p>
+该损失函数在人脸识别 (Face Recognition)、行人再识别 (Person Re-identification) 和细粒度图像检索 (Fine-grained Image Retrieval) 等任务上都表现最优。
+</p>
+
+<hr>
+
+<p>
+非常不错的一篇论文，其为两类不同类型的学习模式的损失函数提供了一个统一的数学表示，对理解最近各种度量学习的损失函数提供了统一的视角和深入的洞见。推荐阅读。
+</p>
+
+<div id="outline-container-org0e652ca" class="outline-2">
+<h2 id="org0e652ca"><span class="section-number-2">1.</span> 参考</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+[1] Sun, Yifan and Cheng, Changmao and Zhang, Yuhan and Zhang, Chi and Zheng, Liang and Wang, Zhongdao and Wei, Yichen, <i>Circle {{Loss}}: {{A Unified Perspective}} of {{Pair Similarity Optimization}}</i>, 2020.</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-15 Wed 03:15<br/></p> </div>
+</div>
+</body>
+</html>
