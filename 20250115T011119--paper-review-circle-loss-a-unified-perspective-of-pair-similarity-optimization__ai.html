@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2025-01-15 Wed 03:32 -->
+<!-- 2025-01-15 Wed 03:42 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Paper Review: Circle Loss</title>
+<title>Paper Review: Circle Loss A Unified Perspective of Pair Similarity Optimization</title>
 <meta name="author" content="杨雪" />
 <meta name="generator" content="Org Mode" />
 <link rel='stylesheet' href='./static/org.css' type='text/css'/> 
@@ -47,7 +47,7 @@
 </div>
 <div id="content" class="content">
 <header>
-<h1 class="title">Paper Review: Circle Loss</h1>
+<h1 class="title">Paper Review: Circle Loss A Unified Perspective of Pair Similarity Optimization</h1>
 </header><p>
 这篇论文(1)发现大多数损失函数，如 <code>cross-entropy loss</code>, <code>triplet loss</code>, <code>N-pair loss</code> 等，都可以统一为如下表达式：
 </p>
@@ -62,11 +62,7 @@
 </p>
 
 <p>
-论文指出这些基于优化 \(s_{n}-s_{p}\) 的损失函数有如下两个问题：（1）缺乏优化的灵活性，类间相似性和类内相似性在损失函数中的权重是严格对称相等的；（2）不明确的收敛状态。直觉上，不同的相似性等分应该有不同的惩罚权重，并且相似性得分离最优值越远其惩罚权重应该越大。
-</p>
-
-<p>
-基于上述分析和洞见，作者提出如下基于 <code>Self-paced Weighting</code> 的损失函数：
+论文指出这些基于优化 \((s_{n}-s_{p})\) 的损失函数有如下两个问题：（1）缺乏优化的灵活性，类间相似性和类内相似性在损失函数中的权重是严格对称相等的；（2）不明确的收敛状态。直觉上，不同的相似性等分应该有不同的惩罚权重，并且相似性得分离最优值越远其惩罚权重应该越大。基于上述洞见，作者提出如下基于 <code>Self-paced Weighting</code> 的损失函数：
 </p>
 
 \begin{aligned}
@@ -88,8 +84,8 @@
 非常不错的一篇论文，其将两种看似截然不同的两类学习模式的损失函数用统一的数学公式表示，为剖析当下众多度量学习损失函数，提供了一种统一的视角和深入的洞见。推荐大家阅读。
 </p>
 
-<div id="outline-container-org0e652ca" class="outline-2">
-<h2 id="org0e652ca"><span class="section-number-2">1.</span> 参考</h2>
+<div id="outline-container-orgbdac96e" class="outline-2">
+<h2 id="orgbdac96e"><span class="section-number-2">1.</span> 参考</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 [1] Sun, Yifan and Cheng, Changmao and Zhang, Yuhan and Zhang, Chi and Zheng, Liang and Wang, Zhongdao and Wei, Yichen, <i>Circle {{Loss}}: {{A Unified Perspective}} of {{Pair Similarity Optimization}}</i>, 2020.</p>
@@ -97,7 +93,7 @@
 </div>
 </div>
 <div id="postamble" class="status">
-<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-15 Wed 03:31<br/></p> </div>
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-15 Wed 03:41<br/></p> </div>
 </div>
 </body>
 </html>
