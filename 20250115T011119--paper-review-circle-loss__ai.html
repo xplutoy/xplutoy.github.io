@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2025-01-15 Wed 03:16 -->
+<!-- 2025-01-15 Wed 03:32 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Paper Review: Circle Loss</title>
@@ -58,7 +58,7 @@
 \end{aligned}
 
 <p>
-其中 \(\gamma\) 是一个缩放因子， \(m\) 是分离的边距， \(s_{n}\) 是类间相似性， \(s_{p}\) 是类内相似性。优化它也就是在减少 \((s_{n}-s_{p})\)，即最小化类间相似性 (\(s_{n}\)) 最大化类内相似性 (\(s_{p}\)) 。该式是对两类看起来很不一样的学习方式的统一表述：基于类级标签的学习和基于成对标签的学习。
+其中 \(\gamma\) 是一个缩放因子， \(m\) 是分离的边距， \(s_{n}\) 是类间相似性， \(s_{p}\) 是类内相似性。优化它也就是在减少 \((s_{n}-s_{p})\)，即最小化类间相似性 (\(s_{n}\)) 最大化类内相似性 (\(s_{p}\)) 。该公式是对两种看似截然不同的学习方式的统一表达，即基于类别标签的学习和基于配对标签的学习。
 </p>
 
 <p>
@@ -85,7 +85,7 @@
 <hr>
 
 <p>
-非常不错的一篇论文，其为两类不同类型的学习模式的损失函数提供了一个统一的数学表示，对理解最近各种度量学习的损失函数提供了统一的视角和深入的洞见。推荐阅读。
+非常不错的一篇论文，其将两种看似截然不同的两类学习模式的损失函数用统一的数学公式表示，为剖析当下众多度量学习损失函数，提供了一种统一的视角和深入的洞见。推荐大家阅读。
 </p>
 
 <div id="outline-container-org0e652ca" class="outline-2">
@@ -97,7 +97,7 @@
 </div>
 </div>
 <div id="postamble" class="status">
-<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-15 Wed 03:15<br/></p> </div>
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-15 Wed 03:31<br/></p> </div>
 </div>
 </body>
 </html>
