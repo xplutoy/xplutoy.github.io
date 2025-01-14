@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2025-01-15 Wed 03:56 -->
+<!-- 2025-01-15 Wed 04:06 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>在 Emacs 中启动 Server 模式</title>
+<title>如何在 Emacs 中启动 Server 模式</title>
 <meta name="author" content="杨雪" />
 <meta name="generator" content="Org Mode" />
 <link rel='stylesheet' href='./static/org.css' type='text/css'/> 
@@ -15,10 +15,10 @@
 </div>
 <div id="content" class="content">
 <header>
-<h1 class="title">在 Emacs 中启动 Server 模式</h1>
+<h1 class="title">如何在 Emacs 中启动 Server 模式</h1>
 </header>
-<div id="outline-container-orgfaac7ee" class="outline-2">
-<h2 id="orgfaac7ee"><span class="section-number-2">1.</span> Intro</h2>
+<div id="outline-container-org27510fd" class="outline-2">
+<h2 id="org27510fd"><span class="section-number-2">1.</span> Intro</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 快速启动 emacs 是一个问题：
@@ -35,12 +35,12 @@
 </div>
 </div>
 
-<div id="outline-container-org854a11d" class="outline-2">
-<h2 id="org854a11d"><span class="section-number-2">2.</span> Setup</h2>
+<div id="outline-container-org8037471" class="outline-2">
+<h2 id="org8037471"><span class="section-number-2">2.</span> Setup</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org3990363" class="outline-3">
-<h3 id="org3990363"><span class="section-number-3">2.1.</span> 方法一</h3>
+<div id="outline-container-org88cb928" class="outline-3">
+<h3 id="org88cb928"><span class="section-number-3">2.1.</span> 方法一</h3>
 <div class="outline-text-3" id="text-2-1">
 <ol class="org-ol">
 <li>按如下命令启动 emacs（server-name可以省略，默认为 &ldquo;server&rdquo;）：</li>
@@ -69,8 +69,8 @@ emacsclient -s server -t
 </p>
 </div>
 
-<div id="outline-container-org95f0993" class="outline-4">
-<h4 id="org95f0993"><span class="section-number-4">2.1.1.</span> 系统自启动</h4>
+<div id="outline-container-org9c58243" class="outline-4">
+<h4 id="org9c58243"><span class="section-number-4">2.1.1.</span> 系统自启动</h4>
 <div class="outline-text-4" id="text-2-1-1">
 <div class="org-src-container">
 <pre class="src src-shell">brew services start d12frosted/emacs-plus/emacs-plus@28
@@ -79,8 +79,8 @@ emacsclient -s server -t
 </div>
 </div>
 
-<div id="outline-container-org6bfc6a2" class="outline-4">
-<h4 id="org6bfc6a2"><span class="section-number-4">2.1.2.</span> 打包成应用</h4>
+<div id="outline-container-orga7dfe24" class="outline-4">
+<h4 id="orga7dfe24"><span class="section-number-4">2.1.2.</span> 打包成应用</h4>
 <div class="outline-text-4" id="text-2-1-2">
 <ol class="org-ol">
 <li>打开 automator</li>
@@ -97,8 +97,8 @@ emacsclient -s server -t
 </div>
 </div>
 
-<div id="outline-container-org53bdcd3" class="outline-4">
-<h4 id="org53bdcd3"><span class="section-number-4">2.1.3.</span> 遇到的问题</h4>
+<div id="outline-container-orgeb71fbc" class="outline-4">
+<h4 id="orgeb71fbc"><span class="section-number-4">2.1.3.</span> 遇到的问题</h4>
 <div class="outline-text-4" id="text-2-1-3">
 <ul class="org-ul">
 <li>在 kitty 终端中用 -t 参数执行会报找不到 terminfo 的错误，在命令前指定环境变量
@@ -109,8 +109,8 @@ TERM=xterm-256color 解决问题。</li>
 </div>
 </div>
 
-<div id="outline-container-org4941342" class="outline-3">
-<h3 id="org4941342"><span class="section-number-3">2.2.</span> 方法二</h3>
+<div id="outline-container-orgeb5e28c" class="outline-3">
+<h3 id="orgeb5e28c"><span class="section-number-3">2.2.</span> 方法二</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 直接在一个 emacs 的实例中启动服务，该服务和这个实例共生共灭。
@@ -129,8 +129,8 @@ TERM=xterm-256color 解决问题。</li>
 </div>
 </div>
 
-<div id="outline-container-org6581a69" class="outline-2">
-<h2 id="org6581a69"><span class="section-number-2">3.</span> Comment</h2>
+<div id="outline-container-orgc30aa6e" class="outline-2">
+<h2 id="orgc30aa6e"><span class="section-number-2">3.</span> Comment</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 用了一段时间的方法一，但不时地出现一些小问题，而且在不同的系统上配置方法都不一样，
@@ -140,7 +140,7 @@ TERM=xterm-256color 解决问题。</li>
 </div>
 </div>
 <div id="postamble" class="status">
-<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-02 Thu 13:01<br/></p> </div>
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-15 Wed 04:00<br/></p> </div>
 </div>
 </body>
 </html>
