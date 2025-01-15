@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2025-01-15 Wed 16:39 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Paper Review: Is Cosine-Similarity of Embeddings Really About Similarity?</title>
+<meta name="author" content="杨雪" />
+<meta name="generator" content="Org Mode" />
+<link rel='stylesheet' href='./static/org.css' type='text/css'/> 
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+</div>
+<div id="content" class="content">
+<header>
+<h1 class="title">Paper Review: Is Cosine-Similarity of Embeddings Really About Similarity?</h1>
+</header><p>
+余弦相似性 (Cosine-Similarity) 可以看作是归一化后的向量内积，被广泛用于各种语义嵌入子空间的低维向量的相似性度量。一般认为，在学习的低维嵌入子空间中，嵌入向量的范数不如其方向对齐重要。不过实际应用中却有很多不一致的地方，很多时候余弦相似性能取得成功，但有时却不如内积有效。这篇论文(1)从一个可解析求解的线性矩阵分解模型 (Matrix Factorization Models) 出发，探索了该不一致性的根源：学习到的嵌入向量具有一定的自由度，可以产生任意的余弦相似性，即使它们（未归一化）的点积是定义明确且唯一的。
+</p>
+
+<p>
+假设在一个推荐系统中，我们有用户-物品矩阵 \(X \in \mathbf{R}_{n \times p}\) 。矩阵分解 (MF) 模型的目的是估计一个低秩矩阵 \(AB^{T} \in \mathbf{R}^{p \times p}\) 使得 \(XAB^{T}\) 是 \(X\) 的一个很好近似。矩阵 \(B\) 的每行 \(\vec{b_{i}}\) 表示物品嵌入向量 (item-embeddings)， \(XA\) 的每行 \(\vec{x_{u}} \cdot A\) 表示用户嵌入向量 (user-embeddings)。整个模型是用用户嵌入向量和物品嵌入向量的内积 \((XAB^{T})_{u,i} = \left< \vec{x_{u}} \cdot A, \vec{b_{i}} \right>\) 定义的。
+</p>
+
+<p>
+作者考察了以下常用的两种训练方法：
+</p>
+
+\begin{aligned}
+ & \min_{A,B}||X-XAB^\top||_F^2+\lambda||AB^\top||_F^2 & & (1) \\
+ & \min_{A,B}||X-XAB^\top||_F^2+\lambda(||XA||_F^2+||B||_F^2) & & (2)
+\end{aligned}
+
+<p>
+并发现不同的正则化是影响余弦相似性的关键因子。假设 \(\hat{A}\) 和 \(\hat{B}\) 是上述目标函数的解，对于任意的旋转矩阵 \(R \in \mathbf{R}^{k \times k}\) ， \(\hat{A}R\) 和 \(\hat{B}R\) 仍是其解，并且余弦相似性对 \(R\) 是不变的。但是论文作者注意到一个关键点，第一个目标函数对矩阵 \(A\) 和 \(B\) 的列的缩放也是不变的：如果 \(\hat{A}\hat{B}^{T}\) 是其解，那么对任何一个对角矩阵 \(D \in \mathbf{R}^{k \times k}\)，\(\hat{A}DD^{T}\hat{B}^{T}\) 仍是其解。结果就是对角矩阵 \(D\) 可以影响学习到的用户嵌入向量和物品嵌入向量的正则化：
+</p>
+
+\begin{aligned}
+(X\hat{A}^{(D)})_{\text{(normalized)}} & =\quad\Omega_AX\hat{A}^{(D)}=\Omega_AX\hat{A}D \\
+\hat{B}_{\text{(normalized)}}^{(D)} & =\quad\Omega_B\hat{B}^{(D)}=\Omega_B\hat{B}D^{-1}
+\end{aligned}
+
+<p>
+其中 \(\Omega_{A}\) 和 \(\Omega_{B}\) 是用来正则化嵌入向量的适当对角矩阵，它们都依赖矩阵 \(D\) 。则用户-用户相似性度量为：
+</p>
+
+<p>
+\[\mathrm{cosSim}\left(X\hat{A}^{(D)},X\hat{A}^{(D)}\right)=\Omega_A(D)\cdot X\hat{A}\cdot D^2\cdot(X\hat{A})^\top\cdot\Omega_A(D)\]
+</p>
+
+<p>
+可以明显看出，其依赖于任意对角矩阵 \(D\) 。因此该额外的自由度使得嵌入空间向量的余弦相似性能产生任意的相似度。对于第二个目标函数是否存在相同的问题，还有待探索。
+</p>
+
+<p>
+针对该问题，论文中提供了以下解决思路：
+</p>
+
+<ul class="org-ul">
+<li>让模型直接基于余弦相似性进行训练，可利用 <code>layer normalization</code> 来实现。</li>
+<li>避免使用嵌入空间。可以从嵌入空间投影回原始空间，在原始空间中进行余弦相似性度量。</li>
+<li>对数据归一化、负采样和 <code>inverse propensity scaling (IPS)</code> 等技术。</li>
+</ul>
+
+<hr>
+
+<p>
+虽然结论并不新奇，但能直观的用简单模型从数学上把这些问题解释清楚还是非常有意思的。推荐阅读。
+</p>
+
+
+<div id="outline-container-orgb9feeac" class="outline-2">
+<h2 id="orgb9feeac"><span class="section-number-2">1.</span> 参考</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+[1] Steck, Harald and Ekanadham, Chaitanya and Kallus, Nathan, <i>Is {{Cosine-Similarity}} of {{Embeddings Really About Similarity}}?</i>, Association for Computing Machinery, 2024.</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-15 Wed 16:38<br/></p> </div>
+</div>
+</body>
+</html>

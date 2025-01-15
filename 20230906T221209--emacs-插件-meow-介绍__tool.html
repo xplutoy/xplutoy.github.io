@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2025-01-15 Wed 04:06 -->
+<!-- 2025-01-15 Wed 16:39 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Emacs 插件 Meow 介绍</title>
@@ -21,11 +21,7 @@
 <h2 id="orgc18951c"><span class="section-number-2">1.</span> Intro</h2>
 <div class="outline-text-2" id="text-1">
 <p>
-Meow 是一个模态编辑模式，与 evil 类似，其命令与具体的模式有关，其大致思想就是把文本编辑大致分为插入和编辑模态，不同的模特完成不同的任务，这可以减少每个操作的按键次数，达到高效快速编辑的作用。
-</p>
-
-<p>
-以移动命令举例，在 emacs 中，向前移动一个字符的快捷键为 <code>C-f</code> ，但在 vim 中，或者 meow 中，只要切换到Nornal模态中，按一个键 <code>f</code> 就可以了。
+Meow 是一个 emacs 下的模态编辑插件，与 evil 类似。模态编辑的思想就是把文本的插入单独拎出来，其他复杂的文本操作放在另外的模态下用单字母的快捷键完成。这可以减少每个操作的按键次数，达到高效快速编辑的目的。以移动命令举例，在 emacs 中，向前移动一个字符的快捷键为 <code>C-f</code> ，但在 vim 中，或者 meow 中，只要切换到 <code>Nornal</code> 模态中，按一个键 <code>f</code> 就可以了。
 </p>
 
 <p>
@@ -41,7 +37,7 @@ Meow 是一个模态编辑模式，与 evil 类似，其命令与具体的模式
 </p>
 
 <p>
-如何结合 emacs 和模态编辑呢，一种简单的想法是，在插入模态中，保留 emacs 的编辑命令，这有点像 spacemacs 的 hybrid 模态，这样在实际编辑时，就可以根据当前编辑任务的具体情况，选择切换到 Normal 模式进行集中编辑，还是就在 Insert 模态中直接用 emacs 的编辑命令编辑，然后继续插入。
+如何结合 emacs 和模态编辑呢，一种简单的想法是，在插入模态中，保留 emacs 的编辑命令，这有点像 spacemacs 的 <code>Hybrid</code> 模态，这样在实际编辑时，就可以根据当前编辑任务的具体情况，选择切换到 <code>Normal</code> 模式进行集中编辑，还是就在 <code>Insert</code> 模态中直接用 emacs 的编辑命令编辑，然后继续插入。
 </p>
 
 <p>
@@ -127,7 +123,7 @@ Normal模态下的基于字符的移动，与 vim 一致，使用 <code>h,j,k,l<
 <h3 id="org26c8734"><span class="section-number-3">1.2.</span> Insert模态</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
-按 <code>i</code> 进入「Insert模态」，按 <code>ESC</code> 键退出「Insert」进入「Normal」。一些其他进入「Insert」的快捷方式
+按 <code>i</code> 进入 <code>Insert</code> 模态，按 <code>ESC</code> 键退出 <code>Insert</code> 进入 <code>Normal</code> 。一些其他进入 <code>Insert</code> 的快捷方式
 </p>
 
 <table>
@@ -352,7 +348,7 @@ Normal模态下的基于字符的移动，与 vim 一致，使用 <code>h,j,k,l<
 </table>
 
 <p>
-Meow 为这些操作提供了方面的操作界面，在 Normal 模态按下操作，比如 <code>]</code> ，meow 会马上弹出对象选择菜单，而不用完全把这些对象记住，其在可用性方面做得比 vim 更好。
+Meow 为这些操作提供了方面的操作界面，在 <code>Normal</code> 模态按下操作，比如 <code>]</code> ，meow 会马上弹出对象选择菜单，而不用完全把这些对象记住，其在可用性方面做得比 vim 更好。
 </p>
 
 <p>
@@ -485,7 +481,7 @@ Meow 这种先选择后操作的模式，可以让其执行 multi-editing 像内
 下面是一个例子：
 </p>
 
-<pre class="example" id="orga56dc72">
+<pre class="example" id="orgf31d344">
 1 2 3
 =&gt;
 [| "1" |] [| "2" |] [| "3" |]
@@ -510,7 +506,7 @@ Meow 这种先选择后操作的模式，可以让其执行 multi-editing 像内
 另一个例子：
 </p>
 
-<pre class="example" id="org947cd73">
+<pre class="example" id="org0c31549">
 x-y-foo-bar-baz
 =&gt;
 x_y_foo_bar_baz
@@ -526,8 +522,8 @@ x_y_foo_bar_baz
 <li>按 <code>f -</code> 查找每个“-”字符，并在字符“-”处自动插入伪光标</li>
 <li>按 <code>c</code> 修改字符“-”，meow 会自动进行记录</li>
 <li>输入“-”</li>
-<li>按 <code>ESC</code> 退出 Insert 模态，进入 Normal 模态，这时 meow 会在所有伪光标处应用记录</li>
-<li>按 <code>G</code> 退出 Beacon 模态，完成编辑</li>
+<li>按 <code>ESC</code> 退出 <code>Insert</code> 模态，进入 <code>Normal</code> 模态，这时 meow 会在所有伪光标处应用记录</li>
+<li>按 <code>G</code> 退出 <code>Beacon</code> 模态，完成编辑</li>
 </ol>
 </div>
 </div>
@@ -547,6 +543,7 @@ x_y_foo_bar_baz
 <p>
 用快速访问实现 emacs 中的 serach-replace 操作:
 </p>
+
 <ol class="org-ol">
 <li>按 <code>v</code> 快速访问要查找的单词</li>
 <li>按 <code>c</code> 修改查找到的单词，然后按 <code>ESC</code> 进入 Normal 模式</li>
@@ -566,7 +563,7 @@ x_y_foo_bar_baz
 <h3 id="org0fd8f94"><span class="section-number-3">2.1.</span> 模态</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
-Emacs 里面分 major-mode 和 mirror-mode，vim 中有插入模态和 Normal 模态，这两者有交叉，但也有很大不同。
+Emacs 里面分 major-mode 和 mirror-mode，vim 中有 <code>Insert</code> 模态和 <code>Normal</code> 模态，这两者有交叉，但也有很大不同。
 </p>
 
 <p>
@@ -586,7 +583,7 @@ Meow 是 emacs 极强扩展能力的一个强有力的例证，它结合了 emac
 </p>
 
 <p>
-Evil 的目标是在 emacs 上完全模拟 vim，怎么把 evil 整合到 emacs 的工作流中，需要用户自己思考和配置。比如在 evil 中的 Insert 下，为了模仿 vim 中的按键，因此覆盖了许多 emacs 原本的按键，这些冲突的地方，都需要用户自己去留意和配置。也因此，在 evil 中，Insert 模态与 emacs 的编辑模态不一样，为了解决这个问题，又单独增加了一个 emacs 模态，以和 evil 的 Insert 模态做区分。这样在 evil 中就包含了两种输入模态，搞得挺麻烦，而且这种设计还割裂了 emacs 和 vim 的各自优点。在 emacspace 这个 start-kit 发行版中又单独引入 hybird 模态，来融合这两者。总之，evil 背负太多的 vim 的负担了，导致其有些臃肿。
+Evil 的目标是在 emacs 上完全模拟 vim，怎么把 evil 整合到 emacs 的工作流中，需要用户自己思考和配置。比如在 evil 中的 <code>Insert</code> 下，为了模仿 vim 中的按键，因此覆盖了许多 emacs 原本的按键，这些冲突的地方，都需要用户自己去留意和配置。也因此，在 evil 中， <code>Insert</code> 模态与 emacs 的编辑模态不一样，为了解决这个问题，又单独增加了一个 emacs 模态，以和 evil 的 <code>Insert</code> 模态做区分。这样在 evil 中就包含了两种输入模态，搞得挺麻烦，而且这种设计还割裂了 emacs 和 vim 的各自优点。在 emacspace 这个 start-kit 发行版中又单独引入 <code>Hybird</code> 模态，来融合这两者。总之，evil 背负太多的 vim 的负担了，导致其有些臃肿。
 </p>
 
 <p>
@@ -598,7 +595,7 @@ Emacs 中，除了编辑模式，还有很多 special-mode，比如 dired，ibuf
 <h4 id="orgb38120a"><span class="section-number-4">2.1.1.</span> Motion 模态</h4>
 <div class="outline-text-4" id="text-2-1-1">
 <p>
-在 meow 中，MOTION 模态默认使用 <code>SPC</code> 作为 leader-key，原本的 <code>SPC</code> 可以通过 <code>SPC SPC</code> 访问，除此之外就再没有绑定其他快捷键了。在 MOTION 模态下，如果定义的快捷键覆盖了 emacs 已有的快捷键，那么 emacs 原本的快捷键被重新绑定到 <code>H-&lt;key&gt;</code> 上。比如为了在 MOTION 模态中也使用 <code>j,k</code> 进行上下移动，可以通过如下配置达成：
+在 meow 中， <code>Motion</code> 模态默认使用 <code>SPC</code> 作为 leader-key，原本的 <code>SPC</code> 可以通过 <code>SPC SPC</code> 访问，除此之外就再没有绑定其他快捷键了。在 <code>Motion</code> 模态下，如果定义的快捷键覆盖了 emacs 已有的快捷键，那么 emacs 原本的快捷键被重新绑定到 <code>H-&lt;key&gt;</code> 上。比如为了在 <code>Motion</code> 模态中也使用 <code>j,k</code> 进行上下移动，可以通过如下配置达成：
 </p>
 
 <div class="org-src-container">
@@ -617,7 +614,7 @@ Emacs 中，除了编辑模式，还有很多 special-mode，比如 dired，ibuf
 <h4 id="orgdb6a720"><span class="section-number-4">2.1.2.</span> Keypad 模态</h4>
 <div class="outline-text-4" id="text-2-1-2">
 <p>
-这个模态类似于 vim 的 leader-key，但又很不同，它实现了不用按 modifier-key 来复用 emacs 的 modifier-keybings。在 Normal 模态中按 <code>SPC</code> 进入 kaypad 模态，然后用户的按键会按下面的规则进行转换：
+这个模态类似于 vim 的 leader-key，但又很不同，它实现了不用按 modifier-key 来复用 emacs 的 modifier-keybings。在 <code>Normal</code> 模态中按 <code>SPC</code> 进入 <code>Kaypad</code> 模态，然后用户的按键会按下面的规则进行转换：
 </p>
 
 <ol class="org-ol">
@@ -642,19 +639,19 @@ Emacs 中，除了编辑模式，还有很多 special-mode，比如 dired，ibuf
 </div>
 </div>
 
-<div id="outline-container-orgb71eb4c" class="outline-4">
-<h4 id="orgb71eb4c"><span class="section-number-4">2.1.3.</span> Beacon模态</h4>
+<div id="outline-container-org91c11de" class="outline-4">
+<h4 id="org91c11de"><span class="section-number-4">2.1.3.</span> Beacon 模态</h4>
 <div class="outline-text-4" id="text-2-1-3">
 <p>
 其也叫做 Batch-KMacro，在这种模式下，可以把键盘宏应用到多个地方。
 </p>
 
 <p>
-当光标移动到 secondary-selection 中，Beacon 模态会自动启动了；如果光标移出 secondary-selection 或者 secondary-selection 去激活，Beacon 模态自动退出。
+当光标移动到 secondary-selection 中， <code>Beacon</code> 模态会自动启动了；如果光标移出 secondary-selection 或者 secondary-selection 去激活， <code>Beacon</code> 模态自动退出。
 </p>
 
 <p>
-当处在 Beacon 模态下，可以通过移动命令创建伪光标：
+当处在 <code>Beacon</code> 模态下，可以通过移动命令创建伪光标：
 </p>
 
 <table>
@@ -708,7 +705,7 @@ Emacs 中，除了编辑模式，还有很多 special-mode，比如 dired，ibuf
 </p>
 
 <ol class="org-ol">
-<li>简单进入 Insert 模态（自动启动宏记录），完成编辑退出 Insert 模态（自动结束宏记录，并应用该宏到所有光标或区域处）</li>
+<li>简单进入 <code>Insert</code> 模态（自动启动宏记录），完成编辑退出 <code>Insert</code> 模态（自动结束宏记录，并应用该宏到所有光标或区域处）</li>
 <li>一般的启动宏记录（按 F3），完成编辑，（按 F4）结束宏记录并应用</li>
 </ol>
 </div>
@@ -860,7 +857,7 @@ Emacs 中，除了编辑模式，还有很多 special-mode，比如 dired，ibuf
 </div>
 </div>
 <div id="postamble" class="status">
-<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-15 Wed 04:04<br/></p> </div>
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-15 Wed 14:50<br/></p> </div>
 </div>
 </body>
 </html>
