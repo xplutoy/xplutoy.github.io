@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2025-01-16 Thu 01:31 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Paper Review: Battle of the Backbones</title>
+<meta name="author" content="杨雪" />
+<meta name="generator" content="Org Mode" />
+<link rel='stylesheet' href='./static/org.css' type='text/css'/> 
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+</div>
+<div id="content" class="content">
+<header>
+<h1 class="title">Paper Review: Battle of the Backbones</h1>
+</header><p>
+大概在 2020 年前，计算机视觉任务中流行的主干网络主要还是随机初始化或者用 ImageNet 预训练的 CNN，其中残差网络 (ResNet) 最受欢迎。最近随着自监督学习 (SSL) 和 ViTs 的流行，涌现了许多用不同数据集训练的基于 SSL 训练方法和 ViTs 网络结构的主干网络。这篇要讲的论文(1)详细的比较了这些主干网络，阐明了这些方法的优缺点，为业界和学界构建计算机视觉系统提供了指导方向。
+</p>
+
+<p>
+下面是论文的一些主要结论：
+</p>
+
+<ul class="org-ul">
+<li>现代架构 (ConvNeXt-Base) 的性能明显优于普通的 ViTs 。</li>
+<li>在同等数据量的前提下，SSL 模型的性能优于监督训练的同类模型。</li>
+<li>在大型训练集上以监督方式预训练的卷积神经网络在大多数任务上仍然表现最佳。</li>
+<li>ViT 比 CNN 对预训练数据量和参数数量更敏感。</li>
+<li>ViT 比 CNN 更受益于规模，如果在更大规模的网络上，ViT 的性能可能超过 CNN 。</li>
+<li>跨任务的性能强相关的：在 BoB 中表现最好的主干模型，在其他任务和设定中也普遍较好。</li>
+<li>Transformers 在端到端的预训练下表现出色；CNN 在 <code>linear probing</code> 的预训练下表现更出色。</li>
+<li>CLIP 预训练在所有普通 ViTs 中表现最好，基于 Vision-Language 的 预训练方法有不错的前景。</li>
+<li>CNN 和 SSL 在对抗性方面更健壮；ViT 比 CNN 更容易受到对抗性示例的影响。</li>
+</ul>
+
+<hr>
+
+<p>
+论文中包含了更多的结论和实验细节，这里不再细说。非常不错的论文，推荐大家阅读，对了解目前 CV 的研究进展很有帮助，也能有效的指导计算机视觉系统的实践落地。
+</p>
+
+<div id="outline-container-org80afd30" class="outline-2">
+<h2 id="org80afd30"><span class="section-number-2">1.</span> 参考</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+[1] Goldblum, Micah and Souri, Hossein and Ni, Renkun and Shu, Manli and Prabhu, Viraj and Somepalli, Gowthami and Chattopadhyay, Prithvijit and Ibrahim, Mark and Bardes, Adrien and Hoffman, Judy and Chellappa, Rama and Wilson, Andrew G. and Goldstein, Tom, <i>Battle of the {{Backbones}}: {{A Large-Scale Comparison}} of {{Pretrained Models}} across {{Computer Vision Tasks}}</i>, 2023.</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-16 Thu 01:27<br/></p> </div>
+</div>
+</body>
+</html>
