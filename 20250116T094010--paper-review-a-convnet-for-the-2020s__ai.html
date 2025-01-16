@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2025-01-16 Thu 12:13 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Paper Review: A ConvNet for the 2020s</title>
+<meta name="author" content="杨雪" />
+<meta name="generator" content="Org Mode" />
+<link rel='stylesheet' href='./static/org.css' type='text/css'/> 
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+</div>
+<div id="content" class="content">
+<header>
+<h1 class="title">Paper Review: A ConvNet for the 2020s</h1>
+</header><p>
+在 2020s，ViTs，尤其是以 Swin Transformers 为代表的分层 Transformers，开始取代 CNN 成为视觉模型主干网络的首选。这篇论文 (1) 重新检视了这些分层 ViTs 的设计空间，提取对性能提升起关键作用的组件，并以此构建了一个结构简单性能优于分层 ViTs 的纯 ConvNet 模型：ConvNeXts 。
+</p>
+
+<p>
+作者从不同层级探索了 Swin Transformers 的设计，以此完成一个普通 ResNet 到更现代化的 ConvNet 的改造。论文中有具体的改造轨迹，对网络结构设计有极大的参考价值。下面是其最后得到的网络结构对比图：
+</p>
+
+
+<figure id="orgbb737db">
+<img src="../data/images/20250116115406_convnext_block.png" alt="20250116115406_convnext_block.png">
+
+</figure>
+
+<hr>
+
+<p>
+网络结构的设计既是艺术又是苦力活，真的很难把握。我现在的研究已经很少再关注网络结构的设计了。但是这些无意中设计或经过无数实验筛选出来的基础网络结构，如 ResNet 、Transformers 和这里提到的 ConvNeXt，无疑带给了深度学习领域巨大的改变。原文写的很精彩，推荐阅读。
+</p>
+</div>
+<div id="postamble" class="status">
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-16 Thu 12:12<br/></p> </div>
+</div>
+</body>
+</html>
