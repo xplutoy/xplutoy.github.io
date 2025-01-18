@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2025-01-18 Sat 15:52 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Paper Review: Decoupled Weight Decay Regularization</title>
+<meta name="author" content="杨雪" />
+<meta name="generator" content="Org Mode" />
+<link rel='stylesheet' href='./static/org.css' type='text/css'/> 
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+</div>
+<div id="content" class="content">
+<header>
+<h1 class="title">Paper Review: Decoupled Weight Decay Regularization</h1>
+</header><p>
+在很多任务中，SGD 训练的模型的泛化能力比 Adam 训练的更好。
+</p>
+
+<p>
+这篇论文 (1) 发现：在学习率适当缩放的情况下，标准 SGD 中的 \(L_{2}\) 与 <code>weight decay</code> 之间是等效的，自适应优化算法 (Adam 等) 却不是。当前的自适应算法的实现都忽略了这一点，所以才导致上面的现象。
+</p>
+
+<p>
+下面是论文中的一些重要观察：
+</p>
+
+<ol class="org-ol">
+<li>\(L_{2}\) 与 <code>weight decay</code> 并不等同。</li>
+<li>\(L_{2}\) 在 <code>Adam</code> 中并不有效。</li>
+<li><code>Weight decay</code> 对 <code>SGD</code> 和 <code>Adam</code> 同样有效。</li>
+<li>最佳权重衰减取决于批处理过程运行的时间和次数。</li>
+</ol>
+
+<p>
+他们提出了一个简单的修改，将权重衰减从损失函数的优化步骤中解耦，来恢复 <code>weight decay</code> 的原始公式。下面是改进的算法：
+</p>
+
+
+<figure id="org341994b">
+<img src="./images/20250118152804_sgdw.png" alt="20250118152804_sgdw.png">
+
+</figure>
+
+<p>
+下面是论文中实验部分值得注意的点：
+</p>
+
+<ul class="org-ul">
+<li>余弦退火学习率调整策略明显优于其他学习率调度。</li>
+<li>权重衰减和学习率超参数解耦，可以提高 <code>Adam</code> 的性能，使其具有与 SGD 相当的竞争力。</li>
+</ul>
+
+
+<div id="outline-container-org367435c" class="outline-2">
+<h2 id="org367435c">参考</h2>
+<div class="outline-text-2" id="text-org367435c">
+<p>
+[1] Loshchilov, Ilya and Hutter, Frank, <i>Decoupled {{Weight Decay Regularization}}</i>, 2018.</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-18 Sat 15:51<br/></p> </div>
+</div>
+</body>
+</html>

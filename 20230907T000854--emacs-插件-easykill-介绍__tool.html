@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2025-01-17 Fri 16:40 -->
+<!-- 2025-01-18 Sat 15:52 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Emacs 插件 EasyKill 介绍</title>
@@ -18,8 +18,8 @@
 <h1 class="title">Emacs 插件 EasyKill 介绍</h1>
 </header>
 <div id="outline-container-org9bdf69a" class="outline-2">
-<h2 id="org9bdf69a"><span class="section-number-2">1.</span> Intro</h2>
-<div class="outline-text-2" id="text-1">
+<h2 id="org9bdf69a">Intro</h2>
+<div class="outline-text-2" id="text-org9bdf69a">
 <p>
 <a href="https://github.com/leoliu/easy-kill">Easy-kill</a> 是一个编辑增强插件，主要提升 emacs 标记复制等操作的效率。
 </p>
@@ -28,8 +28,8 @@
 
 
 <div id="outline-container-orgda01a85" class="outline-2">
-<h2 id="orgda01a85"><span class="section-number-2">2.</span> Setup</h2>
-<div class="outline-text-2" id="text-2">
+<h2 id="orgda01a85">Setup</h2>
+<div class="outline-text-2" id="text-orgda01a85">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #5317ac;">use-package</span> <span style="color: #0000c0;">easy-kill</span>
   <span style="color: #8f0075;">:bind</span> (([remap kill-ring-save] . easy-kill)
@@ -42,8 +42,8 @@
 
 
 <div id="outline-container-org21544fc" class="outline-2">
-<h2 id="org21544fc"><span class="section-number-2">3.</span> Usage</h2>
-<div class="outline-text-2" id="text-3">
+<h2 id="org21544fc">Usage</h2>
+<div class="outline-text-2" id="text-org21544fc">
 <p>
 EasyKill 提供 easy-kill 和 easy-mark 两个命令。推荐按照上面的配置来替换原生的复制和标记命令，现在 <code>M-w</code> 既是一个命令，同时也是一个命令前缀。当单独按下 <code>M-w</code> 时，其会依次按 region，url ，email 和current-line 等当前光标下的内容的类型进行选择（selection）并复制。当作为命令前缀使用时，可以按下 <code>M-w</code> 后接想要复制的对象类型进行复制，如下表所示：
 </p>
@@ -193,8 +193,8 @@ EasyKill 提供 easy-kill 和 easy-mark 两个命令。推荐按照上面的配�
 
 
 <div id="outline-container-org0d79e2d" class="outline-2">
-<h2 id="org0d79e2d"><span class="section-number-2">4.</span> Comment</h2>
-<div class="outline-text-2" id="text-4">
+<h2 id="org0d79e2d">Comment</h2>
+<div class="outline-text-2" id="text-org0d79e2d">
 <p>
 编辑思想跟 <a href="https://github.com/mawww/kakoune">kakoune</a> 类比较类似，选择 + 操作。是一种很高效直观的编辑方式。
 </p>

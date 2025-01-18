@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2025-01-17 Fri 16:40 -->
+<!-- 2025-01-18 Sat 15:52 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>如何在 Emacs 中启动 Server 模式</title>
@@ -18,8 +18,8 @@
 <h1 class="title">如何在 Emacs 中启动 Server 模式</h1>
 </header>
 <div id="outline-container-org27510fd" class="outline-2">
-<h2 id="org27510fd"><span class="section-number-2">1.</span> Intro</h2>
-<div class="outline-text-2" id="text-1">
+<h2 id="org27510fd">Intro</h2>
+<div class="outline-text-2" id="text-org27510fd">
 <p>
 快速启动 emacs 是一个问题：
 </p>
@@ -36,12 +36,12 @@
 </div>
 
 <div id="outline-container-org8037471" class="outline-2">
-<h2 id="org8037471"><span class="section-number-2">2.</span> Setup</h2>
-<div class="outline-text-2" id="text-2">
+<h2 id="org8037471">Setup</h2>
+<div class="outline-text-2" id="text-org8037471">
 </div>
 <div id="outline-container-org88cb928" class="outline-3">
-<h3 id="org88cb928"><span class="section-number-3">2.1.</span> 方法一</h3>
-<div class="outline-text-3" id="text-2-1">
+<h3 id="org88cb928">方法一</h3>
+<div class="outline-text-3" id="text-org88cb928">
 <ol class="org-ol">
 <li>按如下命令启动 emacs（server-name可以省略，默认为 &ldquo;server&rdquo;）：</li>
 </ol>
@@ -70,8 +70,8 @@ emacsclient -s server -t
 </div>
 
 <div id="outline-container-org9c58243" class="outline-4">
-<h4 id="org9c58243"><span class="section-number-4">2.1.1.</span> 系统自启动</h4>
-<div class="outline-text-4" id="text-2-1-1">
+<h4 id="org9c58243">系统自启动</h4>
+<div class="outline-text-4" id="text-org9c58243">
 <div class="org-src-container">
 <pre class="src src-shell">brew services start d12frosted/emacs-plus/emacs-plus@28
 </pre>
@@ -80,8 +80,8 @@ emacsclient -s server -t
 </div>
 
 <div id="outline-container-orga7dfe24" class="outline-4">
-<h4 id="orga7dfe24"><span class="section-number-4">2.1.2.</span> 打包成应用</h4>
-<div class="outline-text-4" id="text-2-1-2">
+<h4 id="orga7dfe24">打包成应用</h4>
+<div class="outline-text-4" id="text-orga7dfe24">
 <ol class="org-ol">
 <li>打开 automator</li>
 <li>选取 <span class="underline">文档类型</span> 为 <span class="underline">应用程序</span></li>
@@ -98,8 +98,8 @@ emacsclient -s server -t
 </div>
 
 <div id="outline-container-orgeb71fbc" class="outline-4">
-<h4 id="orgeb71fbc"><span class="section-number-4">2.1.3.</span> 遇到的问题</h4>
-<div class="outline-text-4" id="text-2-1-3">
+<h4 id="orgeb71fbc">遇到的问题</h4>
+<div class="outline-text-4" id="text-orgeb71fbc">
 <ul class="org-ul">
 <li>在 kitty 终端中用 -t 参数执行会报找不到 terminfo 的错误，在命令前指定环境变量
 TERM=xterm-256color 解决问题。</li>
@@ -110,8 +110,8 @@ TERM=xterm-256color 解决问题。</li>
 </div>
 
 <div id="outline-container-orgeb5e28c" class="outline-3">
-<h3 id="orgeb5e28c"><span class="section-number-3">2.2.</span> 方法二</h3>
-<div class="outline-text-3" id="text-2-2">
+<h3 id="orgeb5e28c">方法二</h3>
+<div class="outline-text-3" id="text-orgeb5e28c">
 <p>
 直接在一个 emacs 的实例中启动服务，该服务和这个实例共生共灭。
 </p>
@@ -130,8 +130,8 @@ TERM=xterm-256color 解决问题。</li>
 </div>
 
 <div id="outline-container-orgc30aa6e" class="outline-2">
-<h2 id="orgc30aa6e"><span class="section-number-2">3.</span> Comment</h2>
-<div class="outline-text-2" id="text-3">
+<h2 id="orgc30aa6e">Comment</h2>
+<div class="outline-text-2" id="text-orgc30aa6e">
 <p>
 用了一段时间的方法一，但不时地出现一些小问题，而且在不同的系统上配置方法都不一样，
 所以现在主要使用第二种方法。简单，方便，一致。

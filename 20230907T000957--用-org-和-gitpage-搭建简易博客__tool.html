@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2025-01-17 Fri 16:40 -->
+<!-- 2025-01-18 Sat 15:52 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>用 Org 和 GitPage 搭建简易博客</title>
@@ -18,8 +18,8 @@
 <h1 class="title">用 Org 和 GitPage 搭建简易博客</h1>
 </header>
 <div id="outline-container-orgc5d155b" class="outline-2">
-<h2 id="orgc5d155b"><span class="section-number-2">1.</span> Intro</h2>
-<div class="outline-text-2" id="text-1">
+<h2 id="orgc5d155b">Intro</h2>
+<div class="outline-text-2" id="text-orgc5d155b">
 <p>
 静态网站生产器，如 <a href="https://gohugo.io">HUGO</a> ，<a href="https://jekyllrb.com">Jekyll</a> ，只支持 <a href="https://www.markdownguide.org">Markdown</a> 格式的文本。目前没有找到令自己满意的支持 Org 格式的替代品。所以就尝试用 Org 自带的 ox-publish 来生产静态页面，结合 github-page 做一个简单的个人笔记展示页面。
 </p>
@@ -27,8 +27,8 @@
 </div>
 
 <div id="outline-container-org286e491" class="outline-2">
-<h2 id="org286e491"><span class="section-number-2">2.</span> Setup</h2>
-<div class="outline-text-2" id="text-2">
+<h2 id="org286e491">Setup</h2>
+<div class="outline-text-2" id="text-org286e491">
 <p>
 我的笔记目录结构如下：
 </p>
@@ -38,7 +38,7 @@
 </pre>
 </div>
 
-<pre class="example" id="orgc4ef636">
+<pre class="example" id="orge1046b9">
 .
 ├── 20230209T052037--常用工具集合__tool.org
 ├── 20230209T055812--zoxide__tool.org
@@ -72,7 +72,7 @@
 </pre>
 </div>
 
-<pre class="example" id="org50b09df">
+<pre class="example" id="orge239bbb">
 : .github
 : └── workflows
 :     └── org-denotes-publish.yml
@@ -330,8 +330,8 @@ jobs:
 </div>
 
 <div id="outline-container-org37628f0" class="outline-2">
-<h2 id="org37628f0"><span class="section-number-2">3.</span> Code Highlight</h2>
-<div class="outline-text-2" id="text-3">
+<h2 id="org37628f0">Code Highlight</h2>
+<div class="outline-text-2" id="text-org37628f0">
 <p>
 org-mode 导出 html 中的代码高亮由变量 <code>org-html-htmlize-output-type</code> 控制：
 </p>
@@ -369,8 +369,8 @@ org-mode 导出 html 中的代码高亮由变量 <code>org-html-htmlize-output-t
 </div>
 
 <div id="outline-container-org7a2bb15" class="outline-2">
-<h2 id="org7a2bb15"><span class="section-number-2">4.</span> Workflow</h2>
-<div class="outline-text-2" id="text-4">
+<h2 id="org7a2bb15">Workflow</h2>
+<div class="outline-text-2" id="text-org7a2bb15">
 <ol class="org-ol">
 <li>本地编辑笔记</li>
 <li>本地构建：
@@ -392,8 +392,8 @@ org-mode 导出 html 中的代码高亮由变量 <code>org-html-htmlize-output-t
 </div>
 
 <div id="outline-container-org1062883" class="outline-2">
-<h2 id="org1062883"><span class="section-number-2">5.</span> Supplement</h2>
-<div class="outline-text-2" id="text-5">
+<h2 id="org1062883">Supplement</h2>
+<div class="outline-text-2" id="text-org1062883">
 <p>
 参考：
 </p>
