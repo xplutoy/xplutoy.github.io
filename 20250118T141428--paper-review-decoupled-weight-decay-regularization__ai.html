@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2025-01-18 Sat 15:52 -->
+<!-- 2025-01-20 Mon 06:46 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Paper Review: Decoupled Weight Decay Regularization</title>
@@ -53,7 +53,7 @@
 </p>
 
 <p>
-这篇论文 (1) 发现：在学习率适当缩放的情况下，标准 SGD 中的 \(L_{2}\) 与 <code>weight decay</code> 之间是等效的，自适应优化算法 (Adam 等) 却不是。当前的自适应算法的实现都忽略了这一点，所以才导致上面的现象。
+这篇论文 (2) 发现：在学习率适当缩放的情况下，标准 SGD 中的 \(L_{2}\) 与 <code>weight decay</code> 之间是等效的，自适应优化算法 (Adam 等) 却不是。当前的自适应算法的实现都忽略了这一点，所以才导致上面的现象。
 </p>
 
 <p>
@@ -72,7 +72,7 @@
 </p>
 
 
-<figure id="org341994b">
+<figure id="orgf5bada2">
 <img src="./images/20250118152804_sgdw.png" alt="20250118152804_sgdw.png">
 
 </figure>
@@ -86,17 +86,148 @@
 <li>权重衰减和学习率超参数解耦，可以提高 <code>Adam</code> 的性能，使其具有与 SGD 相当的竞争力。</li>
 </ul>
 
+<hr>
 
-<div id="outline-container-org367435c" class="outline-2">
-<h2 id="org367435c">参考</h2>
-<div class="outline-text-2" id="text-org367435c">
 <p>
-[1] Loshchilov, Ilya and Hutter, Frank, <i>Decoupled {{Weight Decay Regularization}}</i>, 2018.</p>
+魔鬼藏在细节里，被忽略的细节加上简单的改进就带来如此巨大的性能提升，推荐阅读。我在阅读这篇论文时参考了下面两篇文章来帮自己回顾随机梯度优化算法上的一些记忆模糊的概念，也一并推荐：
+</p>
+
+<ul class="org-ul">
+<li><a href="https://medium.com/@weidagang/demystifying-the-adam-optimizer-in-machine-learning-4401d162cb9e">Demystifying the Adam Optimizer in Machine Learning</a></li>
+<li><a href="https://medium.com/%E9%9B%9E%E9%9B%9E%E8%88%87%E5%85%94%E5%85%94%E7%9A%84%E5%B7%A5%E7%A8%8B%E4%B8%96%E7%95%8C/%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92ml-note-sgd-momentum-adagrad-adam-optimizer-f20568c968db">[機器學習ML NOTE]SGD, Momentum, AdaGrad, Adam Optimizer</a></li>
+</ul>
+
+
+<div id="outline-container-org33b9cdf" class="outline-2">
+<h2 id="org33b9cdf">文献简述</h2>
+<div class="outline-text-2" id="text-org33b9cdf">
+</div>
+<div id="outline-container-org426b80d" class="outline-3">
+<h3 id="org426b80d">Stochastic Gradient Descent with  Warm Restarts (SGDR)</h3>
+<div class="outline-text-3" id="text-org426b80d">
+<p>
+文中指出当前 (2016) 最好的模型都是用 SGD 训练的，但其收敛速度相当感人。 所以这篇论文 (3) 借用了一个在 <code>gradient-free optimization</code> 领域常见的“重启技巧”来加速 <code>SGD</code> 算法的收敛（速率、泛化）。
+</p>
+
+<p>
+简单来说，SGDR 每经过 \(T_{i}\)  个 epochs 就对网络的训练进行一次热重启，具体方法是用下面的余弦模拟退火 (cosine annealing) 学习率调整策略来实现的。
+</p>
+
+<p>
+\[\eta_t=\eta_{min}^i+\frac{1}{2}(\eta_{max}^i-\eta_{min}^i)(1+\cos(\frac{T_{cur}}{T_i}\pi)),\]
+</p>
+
+<p>
+其中 \(\eta_{min}\) 和 \(\eta_{max}\) 是学习率的区间边界。该方法简单有效，比固定学习率方法和周期递减学习率方法有很大的优势。
+</p>
+
+<p>
+该文与当年的另一篇论文 (4) 的方法大同小异，自己的一篇知乎博文 (<a href="https://zhuanlan.zhihu.com/p/62565513">Cyclical Learning Rates</a>) 有专门介绍。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb4fc82b" class="outline-3">
+<h3 id="orgb4fc82b">Adam: A Method for Stochastic Optimization</h3>
+<div class="outline-text-3" id="text-orgb4fc82b">
+<p>
+这篇论文 (1) 的引用高得出奇。它结合了 RMSProp 和 AdaGrad 两种优化器的优势，其用指数加权移动平均方法估算梯度动量和二阶动量，并以此计算不同参数的自适应学习率。
+</p>
+
+
+<figure id="org698bdb1">
+<img src="./images/20250120050336_adam.png" alt="20250120050336_adam.png">
+
+</figure>
+
+<p>
+文中还指出 Adam 有两个重要性质。其一是在参数空间中采取的有效步长 (effective step) 是有界的。这可以理解为在当前参数值周围建立一个信任区域 (true region)，在信任区域外，当前梯度估计值无法提供足够的信息。其二是有效步长对梯度的缩放具有不变性。这使得采用 Adam 的训练会比较稳定。
+</p>
+
+<p>
+原文很精彩也有很多细节，我在理解时参考了这本网络深度学习书籍：<a href="https://zh.d2l.ai/chapter_optimization/index.html">DIVE INTO DEEP LEARNING: 优化算法</a>。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgcddcb6d" class="outline-3">
+<h3 id="orgcddcb6d">On The Convergence Of Adam And Beyond (AMSGrad)</h3>
+<div class="outline-text-3" id="text-orgcddcb6d">
+<p>
+这篇文中是 ICLR 2018 的最佳论文。其发现目前的基于指数移动平均 (exponential moving average) 类的算法 (Adam, RMSprop, AdaDelta, NAdam) 存在收敛性的问题。甚至在作者人工设计的一个简单的凸优化问题上都无法保证收敛。原因是一些稀疏却很重要的历史梯度信息在指数平均的作用下被淹没。
+</p>
+
+<p>
+论文中提供了一个自适应方法框架，用来深入了解不同自适应方法之间的差异，并帮助大家理解一些流行的自适应方法中的缺陷。
+</p>
+
+
+<figure id="org4186178">
+<img src="./images/20250120060516_gams.png" alt="20250120060516_gams.png">
+
+</figure>
+
+<p>
+其中 \(\phi\) 和 \(\psi\) 是“平均函数”。对于 Adam，可以去如下“平均函数”：
+</p>
+
+<p>
+\[\phi_t(g_1,\ldots,g_t)=(1-\beta_1)\sum_{i=1}^t\beta_1^{t-i}g_i\mathrm, \quad \psi_t(g_1,\ldots,g_t)=(1-\beta_2)\mathrm{diag}(\sum_{i=1}^t\beta_2^{t-i}g_i^2).\]
+</p>
+
+<p>
+在上述一般自适应方法框架下，作者发现 Adam 不收敛取决于下面这个量的值：
+</p>
+
+<p>
+\[\Gamma_{t+1}=\left(\frac{\sqrt{V_{t+1}}}{\alpha_{t+1}}-\frac{\sqrt{V_t}}{\alpha_t}\right).\]
+</p>
+
+<p>
+且可以证明：在 \(\Gamma\) 的值是不定的情况下上述一般自适应方法收敛得不到保障。在主流的深度学习优化算法中，SGD 和 AdaGrad 的 \(\Gamma\) 值是正定的 (\(\Gamma_t\succeq0\))，Adam 和 RMSProp 等指数移动平均类算法的 \(\Gamma\) 是不定的。
+</p>
+
+<p>
+基于上述理论分析，作者提出如下的 AMSGrad 算法：
+</p>
+
+
+<figure id="org6e82932">
+<img src="./images/20250120063412_amsgrad.png" alt="20250120063412_amsgrad.png">
+
+</figure>
+
+<p>
+其与 Adam 的主要区别在于其保存 \(\mu_{t}\) 的历史最大值 \(\hat{\mu_{t}}\) 来准化梯度的运行平均值，而不是 Adam 中的 \(\nu_{t}\)。
+</p>
+
+<p>
+论文的写作思路清晰，内容对理解当前优化算法很有帮助，推荐阅读。
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org3b3590c" class="outline-2">
+<h2 id="org3b3590c">参考文献</h2>
+<div class="outline-text-2" id="text-org3b3590c">
+<p>
+[1] Kingma, Diederik P. and Ba, Jimmy, <i>Adam: {{A Method}} for {{Stochastic Optimization}}</i>, 2017.</p>
+
+<p>
+[2] Loshchilov, Ilya and Hutter, Frank, <i>Decoupled {{Weight Decay Regularization}}</i>, 2018.</p>
+
+<p>
+[3] Loshchilov, Ilya and Hutter, Frank, <i>{{SGDR}}: {{Stochastic Gradient Descent}} with {{Warm Restarts}}</i>, 2017.</p>
+
+<p>
+[4] Smith, Leslie N., <i>Cyclical {{Learning Rates}} for {{Training Neural Networks}}</i>, 2017.</p>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-18 Sat 15:51<br/></p> </div>
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-20 Mon 06:45<br/></p> </div>
 </div>
 </body>
 </html>
