@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2025-01-22 Wed 23:30 -->
+<!-- 2025-01-23 Thu 01:44 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Paper Review: Decoupled Weight Decay Regularization</title>
@@ -53,7 +53,7 @@
 </p>
 
 <p>
-这篇论文 (2) 发现：在学习率适当缩放的情况下，标准 SGD 中的 \(L_{2}\) 与 <code>weight decay</code> 之间是等效的。最初的 <code>weight decay</code> 如下：
+这篇论文 (3) 发现：在学习率适当缩放的情况下，标准 SGD 中的 \(L_{2}\) 与 <code>weight decay</code> 之间是等效的。最初的 <code>weight decay</code> 如下：
 </p>
 
 <p>
@@ -69,7 +69,7 @@
 </p>
 
 <p>
-但 \(\lambda^{'} =\frac{\lambda}{\eta}\) 时，这二者是等同的。但这在自适应优化算法 (Adam 等) 上却不成立。目前的自适应算法的实现都忽略了这一点，所以才导致上面的现象
+但 \(\lambda^{'} =\frac{\lambda}{\eta}\) 时，这二者是等同的。但这在自适应优化算法 (Adam 等) 上却不成立。目前的自适应算法的实现都忽略了这一点，所以才导致上面的现象。
 </p>
 
 <p>
@@ -88,7 +88,7 @@
 </p>
 
 
-<figure id="org651deac">
+<figure id="org295c235">
 <img src="./images/20250118152804_sgdw.png" alt="20250118152804_sgdw.png">
 
 </figure>
@@ -122,7 +122,7 @@
 <h3 id="org426b80d">Stochastic Gradient Descent with  Warm Restarts (SGDR)</h3>
 <div class="outline-text-3" id="text-org426b80d">
 <p>
-文中指出当前 (2016) 最好的模型都是用 SGD 训练的，但其收敛速度相当感人。 所以这篇论文 (3) 借用了一个在 <code>gradient-free optimization</code> 领域常见的“重启技巧”来加速 <code>SGD</code> 算法的收敛（速率、泛化）。
+文中指出当前 (2016) 最好的模型都是用 SGD 训练的，但其收敛速度相当感人。 所以这篇论文 (4) 借用了一个在 <code>gradient-free optimization</code> 领域常见的“重启技巧”来加速 <code>SGD</code> 算法的收敛（速率、泛化）。
 </p>
 
 <p>
@@ -138,7 +138,7 @@
 </p>
 
 <p>
-该文与当年的另一篇论文 (4) 的方法大同小异，自己的一篇知乎博文 (<a href="https://zhuanlan.zhihu.com/p/62565513">Cyclical Learning Rates</a>) 有专门介绍。
+该文与当年的另一篇论文 (5) 的方法大同小异，自己的一篇知乎博文 (<a href="https://zhuanlan.zhihu.com/p/62565513">Cyclical Learning Rates</a>) 有专门介绍。
 </p>
 </div>
 </div>
@@ -147,11 +147,11 @@
 <h3 id="orgb4fc82b">Adam: A Method for Stochastic Optimization</h3>
 <div class="outline-text-3" id="text-orgb4fc82b">
 <p>
-这篇论文 (1) 的引用高得出奇。它结合了 RMSProp 和 AdaGrad 两种优化器的优势，其用指数加权移动平均方法估算梯度动量和二阶动量，并以此计算不同参数的自适应学习率。
+这篇论文 (2) 的引用高得出奇。它结合了 RMSProp 和 AdaGrad 两种优化器的优势，其用指数加权移动平均方法估算梯度动量和二阶动量，并以此计算不同参数的自适应学习率。
 </p>
 
 
-<figure id="orgeb1f572">
+<figure id="org3289537">
 <img src="./images/20250120050336_adam.png" alt="20250120050336_adam.png">
 
 </figure>
@@ -178,7 +178,7 @@
 </p>
 
 
-<figure id="orgaae7842">
+<figure id="org113d86b">
 <img src="./images/20250120060516_gams.png" alt="20250120060516_gams.png">
 
 </figure>
@@ -208,7 +208,7 @@
 </p>
 
 
-<figure id="org03c3022">
+<figure id="orgf19e698">
 <img src="./images/20250120063412_amsgrad.png" alt="20250120063412_amsgrad.png">
 
 </figure>
@@ -222,28 +222,59 @@
 </p>
 </div>
 </div>
-</div>
 
+<div id="outline-container-org5e6fba2" class="outline-3">
+<h3 id="org5e6fba2">Why Do We Need Weight Decay for Overparameterized Deep Networks?</h3>
+<div class="outline-text-3" id="text-org5e6fba2">
+<p>
+这篇论文 (1) 不太容易读。其结论是：在学习率足够大的情况下，权重衰减会把网络权重的范数约束在一个小的区间里，将 SGD 的噪声保持在一定的尺度上。这种隐含的正则化会影响最终模型的泛化性。
+</p>
+
+<p>
+这里梯度的噪声定义如下：
+</p>
+
+<p>
+\[g_t = \nabla_\mathbf{w}\mathcal{L}(\mathbf{w}_t)-\nabla_\mathbf{w}\ell\left(y_{i_t},h(\mathbf{w}_t,x_{i_t})\right)\]
+</p>
+
+<p>
+论文中关于它值的尺度的定理很有意思：在合理的近似值下，SGD 的梯度噪声在尺度上与训练的交叉熵损失成正比。数学表述如下：
+</p>
+
+<p>
+\[c_1\mathcal{L}(\mathbf{w})\leq\mathbb{E}\left[\left\|g(\mathbf{w})\right\|^2\right]\leq c_2\mathcal{L}(\mathbf{w}).\]
+</p>
+
+<p>
+其中 \(c_{1}\) 和 \(c_{2}\) 是常数。
+</p>
+</div>
+</div>
+</div>
 
 <div id="outline-container-org3b3590c" class="outline-2">
 <h2 id="org3b3590c">参考文献</h2>
 <div class="outline-text-2" id="text-org3b3590c">
 <p>
-[1] Kingma, Diederik P. and Ba, Jimmy, <i>Adam: {{A Method}} for {{Stochastic Optimization}}</i>, 2017.</p>
+[1] D&rsquo;Angelo, Francesco and Varre, Aditya and Andriushchenko, Maksym and Flammarion, Nicolas, <i>Why {{Do We Need Weight Decay}} for {{Overparameterized Deep Networks}}?</i>, 2023.</p>
 
 <p>
-[2] Loshchilov, Ilya and Hutter, Frank, <i>Decoupled {{Weight Decay Regularization}}</i>, 2018.</p>
+[2] Kingma, Diederik P. and Ba, Jimmy, <i>Adam: {{A Method}} for {{Stochastic Optimization}}</i>, 2017.</p>
 
 <p>
-[3] Loshchilov, Ilya and Hutter, Frank, <i>{{SGDR}}: {{Stochastic Gradient Descent}} with {{Warm Restarts}}</i>, 2017.</p>
+[3] Loshchilov, Ilya and Hutter, Frank, <i>Decoupled {{Weight Decay Regularization}}</i>, 2018.</p>
 
 <p>
-[4] Smith, Leslie N., <i>Cyclical {{Learning Rates}} for {{Training Neural Networks}}</i>, 2017.</p>
+[4] Loshchilov, Ilya and Hutter, Frank, <i>{{SGDR}}: {{Stochastic Gradient Descent}} with {{Warm Restarts}}</i>, 2017.</p>
+
+<p>
+[5] Smith, Leslie N., <i>Cyclical {{Learning Rates}} for {{Training Neural Networks}}</i>, 2017.</p>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-22 Wed 23:03<br/></p> </div>
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-23 Thu 00:28<br/></p> </div>
 </div>
 </body>
 </html>
