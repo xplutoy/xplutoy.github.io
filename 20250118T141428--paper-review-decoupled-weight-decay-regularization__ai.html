@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2025-01-20 Mon 06:46 -->
+<!-- 2025-01-22 Wed 23:30 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Paper Review: Decoupled Weight Decay Regularization</title>
@@ -53,7 +53,23 @@
 </p>
 
 <p>
-这篇论文 (2) 发现：在学习率适当缩放的情况下，标准 SGD 中的 \(L_{2}\) 与 <code>weight decay</code> 之间是等效的，自适应优化算法 (Adam 等) 却不是。当前的自适应算法的实现都忽略了这一点，所以才导致上面的现象。
+这篇论文 (2) 发现：在学习率适当缩放的情况下，标准 SGD 中的 \(L_{2}\) 与 <code>weight decay</code> 之间是等效的。最初的 <code>weight decay</code> 如下：
+</p>
+
+<p>
+\[\theta_{t+1}=(1-\lambda)\theta_t-\eta\nabla_\mathbf{\theta}\ell\left(y_{i_t},h(\mathbf{\theta}_t,x_{i_t})\right)\]
+</p>
+
+<p>
+其中 \(\lambda\) 定义了每步权重衰减的权重。但在具体的实现中都是用 \(L_{2}\) 正则来实现：
+</p>
+
+<p>
+\[\mathcal{L}_\lambda(\mathbf{\theta}):=\mathcal{L}(\mathbf{\theta})+\frac{\lambda^{'}}{2}{\left\|\mathbf{\theta}\right\|}^2, \quad \mathbf{\theta}_{t+1}=\mathbf{\theta}_t-\eta\nabla_\mathbf{\theta}\ell\left(y_{i_t},h(\mathbf{\theta}_t,x_{i_t})\right)-\eta\lambda^{'}\mathbf{\theta}_t\]
+</p>
+
+<p>
+但 \(\lambda^{'} =\frac{\lambda}{\eta}\) 时，这二者是等同的。但这在自适应优化算法 (Adam 等) 上却不成立。目前的自适应算法的实现都忽略了这一点，所以才导致上面的现象
 </p>
 
 <p>
@@ -72,7 +88,7 @@
 </p>
 
 
-<figure id="orgf5bada2">
+<figure id="org651deac">
 <img src="./images/20250118152804_sgdw.png" alt="20250118152804_sgdw.png">
 
 </figure>
@@ -135,7 +151,7 @@
 </p>
 
 
-<figure id="org698bdb1">
+<figure id="orgeb1f572">
 <img src="./images/20250120050336_adam.png" alt="20250120050336_adam.png">
 
 </figure>
@@ -162,7 +178,7 @@
 </p>
 
 
-<figure id="org4186178">
+<figure id="orgaae7842">
 <img src="./images/20250120060516_gams.png" alt="20250120060516_gams.png">
 
 </figure>
@@ -192,7 +208,7 @@
 </p>
 
 
-<figure id="org6e82932">
+<figure id="org03c3022">
 <img src="./images/20250120063412_amsgrad.png" alt="20250120063412_amsgrad.png">
 
 </figure>
@@ -227,7 +243,7 @@
 </div>
 </div>
 <div id="postamble" class="status">
-<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-20 Mon 06:45<br/></p> </div>
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-22 Wed 23:03<br/></p> </div>
 </div>
 </body>
 </html>
