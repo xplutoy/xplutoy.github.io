@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2025-01-24 Fri 01:52 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Zoxide: 更高效的在终端切换目录</title>
+<meta name="author" content="杨雪" />
+<meta name="generator" content="Org Mode" />
+<link rel='stylesheet' href='/static/org.css' type='text/css'/>
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+</div>
+<div id="content" class="content">
+<header>
+<h1 class="title">Zoxide: 更高效的在终端切换目录</h1>
+</header>
+<div id="outline-container-org6d57022" class="outline-2">
+<h2 id="org6d57022"><span class="section-number-2">1.</span> Intro</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+zoxide is a smarter cd command, inspired by z and autojump.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdc0273c" class="outline-2">
+<h2 id="orgdc0273c"><span class="section-number-2">2.</span> Install</h2>
+<div class="outline-text-2" id="text-2">
+<ol class="org-ol">
+<li>在MacOS上，执行如下命令安装：</li>
+</ol>
+
+<div class="org-src-container">
+<pre class="src src-shell">brew install zoxide
+</pre>
+</div>
+
+<ol class="org-ol">
+<li>在shell的配置文件(~/.zshrc)中写入（必须放在compinit的调用后面）：</li>
+</ol>
+
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #8f0075;">eval</span> <span style="color: #2544bb;">"$(zoxide init zsh)"</span>
+</pre>
+</div>
+
+<ol class="org-ol">
+<li>迁移fasd的数据：</li>
+</ol>
+
+<div class="org-src-container">
+<pre class="src src-shell">zoxide import --from=z $<span style="color: #00538b;">HOME</span>/.fasd
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org85b0235" class="outline-2">
+<h2 id="org85b0235"><span class="section-number-2">3.</span> Usage</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-org23f9173" class="outline-3">
+<h3 id="org23f9173"><span class="section-number-3">3.1.</span> 示例：</h3>
+<div class="outline-text-3" id="text-3-1">
+<div class="org-src-container">
+<pre class="src src-shell">z foo              <span style="color: #505050;"># </span><span style="color: #505050;">cd into highest ranked directory matching foo</span>
+z foo bar          <span style="color: #505050;"># </span><span style="color: #505050;">cd into highest ranked directory matching foo and bar</span>
+z foo /            <span style="color: #505050;"># </span><span style="color: #505050;">cd into a subdirectory starting with foo</span>
+z ~/foo            <span style="color: #505050;"># </span><span style="color: #505050;">z also works like a regular cd command</span>
+z foo/             <span style="color: #505050;"># </span><span style="color: #505050;">cd into relative path</span>
+z ..               <span style="color: #505050;"># </span><span style="color: #505050;">cd one level up</span>
+z -                <span style="color: #505050;"># </span><span style="color: #505050;">cd into previous directory</span>
+zi foo             <span style="color: #505050;"># </span><span style="color: #505050;">cd with interactive selection (using fzf)</span>
+z foo&lt;SPACE&gt;&lt;TAB&gt;  <span style="color: #505050;"># </span><span style="color: #505050;">show interactive completions (zoxide v0.8.0+, bash 4.4+/fish/zsh only)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga4060df" class="outline-3">
+<h3 id="orga4060df"><span class="section-number-3">3.2.</span> Emacs前端</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+zoxide可以通过插件 <a href="https://gitlab.com/Vonfry/zoxide.el">zoxide.el</a> 集成到 emacs 中。我自己绑定了两个常用的函数：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(yx-space-leader-def
+  <span style="color: #2544bb;">"ff"</span> zoxide-find-file
+  <span style="color: #2544bb;">"zf"</span> zoxide-find-file
+  <span style="color: #2544bb;">"zc"</span> zoxide-cd)
+</pre>
+</div>
+
+<p>
+跟 emacs 自带的 find-file 相比，可以省去很多的目录切换操作。当然，前提是你要打开的文件的目录记录在 zoxide 中。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfac0da6" class="outline-2">
+<h2 id="orgfac0da6"><span class="section-number-2">4.</span> Comment</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+z 命令已经成为日常在终端中使用最多的命令。其思想简单，效率提升惊人。
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-24 Fri 01:51<br/></p> </div>
+</div>
+</body>
+</html>
