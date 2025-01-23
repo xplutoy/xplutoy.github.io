@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2025-01-23 Thu 01:44 -->
+<!-- 2025-01-23 Thu 18:45 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Paper Review: Decoupled Weight Decay Regularization</title>
@@ -88,7 +88,7 @@
 </p>
 
 
-<figure id="org295c235">
+<figure id="org49f0220">
 <img src="./images/20250118152804_sgdw.png" alt="20250118152804_sgdw.png">
 
 </figure>
@@ -114,13 +114,13 @@
 </ul>
 
 
-<div id="outline-container-org33b9cdf" class="outline-2">
-<h2 id="org33b9cdf">文献简述</h2>
-<div class="outline-text-2" id="text-org33b9cdf">
+<div id="outline-container-org371265b" class="outline-2">
+<h2 id="org371265b">文献简述</h2>
+<div class="outline-text-2" id="text-org371265b">
 </div>
-<div id="outline-container-org426b80d" class="outline-3">
-<h3 id="org426b80d">Stochastic Gradient Descent with  Warm Restarts (SGDR)</h3>
-<div class="outline-text-3" id="text-org426b80d">
+<div id="outline-container-org0c63f5e" class="outline-3">
+<h3 id="org0c63f5e">Stochastic Gradient Descent with  Warm Restarts (SGDR)</h3>
+<div class="outline-text-3" id="text-org0c63f5e">
 <p>
 文中指出当前 (2016) 最好的模型都是用 SGD 训练的，但其收敛速度相当感人。 所以这篇论文 (4) 借用了一个在 <code>gradient-free optimization</code> 领域常见的“重启技巧”来加速 <code>SGD</code> 算法的收敛（速率、泛化）。
 </p>
@@ -143,15 +143,15 @@
 </div>
 </div>
 
-<div id="outline-container-orgb4fc82b" class="outline-3">
-<h3 id="orgb4fc82b">Adam: A Method for Stochastic Optimization</h3>
-<div class="outline-text-3" id="text-orgb4fc82b">
+<div id="outline-container-orga6f9731" class="outline-3">
+<h3 id="orga6f9731">Adam: A Method for Stochastic Optimization</h3>
+<div class="outline-text-3" id="text-orga6f9731">
 <p>
 这篇论文 (2) 的引用高得出奇。它结合了 RMSProp 和 AdaGrad 两种优化器的优势，其用指数加权移动平均方法估算梯度动量和二阶动量，并以此计算不同参数的自适应学习率。
 </p>
 
 
-<figure id="org3289537">
+<figure id="orga0f9426">
 <img src="./images/20250120050336_adam.png" alt="20250120050336_adam.png">
 
 </figure>
@@ -166,9 +166,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgcddcb6d" class="outline-3">
-<h3 id="orgcddcb6d">On The Convergence Of Adam And Beyond (AMSGrad)</h3>
-<div class="outline-text-3" id="text-orgcddcb6d">
+<div id="outline-container-org0d4a8bb" class="outline-3">
+<h3 id="org0d4a8bb">On The Convergence Of Adam And Beyond (AMSGrad)</h3>
+<div class="outline-text-3" id="text-org0d4a8bb">
 <p>
 这篇文中是 ICLR 2018 的最佳论文。其发现目前的基于指数移动平均 (exponential moving average) 类的算法 (Adam, RMSprop, AdaDelta, NAdam) 存在收敛性的问题。甚至在作者人工设计的一个简单的凸优化问题上都无法保证收敛。原因是一些稀疏却很重要的历史梯度信息在指数平均的作用下被淹没。
 </p>
@@ -178,7 +178,7 @@
 </p>
 
 
-<figure id="org113d86b">
+<figure id="org34f0206">
 <img src="./images/20250120060516_gams.png" alt="20250120060516_gams.png">
 
 </figure>
@@ -208,7 +208,7 @@
 </p>
 
 
-<figure id="orgf19e698">
+<figure id="org4008faf">
 <img src="./images/20250120063412_amsgrad.png" alt="20250120063412_amsgrad.png">
 
 </figure>
@@ -223,9 +223,9 @@
 </div>
 </div>
 
-<div id="outline-container-org5e6fba2" class="outline-3">
-<h3 id="org5e6fba2">Why Do We Need Weight Decay for Overparameterized Deep Networks?</h3>
-<div class="outline-text-3" id="text-org5e6fba2">
+<div id="outline-container-org1f102f5" class="outline-3">
+<h3 id="org1f102f5">Why Do We Need Weight Decay for Overparameterized Deep Networks?</h3>
+<div class="outline-text-3" id="text-org1f102f5">
 <p>
 这篇论文 (1) 不太容易读。其结论是：在学习率足够大的情况下，权重衰减会把网络权重的范数约束在一个小的区间里，将 SGD 的噪声保持在一定的尺度上。这种隐含的正则化会影响最终模型的泛化性。
 </p>
@@ -253,9 +253,9 @@
 </div>
 </div>
 
-<div id="outline-container-org3b3590c" class="outline-2">
-<h2 id="org3b3590c">参考文献</h2>
-<div class="outline-text-2" id="text-org3b3590c">
+<div id="outline-container-org2153a3a" class="outline-2">
+<h2 id="org2153a3a">参考文献</h2>
+<div class="outline-text-2" id="text-org2153a3a">
 <p>
 [1] D&rsquo;Angelo, Francesco and Varre, Aditya and Andriushchenko, Maksym and Flammarion, Nicolas, <i>Why {{Do We Need Weight Decay}} for {{Overparameterized Deep Networks}}?</i>, 2023.</p>
 
