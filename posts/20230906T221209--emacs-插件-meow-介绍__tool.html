@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2025-01-23 Thu 19:15 -->
+<!-- 2025-01-24 Fri 01:17 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Emacs 插件 Meow 介绍</title>
 <meta name="author" content="杨雪" />
 <meta name="generator" content="Org Mode" />
-<link rel='stylesheet' href='../static/org.css' type='text/css'/>
-		      <link rel='stylesheet' href='./static/org.css' type='text/css'/>
+<link rel='stylesheet' href='/static/org.css' type='text/css'/>
 </head>
 <body>
 <div id="preamble" class="status">
@@ -19,8 +18,8 @@
 <h1 class="title">Emacs 插件 Meow 介绍</h1>
 </header>
 <div id="outline-container-org8d763b8" class="outline-2">
-<h2 id="org8d763b8">Intro</h2>
-<div class="outline-text-2" id="text-org8d763b8">
+<h2 id="org8d763b8"><span class="section-number-2">1.</span> Intro</h2>
+<div class="outline-text-2" id="text-1">
 <p>
 Meow 是一个 emacs 下的模态编辑插件，与 evil 类似。模态编辑的思想就是把文本的插入单独拎出来，其他复杂的文本操作放在另外的模态下用单字母的快捷键完成。这可以减少每个操作的按键次数，达到高效快速编辑的目的。以移动命令举例，在 emacs 中，向前移动一个字符的快捷键为 <code>C-f</code> ，但在 vim 中，或者 meow 中，只要切换到 <code>Nornal</code> 模态中，按一个键 <code>f</code> 就可以了。
 </p>
@@ -52,8 +51,8 @@ Meow 没有 vim 的包袱，更加纯粹，而且在设计之初就考虑了如�
 
 
 <div id="outline-container-org8926a0c" class="outline-3">
-<h3 id="org8926a0c">Normal模态</h3>
-<div class="outline-text-3" id="text-org8926a0c">
+<h3 id="org8926a0c"><span class="section-number-3">1.1.</span> Normal模态</h3>
+<div class="outline-text-3" id="text-1-1">
 <ul class="org-ul">
 <li>移动</li>
 </ul>
@@ -121,8 +120,8 @@ Normal模态下的基于字符的移动，与 vim 一致，使用 <code>h,j,k,l<
 </div>
 
 <div id="outline-container-org000269c" class="outline-3">
-<h3 id="org000269c">Insert模态</h3>
-<div class="outline-text-3" id="text-org000269c">
+<h3 id="org000269c"><span class="section-number-3">1.2.</span> Insert模态</h3>
+<div class="outline-text-3" id="text-1-2">
 <p>
 按 <code>i</code> 进入 <code>Insert</code> 模态，按 <code>ESC</code> 键退出 <code>Insert</code> 进入 <code>Normal</code> 。一些其他进入 <code>Insert</code> 的快捷方式
 </p>
@@ -179,8 +178,8 @@ Normal模态下的基于字符的移动，与 vim 一致，使用 <code>h,j,k,l<
 </div>
 
 <div id="outline-container-org183bf7d" class="outline-3">
-<h3 id="org183bf7d">选择命令</h3>
-<div class="outline-text-3" id="text-org183bf7d">
+<h3 id="org183bf7d"><span class="section-number-3">1.3.</span> 选择命令</h3>
+<div class="outline-text-3" id="text-1-3">
 <p>
 除了上面的 <code>x</code> 和 <code>m</code> 外，还有其他一些选择命令，跟 vim 一样，也是按照语义来定义的：
 </p>
@@ -243,8 +242,8 @@ Normal模态下的基于字符的移动，与 vim 一致，使用 <code>h,j,k,l<
 </div>
 
 <div id="outline-container-orgf5ee07f" class="outline-3">
-<h3 id="orgf5ee07f">扩展选择</h3>
-<div class="outline-text-3" id="text-orgf5ee07f">
+<h3 id="orgf5ee07f"><span class="section-number-3">1.4.</span> 扩展选择</h3>
+<div class="outline-text-3" id="text-1-4">
 <p>
 当按了上面选择命令后，可以接着进行选择扩展，比如按了 <code>w</code> 选择当前单词，在按 <code>e</code> 向前继续扩展选择到下一个单词末尾。大致模式是，选择命令后面继续接选择命令为扩展选择区域。
 </p>
@@ -256,8 +255,8 @@ Normal模态下的基于字符的移动，与 vim 一致，使用 <code>h,j,k,l<
 </div>
 
 <div id="outline-container-org345d894" class="outline-3">
-<h3 id="org345d894">依对象扩展选择区域</h3>
-<div class="outline-text-3" id="text-org345d894">
+<h3 id="org345d894"><span class="section-number-3">1.5.</span> 依对象扩展选择区域</h3>
+<div class="outline-text-3" id="text-1-5">
 <p>
 除了上面的选择扩展，还有更加通用的基于对象的扩展选择操作：
 </p>
@@ -367,8 +366,8 @@ Meow 的在做选择操作的同时也移动光标，比如要移动到整个 bu
 </div>
 
 <div id="outline-container-org8e01888" class="outline-3">
-<h3 id="org8e01888">Find/Till</h3>
-<div class="outline-text-3" id="text-org8e01888">
+<h3 id="org8e01888"><span class="section-number-3">1.6.</span> Find/Till</h3>
+<div class="outline-text-3" id="text-1-6">
 <table>
 
 
@@ -405,8 +404,8 @@ Meow 的在做选择操作的同时也移动光标，比如要移动到整个 bu
 </div>
 
 <div id="outline-container-orgfd245e7" class="outline-3">
-<h3 id="orgfd245e7">修改命令</h3>
-<div class="outline-text-3" id="text-orgfd245e7">
+<h3 id="orgfd245e7"><span class="section-number-3">1.7.</span> 修改命令</h3>
+<div class="outline-text-3" id="text-1-7">
 <table>
 
 
@@ -456,8 +455,8 @@ Meow 的在做选择操作的同时也移动光标，比如要移动到整个 bu
 </div>
 
 <div id="outline-container-org1f4fcf4" class="outline-3">
-<h3 id="org1f4fcf4">BEACON (BATCHED KEYBOARD MACROS)</h3>
-<div class="outline-text-3" id="text-org1f4fcf4">
+<h3 id="org1f4fcf4"><span class="section-number-3">1.8.</span> BEACON (BATCHED KEYBOARD MACROS)</h3>
+<div class="outline-text-3" id="text-1-8">
 <p>
 Meow 这种先选择后操作的模式，可以让其执行 multi-editing 像内置操作一样容易。
 </p>
@@ -476,13 +475,13 @@ Meow 这种先选择后操作的模式，可以让其执行 multi-editing 像内
 </div>
 
 <div id="outline-container-orgcd6e982" class="outline-4">
-<h4 id="orgcd6e982">Beacon 可以结合 emacs 的 keyboard-macros 系统完成复杂的编辑任务</h4>
-<div class="outline-text-4" id="text-orgcd6e982">
+<h4 id="orgcd6e982"><span class="section-number-4">1.8.1.</span> Beacon 可以结合 emacs 的 keyboard-macros 系统完成复杂的编辑任务</h4>
+<div class="outline-text-4" id="text-1-8-1">
 <p>
 下面是一个例子：
 </p>
 
-<pre class="example" id="orgabc087b">
+<pre class="example" id="org681d41b">
 1 2 3
 =&gt;
 [| "1" |] [| "2" |] [| "3" |]
@@ -507,7 +506,7 @@ Meow 这种先选择后操作的模式，可以让其执行 multi-editing 像内
 另一个例子：
 </p>
 
-<pre class="example" id="orgfb4bd72">
+<pre class="example" id="org4ea5d3a">
 x-y-foo-bar-baz
 =&gt;
 x_y_foo_bar_baz
@@ -531,8 +530,8 @@ x_y_foo_bar_baz
 </div>
 
 <div id="outline-container-org4309e5e" class="outline-3">
-<h3 id="org4309e5e">快速访问和搜索</h3>
-<div class="outline-text-3" id="text-org4309e5e">
+<h3 id="org4309e5e"><span class="section-number-3">1.9.</span> 快速访问和搜索</h3>
+<div class="outline-text-3" id="text-1-9">
 <p>
 按 <code>v</code> 启动快速访问，它会在 minibuffer 中提示用户输入要快速访问的符号，然后在当前 buffer 中定位到这个符号，可以通过命令 <code>n</code> 跳转到下一个匹配的符号。可以通过 <code>;</code> 来改变查找方向。 <code>n</code> 操作会遵循当前方向进行查找。
 </p>
@@ -557,12 +556,12 @@ x_y_foo_bar_baz
 
 
 <div id="outline-container-orgc030c4f" class="outline-2">
-<h2 id="orgc030c4f">Conceptions</h2>
-<div class="outline-text-2" id="text-orgc030c4f">
+<h2 id="orgc030c4f"><span class="section-number-2">2.</span> Conceptions</h2>
+<div class="outline-text-2" id="text-2">
 </div>
 <div id="outline-container-orgdabe460" class="outline-3">
-<h3 id="orgdabe460">模态</h3>
-<div class="outline-text-3" id="text-orgdabe460">
+<h3 id="orgdabe460"><span class="section-number-3">2.1.</span> 模态</h3>
+<div class="outline-text-3" id="text-2-1">
 <p>
 Emacs 里面分 major-mode 和 mirror-mode，vim 中有 <code>Insert</code> 模态和 <code>Normal</code> 模态，这两者有交叉，但也有很大不同。
 </p>
@@ -593,8 +592,8 @@ Emacs 中，除了编辑模式，还有很多 special-mode，比如 dired，ibuf
 </div>
 
 <div id="outline-container-org2a71c34" class="outline-4">
-<h4 id="org2a71c34">Motion 模态</h4>
-<div class="outline-text-4" id="text-org2a71c34">
+<h4 id="org2a71c34"><span class="section-number-4">2.1.1.</span> Motion 模态</h4>
+<div class="outline-text-4" id="text-2-1-1">
 <p>
 在 meow 中， <code>Motion</code> 模态默认使用 <code>SPC</code> 作为 leader-key，原本的 <code>SPC</code> 可以通过 <code>SPC SPC</code> 访问，除此之外就再没有绑定其他快捷键了。在 <code>Motion</code> 模态下，如果定义的快捷键覆盖了 emacs 已有的快捷键，那么 emacs 原本的快捷键被重新绑定到 <code>H-&lt;key&gt;</code> 上。比如为了在 <code>Motion</code> 模态中也使用 <code>j,k</code> 进行上下移动，可以通过如下配置达成：
 </p>
@@ -612,8 +611,8 @@ Emacs 中，除了编辑模式，还有很多 special-mode，比如 dired，ibuf
 </div>
 
 <div id="outline-container-orgda9cd5a" class="outline-4">
-<h4 id="orgda9cd5a">Keypad 模态</h4>
-<div class="outline-text-4" id="text-orgda9cd5a">
+<h4 id="orgda9cd5a"><span class="section-number-4">2.1.2.</span> Keypad 模态</h4>
+<div class="outline-text-4" id="text-2-1-2">
 <p>
 这个模态类似于 vim 的 leader-key，但又很不同，它实现了不用按 modifier-key 来复用 emacs 的 modifier-keybings。在 <code>Normal</code> 模态中按 <code>SPC</code> 进入 <code>Kaypad</code> 模态，然后用户的按键会按下面的规则进行转换：
 </p>
@@ -641,8 +640,8 @@ Emacs 中，除了编辑模式，还有很多 special-mode，比如 dired，ibuf
 </div>
 
 <div id="outline-container-orgacb9c31" class="outline-4">
-<h4 id="orgacb9c31">Beacon 模态</h4>
-<div class="outline-text-4" id="text-orgacb9c31">
+<h4 id="orgacb9c31"><span class="section-number-4">2.1.3.</span> Beacon 模态</h4>
+<div class="outline-text-4" id="text-2-1-3">
 <p>
 其也叫做 Batch-KMacro，在这种模式下，可以把键盘宏应用到多个地方。
 </p>
@@ -716,8 +715,8 @@ Emacs 中，除了编辑模式，还有很多 special-mode，比如 dired，ibuf
 
 
 <div id="outline-container-orgcf1885d" class="outline-2">
-<h2 id="orgcf1885d">Config</h2>
-<div class="outline-text-2" id="text-orgcf1885d">
+<h2 id="orgcf1885d"><span class="section-number-2">3.</span> Config</h2>
+<div class="outline-text-2" id="text-3">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #5317ac;">require</span> '<span style="color: #0000c0;">meow</span>)
 (<span style="color: #5317ac;">defun</span> <span style="color: #721045;">meow-setup</span> ()
