@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2025-02-12 Wed 22:07 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DeepSeek LLM 在 2024 年的进展</title>
+<meta name="author" content="杨雪" />
+<meta name="generator" content="Org Mode" />
+<link rel='stylesheet' href='/static/org.css' type='text/css'/>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+</div>
+<div id="content" class="content">
+<header>
+<h1 class="title">DeepSeek LLM 在 2024 年的进展</h1>
+</header><p>
+过年期间被 DeepSeek-V3 和 DeepSeek-R1 刷屏了，趁空闲时间，粗略过一遍 DeepSeek 模型的系列论文和报告。
+</p>
+
+<div id="outline-container-orgdf81fec" class="outline-2">
+<h2 id="orgdf81fec"><span class="section-number-2">1.</span> DeepSeek-R1</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+下面是对论文 (3) 的简短总结：
+</p>
+
+<ul class="org-ul">
+<li>推出了两个推理模型：DeepSeek-R1-Zero 和 DeepSeek-R1。</li>
+<li>其中 DeepSeek-R1-Zero 只经过大规模的 RL 后训练 (无 SFT 后训练) 就自然的涌现出可观的推理能力：自我验证、反射和生成长的 CoT 推理链等。不过该模型有可读性差和语言混淆的问题。</li>
+<li>在 DeepSeek-R1-Zero 的基础上，在 RL 后训练之前整合多阶段训练和冷启动数据来进一步增强模型的推理能力，得到 DeepSeek-R1 模型，其性能可媲美 OpenAI-o1-1217。</li>
+<li>文中还探索了把 DeepSeek-R1 的推理知识蒸馏到小模型 (Qwen2.5、Llama) 上，比直接在小模型上应用 RL 后训练。这表明大型基础模型发现的推理模式对于提高推理能力至关重要。而且其蒸馏的 14B 推理模型可以超越当前最好的开源推理模型 QwQ-32B-Preview。值得深入研究的现象。</li>
+<li>DeepSeek-R1 在需要长程上下文理解的任务上表现出出色的性能，大大优于 DeepSeek-V3。</li>
+<li>DeepSeek-R1-Zero 的 RL 后训练只使用了两种基于规则的奖励系统：Accuracy rewards、Format rewards。采用格式奖励模型用于强制模型将其思考过程置于 &rsquo;&lt;think&gt;&rsquo; 和 &rsquo;&lt;/think&gt;&rsquo; 标签之间。</li>
+<li>DeepSeek-R1-Zero 的 RL 后训练没有采用结果或过程神经奖励模型，因为他们发现神经奖励模型在大规模强化学习过程中可能会遇到奖励黑客的问题，而且重新训练奖励模型需要额外的训练资源，并且使整个训练管道复杂化。</li>
+<li>DeepSeek-R1-Zero 的 RL 后训练会使用一个简单的回答模版用于指导基本模型遵循该模版展示的推理过程进行回答。</li>
+<li>DeepSeek-R1-Zero 通过利用扩展的测试时间计算，自然而然地获得了解决日益复杂的推理任务的能力。这种计算范围从生成数百到数千个推理标记，使模型能够更深入地探索和完善其思维过程。这种自我进化最引人注目的方面之一是随着测试时间计算的增加而出现复杂的行为，比如自省 (reflection) 和探索多个替代方法。</li>
+<li>DeepSeek-R1-Zero 会有顿悟时刻 (Aha Moment) 的现象。“顿悟时刻” 说明 RL 有可能在人工系统中解锁新的智能水平，为未来更加自主和自适应的模型铺平道路。</li>
+<li>文中也列举了一些失败的尝试：Process Reward Model (PRM)、Monte Carlo Tree Search (MCTS)。其中的讨论非常有洞见。</li>
+<li>当前 DeepSeek-R1 在函数调用、多轮对话、复杂角色扮演和格式输出等能力上不如 DeepSeek-V3。</li>
+<li>在评估 DeepSeek-R1 时，观察到它对提示很敏感。Few-Shot 提示始终会降低其性能。推荐使用 Zero-Shot 提示直接描述问题。</li>
+</ul>
+
+<p>
+为了进一步的提升 DeepSeek-R1-Zero 的推理能力，他们设计了一个四阶段的流水线来训练 DeepSeek-R1：
+</p>
+
+<dl class="org-dl">
+<dt>Cold Start</dt><dd>训练 DeepSeek-R1 时先收集了少量的长 CoT 数据来微调模型，并以微调模型作为初始 RL 参与者。这些 cold start 数据具有可读性和格式要求，这可以有效的缓解 DeepSeek-R1-Zero 中出现的语言混淆问题。</dd>
+<dt>Reasoning-oriented Reinforcement Learning</dt><dd>与 DeepSeek-R1-Zero 的 RL 后训练相同的过程，不过引入了语言一致性奖励来缓解 CoT 中的语言混淆问题。注意这一阶段的 RL 训练只用基于规则的奖励系统。</dd>
+<dt>Rejection Sampling and Supervised Fine-Tuning</dt><dd>当面向推理的 RL 收敛时，他们利用该模型检查点来收集 SFT（监督微调）数据，用于下一轮模型微调。这一阶段中的一些数据通过使用生成奖励模型，将真实和模型预测输入到 DeepSeek-V3 中进行判断。</dd>
+<dt>Reinforcement Learning for all Scenarios</dt><dd>为了进一步使模型与人类偏好保持一致，他们实现了一个二级强化学习阶段，旨在提高模型的有用性和无害性，同时完善其推理能力。具体来说，他们使用奖励信号和各种提示分布的组合来训练模型。</dd>
+</dl>
+</div>
+</div>
+
+
+<div id="outline-container-org7aaa290" class="outline-2">
+<h2 id="org7aaa290"><span class="section-number-2">2.</span> DeepSeek-V3</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+下面是对 DeepSeek-V3 模型 (5) 的技术报告的简短总结：
+</p>
+
+<ul class="org-ul">
+<li>延续了 DeepSeek-V2 的网络结构 (MLA + MoE)。</li>
+<li>共 671B 参数，每个 Token 激活 37B 参数。</li>
+<li>用 14.8T Token 进行预训练，接着再进行 SFT 和 RL 后训练。</li>
+<li>整个训练共用了 2048 块 H800 GPU。花费约 788M H800 GPU 每小时。</li>
+<li>训练过程非常稳定，中途没有任何不可恢复的损失峰值和训练回滚。</li>
+<li>采用负载均衡的辅助无损策略 (auxiliary-loss-free strategy) 来缓解因鼓励负载均衡造成的性能下降。</li>
+<li>采用互补序列平衡损失 (complementary sequence-wise balance loss) 来鼓励保持每个序列的负载平衡。</li>
+<li>采用了多标记预测 (multi-token prediction) 训练目标，该目标可以提高评估基准的整体性能。</li>
+<li>将 DeepSeek R1 系列模型的推理能力蒸馏到 DeepSeek-V3 模型中。</li>
+<li>设计了 DualPipe 算法以实现高效的管道并行性。</li>
+<li>在预训练后进行了两阶段上下文长度扩展 (two-stage context length extension)，32k 到 128k。</li>
+<li>性能可与 GPT-4o 和 Claude-Sonnet-3.5 等当前领先的闭源模型相媲美。</li>
+<li>采用混合精度训练框架，大多数计算密度运算都是在 FP8 中进行的，而少数关键运算则战略性地保持其原始数据格式，以平衡训练效率和数值稳定性。</li>
+<li>在 post-training 的 SFT 微调阶段，用内部的 deepseek-r1 模型来生成 SFT 微调推理数据，用 deepseek-v2 生成其他非推理数据。</li>
+<li>在 post-training 的 RL 微调阶段，用了一个基于规则的奖励模型和一个基于模型的奖励模型。其中“规则”可以是（数学问题）回答的格式以及（代码生成）代码生成问题的测试用例。</li>
+<li>同 DeepSeek-v2 一样采用 Group Relative Policy Optimization (GRPO) 强化学习算法。</li>
+<li>从推理模型中蒸馏知识；LLMs 模型的自奖励。</li>
+</ul>
+
+<p>
+DeepSeek-V3 最大的突破是其极大缩减了整个训练花销：
+</p>
+
+
+<figure id="org587e0fd">
+<img src="../images/20250128231241_dsv3_cost.png" alt="20250128231241_dsv3_cost.png">
+
+</figure>
+</div>
+</div>
+
+
+<div id="outline-container-orgfa3d7d5" class="outline-2">
+<h2 id="orgfa3d7d5"><span class="section-number-2">3.</span> DeepSeek-V2</h2>
+<div class="outline-text-2" id="text-3">
+
+<figure id="orgf70993c">
+<img src="../images/20250129002016_dsv2_arch.png" alt="20250129002016_dsv2_arch.png">
+
+</figure>
+
+<p>
+下面是对论文 (4) 的简短总结：
+</p>
+
+<ul class="org-ul">
+<li>DeepSeek-V2 采用 MoE 架构，使用 8.1T tokens 多源语料进行训练。其包括 236B 的模型参数，128k tokens 的上下文长度，推理时每个 token 激活 21B 的参数。</li>
+<li>采用革新的 Multi-head Latent Attention (MLA)，通过将键值缓存显著压缩为潜在向量来保证高效推理。克服了传统多头注意力 (MHA) 的键值 缓存对 LLM 的推理效率构成的重大障碍。</li>
+<li>由于 RoPE 位置编码策略与 MLA 有耦合，会造成 MLA 的高效 KV 缓存策略失效，提出解耦 RoPE 策略，用一个额外的多头 query 和一个共享的 key 来携带 RoPE。</li>
+<li>使用 SFT 和 RL (GRPO) 进行 Post-Training 对齐。</li>
+<li>相比 DeepSeek 67B，DeepSeek-V2 减少了 42.5 的训练花销和 93.3% 的 KV 缓存，最多生成吞吐量提升了 5.67 倍。</li>
+<li>采用专家并行 (expert parallelism)，并设计了一种设备受限的路由机制 (Device-Limited Routing)，以约束与 MoE 相关的通信成本。</li>
+<li>采用了三种负载均衡的辅助损失 (Auxiliary Loss for Load Balance)：expert-level load balance、device-level load balance 和 communication balance，使模型自动学习路由策略时会考虑负载均衡。</li>
+<li>增加了更多的中文语料，，并更新了过滤算法，数据质量进一步提升。</li>
+<li>仍采用 AdamW 优化算法 (β1 = 0.9, β2 = 0.95, and weight_decay = 0.1)。学习率调整策略同 DeepSeek 67B 仍为 warmup-and-step-decay。</li>
+<li>仍采用自研的 HAI-LLM 框架进行并行训练，HAI-LLM 采用 16 路零气泡 (zero-bubble) 管道并行、8 路专家并行和 ZeRO-1 数据并行。</li>
+<li>采用 YaRN 方法将默认上下文窗口长度从 4K 扩展到 128K。</li>
+<li>DeepSeek-V2 性能超越 LLaMA3。</li>
+<li>发现对推理数据的 RL 的后训练与一般数据训练不同的独特特征。因此，其采用了两阶段的 RL 训练策略，首先进行推理对齐，然后进行人类偏好对齐。另外 RL 后训练采用了多个不同的奖励网络。</li>
+<li>在 SFT 后训练上，如果使用的数据少于 10K，会有性能的显著下降。</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-orge337026" class="outline-2">
+<h2 id="orge337026"><span class="section-number-2">4.</span> DeepSeek-V1</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+下面是对这篇论文 (2) 的主要结果的简单总结：
+</p>
+
+<ul class="org-ul">
+<li>提供了 DeepSeek 7B 和 DeepSeek 76B 两个模型，其中 76B 模型可以与当时的 LLaMA-2 70B 和 GPT-3.5 相媲美。</li>
+<li>对数据进行三阶段处理：重复数据删除、过滤和重新混合。这种三阶段数据预处理旨在实现更加平衡和包容的数据集，确保充分代表不同的观点和信息。</li>
+<li>分词采用 Byte-level Byte-Pair Encoding (BBPE) 算法，模型的 vocabulary size 为 102400。</li>
+<li>模型微观结构借鉴了 LLaMA 的相关设计：RMSNorm、SwiGLU、Rotary Positional Encoding (RoPE)、GroupedQuery Attention (GQA)。宏观结构稍微不同，采用了更深的网络结构设计。</li>
+<li>超参数：网络以 0.006 的标准差进行初始化、AdamW (β1 = 0.9, β2 = 0.95, and weight_decay = 0.1)、多步学习率调度器。</li>
+<li>模拟了计算预算 C 与最佳批量大小和学习率之间的幂律关系，称之为超参数的缩放定律，为确定最佳超参数提供了一个经验框架。</li>
+<li>发现数据质量显着影响最佳模型/数据缩放分配策略。数据质量越高，应为模型扩展分配更多的计算预算。这意味着在相同的数据规模下，高质量的数据可以驱动更大模型的训练。</li>
+<li>采用 non-embedding FLOPs/token M 来表示模型规模，得到更加正确和简单的最优模型/数据扩展分配策略，且对大规模模型的泛化损失有更好预测。</li>
+<li>采用 SFT 和 DPO 方法进行 LLM 对齐。并发现 DPO 可以增强模型的开放式生成技能。</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-orgcbd127e" class="outline-2">
+<h2 id="orgcbd127e"><span class="section-number-2">5.</span> DeepSeekMoE</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+这篇论文 (1) 指出当前的 MoE 架构，比如 GShard 可能存在 <b>knowledge hybridity</b> 和 <b>knowledge redundancy</b> 的问题：
+</p>
+
+<dl class="org-dl">
+<dt>Knowledge Hybridity</dt><dd>当前的 MoE 实践采用有限数量的专家，分配给特定专家的 Tokens 可能会涵盖不同的知识。指定的专家将打算在其参数中收集大量不同类型的知识，这些知识很难同时利用。</dd>
+<dt>Knowledge Redundancy</dt><dd>分配给不同专家的 Tokens 可能需要常识。多个专家可能会学得各自的共享知识，从而导致专家参数的冗余。</dd>
+</dl>
+
+<p>
+该文提出 DeepSeekMoE 架构来缓解上述问题，其包含两个核心策略：
+</p>
+
+<dl class="org-dl">
+<dt>Fine-Grained Expert  Segmentation</dt><dd>在保持参数数量不变的同时，通过拆分 FFN 中间隐藏维度将专家分为更精细的粒度，并激活了更多细粒度的专家，以实现更灵活和适应性更强的已激活专家组合。</dd>
+<dt>Shared Expert Isolation</dt><dd>分离出某些专家作为共享专家，这些专家始终处于激活状态，旨在在不同环境中捕获和整合共同知识。</dd>
+</dl>
+
+<p>
+DeepSeekMoE 采用 MoE 层代替 FFNs 层来实现 MoE LLMs 的典型方法。MoE 层由多个 Expert 组成，其中每个 Expert 在结构上与标准 FFN 相同。
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-orgecb4fea" class="outline-2">
+<h2 id="orgecb4fea"><span class="section-number-2">6.</span> DeepSeekMath</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+下面是对论文 (7) 的简短总结：
+</p>
+
+<ul class="org-ul">
+<li>从 Common Crawl (CC) 中提取了 120B tokens 的高质量的数学训练语料。</li>
+<li>用于 Math Pre-Training 的基模型是 DeepSeek-Coder-Base-v1.5 7B。他们发现从代码训练模型开始比从通用大模型开始更好，并且数学训练也能增强模型的其它一般推理能力。结果模型 DeepSeekMath-Base 已经可以和闭源的 Minerva 540B 相媲美，并超越当前的所有开源模型。</li>
+<li>在 Pre-Training 后再对 DeepSeekMath-Base 做了数学的指令微调：CoT、program-of-thought (PoT)、tool-integrated reasoning。结果模型 DeepSeekMath-Instruct 7B 已经可以与当前 70B 的开源模型相媲美了。</li>
+<li>数学指令微调后，再接 RL 后训练。他们引入了 GRPO 算法，一种 PPO 算法的变体，不同在于其放弃了批评者模型，而是根据小组分数估计基线，从而显著减少训练资源。</li>
+<li>在 GRPO 的训练阶段，同时使用了基于结果和过程的奖励模型，并且奖励模型也一直迭代持续学习。</li>
+<li>在实验中，他们将奖励函数分为 &rsquo;Rule&rsquo; 和 &rsquo;Model&rsquo;。Rule 是指根据答案的正确性来判断响应的质量，Model 表示我们训练一个奖励模型来对每个响应进行评分。</li>
+<li>这篇论文中首次提出了 GRPO，包含了该算法的很多细节，这部分内容非常值得细读。该算法也用于后面的 DeepSeek-V3、DeepSeek-R1 模型的训练。</li>
+</ul>
+
+<p>
+文中提供了一个统一的范式来分析不同的训练方法： SFT、RFT、DPO、PPO、GRPO。非常有洞见。具体而已，这些训练方法可以统一在下面的公式里：
+</p>
+
+<p>
+\[\nabla_\theta\mathcal{J}_{\mathcal{A}}(\theta)=\mathbb{E}[\underbrace{(q,o)\sim\mathcal{D}}_{Data\mathrm{~Source}}]\left(\frac{1}{|o|}\sum_{t=1}^{|o|}\underbrace{GC_{\mathcal{A}}(q,o,t,\pi_{rf})}_{Gradient\mathrm{~Coe}fficient}\nabla_\theta\log\pi_\theta(o_t|q,o_{\lt t})\right).\]
+</p>
+
+<p>
+其中 \(\mathcal{D}\) 表示数据源， \(\mathcal{A}\) 表示具体算法，GC 表示梯度系数。论文及其附录中包含更详细的内容。
+</p>
+
+<p>
+这篇论文对理解后面的 DeepSeek-R1 具有非常重要的参考价值，尤其是其关于 RL 算法和模型推理方向上的探索与分析。
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org33b777e" class="outline-2">
+<h2 id="org33b777e"><span class="section-number-2">7.</span> DeepSeek-Coder</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+这是对技术报告 (6) 的简短总结：
+</p>
+
+<ul class="org-ul">
+<li>引入了 DeepSeek-Coder-Base 和 DeepSeek-Coder-Instruct 模型，包含 1.3B 到 33B 一系列模型，从 2T tokens 包含 87 中语言的语料从头训练。</li>
+<li>在存储库级别组织预训练数据，以增强预训练模型在存储库内跨文件上下文中的理解能力。</li>
+<li>除了在预训练期间采用下一个符号预测损失 (next token prediction loss) 外，还采用了 Fill-In-Middle (FIM) 方法。这种方法旨在进一步增强模型的代码完成功能。</li>
+<li>为了满足处理较长代码输入的要求，上下文长度扩展到 16K。</li>
+<li>当前的代码大模型主要用文件级的源码进行预训练，忽略了项目中源码文件之间的依赖。DeepSeek-Coder 考虑了代码仓库中文件的依赖关系，并尽可能的在仓库级上进行预训练。</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-orge72a759" class="outline-2">
+<h2 id="orge72a759"><span class="section-number-2">8.</span> 参考文献</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+[1] Dai, Damai and Deng, Chengqi and Zhao, Chenggang and Xu, R.x. and Gao, Huazuo and Chen, Deli and Li, Jiashi and Zeng, Wangding and Yu, Xingkai and Wu, Y. and Xie, Zhenda and Li, Y.k. and Huang, Panpan and Luo, Fuli and Ruan, Chong and Sui, Zhifang and Liang, Wenfeng, <i>{{DeepSeekMoE}}: {{Towards Ultimate Expert Specialization}} in {{Mixture-of-Experts Language Models}}</i>, Association for Computational Linguistics, 2024.</p>
+
+<p>
+[2] DeepSeek-AI and Bi, Xiao and Chen, Deli and Chen, Guanting and Chen, Shanhuang and Dai, Damai and Deng, Chengqi and Ding, Honghui and Dong, Kai and Du, Qiushi and Fu, Zhe and Gao, Huazuo and Gao, Kaige and Gao, Wenjun and Ge, Ruiqi and Guan, Kang and Guo, Daya and Guo, Jianzhong and Hao, Guangbo and Hao, Zhewen and He, Ying and Hu, Wenjie and Huang, Panpan and Li, Erhang and Li, Guowei and Li, Jiashi and Li, Yao and Li, Y. K. and Liang, Wenfeng and Lin, Fangyun and Liu, A. X. and Liu, Bo and Liu, Wen and Liu, Xiaodong and Liu, Xin and Liu, Yiyuan and Lu, Haoyu and Lu, Shanghao and Luo, Fuli and Ma, Shirong and Nie, Xiaotao and Pei, Tian and Piao, Yishi and Qiu, Junjie and Qu, Hui and Ren, Tongzheng and Ren, Zehui and Ruan, Chong and Sha, Zhangli and Shao, Zhihong and Song, Junxiao and Su, Xuecheng and Sun, Jingxiang and Sun, Yaofeng and Tang, Minghui and Wang, Bingxuan and Wang, Peiyi and Wang, Shiyu and Wang, Yaohui and Wang, Yongji and Wu, Tong and Wu, Y. and Xie, Xin and Xie, Zhenda and Xie, Ziwei and Xiong, Yiliang and Xu, Hanwei and Xu, R. X. and Xu, Yanhong and Yang, Dejian and You, Yuxiang and Yu, Shuiping and Yu, Xingkai and Zhang, B. and Zhang, Haowei and Zhang, Lecong and Zhang, Liyue and Zhang, Mingchuan and Zhang, Minghua and Zhang, Wentao and Zhang, Yichao and Zhao, Chenggang and Zhao, Yao and Zhou, Shangyan and Zhou, Shunfeng and Zhu, Qihao and Zou, Yuheng, <i>{{DeepSeek LLM}}: {{Scaling Open-Source Language Models}} with {{Longtermism}}</i>, 2024.</p>
+
+<p>
+[3] DeepSeek-AI and Guo, Daya and Yang, Dejian and Zhang, Haowei and Song, Junxiao and Zhang, Ruoyu and Xu, Runxin and Zhu, Qihao and Ma, Shirong and Wang, Peiyi and Bi, Xiao and Zhang, Xiaokang and Yu, Xingkai and Wu, Yu and Wu, Z. F. and Gou, Zhibin and Shao, Zhihong and Li, Zhuoshu and Gao, Ziyi and Liu, Aixin and Xue, Bing and Wang, Bingxuan and Wu, Bochao and Feng, Bei and Lu, Chengda and Zhao, Chenggang and Deng, Chengqi and Zhang, Chenyu and Ruan, Chong and Dai, Damai and Chen, Deli and Ji, Dongjie and Li, Erhang and Lin, Fangyun and Dai, Fucong and Luo, Fuli and Hao, Guangbo and Chen, Guanting and Li, Guowei and Zhang, H. and Bao, Han and Xu, Hanwei and Wang, Haocheng and Ding, Honghui and Xin, Huajian and Gao, Huazuo and Qu, Hui and Li, Hui and Guo, Jianzhong and Li, Jiashi and Wang, Jiawei and Chen, Jingchang and Yuan, Jingyang and Qiu, Junjie and Li, Junlong and Cai, J. L. and Ni, Jiaqi and Liang, Jian and Chen, Jin and Dong, Kai and Hu, Kai and Gao, Kaige and Guan, Kang and Huang, Kexin and Yu, Kuai and Wang, Lean and Zhang, Lecong and Zhao, Liang and Wang, Litong and Zhang, Liyue and Xu, Lei and Xia, Leyi and Zhang, Mingchuan and Zhang, Minghua and Tang, Minghui and Li, Meng and Wang, Miaojun and Li, Mingming and Tian, Ning and Huang, Panpan and Zhang, Peng and Wang, Qiancheng and Chen, Qinyu and Du, Qiushi and Ge, Ruiqi and Zhang, Ruisong and Pan, Ruizhe and Wang, Runji and Chen, R. J. and Jin, R. L. and Chen, Ruyi and Lu, Shanghao and Zhou, Shangyan and Chen, Shanhuang and Ye, Shengfeng and Wang, Shiyu and Yu, Shuiping and Zhou, Shunfeng and Pan, Shuting and Li, S. S. and Zhou, Shuang and Wu, Shaoqing and Ye, Shengfeng and Yun, Tao and Pei, Tian and Sun, Tianyu and Wang, T. and Zeng, Wangding and Zhao, Wanjia and Liu, Wen and Liang, Wenfeng and Gao, Wenjun and Yu, Wenqin and Zhang, Wentao and Xiao, W. L. and An, Wei and Liu, Xiaodong and Wang, Xiaohan and Chen, Xiaokang and Nie, Xiaotao and Cheng, Xin and Liu, Xin and Xie, Xin and Liu, Xingchao and Yang, Xinyu and Li, Xinyuan and Su, Xuecheng and Lin, Xuheng and Li, X. Q. and Jin, Xiangyue and Shen, Xiaojin and Chen, Xiaosha and Sun, Xiaowen and Wang, Xiaoxiang and Song, Xinnan and Zhou, Xinyi and Wang, Xianzu and Shan, Xinxia and Li, Y. K. and Wang, Y. Q. and Wei, Y. X. and Zhang, Yang and Xu, Yanhong and Li, Yao and Zhao, Yao and Sun, Yaofeng and Wang, Yaohui and Yu, Yi and Zhang, Yichao and Shi, Yifan and Xiong, Yiliang and He, Ying and Piao, Yishi and Wang, Yisong and Tan, Yixuan and Ma, Yiyang and Liu, Yiyuan and Guo, Yongqiang and Ou, Yuan and Wang, Yuduan and Gong, Yue and Zou, Yuheng and He, Yujia and Xiong, Yunfan and Luo, Yuxiang and You, Yuxiang and Liu, Yuxuan and Zhou, Yuyang and Zhu, Y. X. and Xu, Yanhong and Huang, Yanping and Li, Yaohui and Zheng, Yi and Zhu, Yuchen and Ma, Yunxian and Tang, Ying and Zha, Yukun and Yan, Yuting and Ren, Z. Z. and Ren, Zehui and Sha, Zhangli and Fu, Zhe and Xu, Zhean and Xie, Zhenda and Zhang, Zhengyan and Hao, Zhewen and Ma, Zhicheng and Yan, Zhigang and Wu, Zhiyu and Gu, Zihui and Zhu, Zijia and Liu, Zijun and Li, Zilin and Xie, Ziwei and Song, Ziyang and Pan, Zizheng and Huang, Zhen and Xu, Zhipeng and Zhang, Zhongyu and Zhang, Zhen, <i>{{DeepSeek-R1}}: {{Incentivizing Reasoning Capability}} in {{LLMs}} via {{Reinforcement Learning}}</i>, 2025.</p>
+
+<p>
+[4] DeepSeek-AI and Liu, Aixin and Feng, Bei and Wang, Bin and Wang, Bingxuan and Liu, Bo and Zhao, Chenggang and Dengr, Chengqi and Ruan, Chong and Dai, Damai and Guo, Daya and Yang, Dejian and Chen, Deli and Ji, Dongjie and Li, Erhang and Lin, Fangyun and Luo, Fuli and Hao, Guangbo and Chen, Guanting and Li, Guowei and Zhang, H. and Xu, Hanwei and Yang, Hao and Zhang, Haowei and Ding, Honghui and Xin, Huajian and Gao, Huazuo and Li, Hui and Qu, Hui and Cai, J. L. and Liang, Jian and Guo, Jianzhong and Ni, Jiaqi and Li, Jiashi and Chen, Jin and Yuan, Jingyang and Qiu, Junjie and Song, Junxiao and Dong, Kai and Gao, Kaige and Guan, Kang and Wang, Lean and Zhang, Lecong and Xu, Lei and Xia, Leyi and Zhao, Liang and Zhang, Liyue and Li, Meng and Wang, Miaojun and Zhang, Mingchuan and Zhang, Minghua and Tang, Minghui and Li, Mingming and Tian, Ning and Huang, Panpan and Wang, Peiyi and Zhang, Peng and Zhu, Qihao and Chen, Qinyu and Du, Qiushi and Chen, R. J. and Jin, R. L. and Ge, Ruiqi and Pan, Ruizhe and Xu, Runxin and Chen, Ruyi and Li, S. S. and Lu, Shanghao and Zhou, Shangyan and Chen, Shanhuang and Wu, Shaoqing and Ye, Shengfeng and Ma, Shirong and Wang, Shiyu and Zhou, Shuang and Yu, Shuiping and Zhou, Shunfeng and Zheng, Size and Wang, T. and Pei, Tian and Yuan, Tian and Sun, Tianyu and Xiao, W. L. and Zeng, Wangding and An, Wei and Liu, Wen and Liang, Wenfeng and Gao, Wenjun and Zhang, Wentao and Li, X. Q. and Jin, Xiangyue and Wang, Xianzu and Bi, Xiao and Liu, Xiaodong and Wang, Xiaohan and Shen, Xiaojin and Chen, Xiaokang and Chen, Xiaosha and Nie, Xiaotao and Sun, Xiaowen and Wang, Xiaoxiang and Liu, Xin and Xie, Xin and Yu, Xingkai and Song, Xinnan and Zhou, Xinyi and Yang, Xinyu and Lu, Xuan and Su, Xuecheng and Wu, Y. and Li, Y. K. and Wei, Y. X. and Zhu, Y. X. and Xu, Yanhong and Huang, Yanping and Li, Yao and Zhao, Yao and Sun, Yaofeng and Li, Yaohui and Wang, Yaohui and Zheng, Yi and Zhang, Yichao and Xiong, Yiliang and Zhao, Yilong and He, Ying and Tang, Ying and Piao, Yishi and Dong, Yixin and Tan, Yixuan and Liu, Yiyuan and Wang, Yongji and Guo, Yongqiang and Zhu, Yuchen and Wang, Yuduan and Zou, Yuheng and Zha, Yukun and Ma, Yunxian and Yan, Yuting and You, Yuxiang and Liu, Yuxuan and Ren, Z. Z. and Ren, Zehui and Sha, Zhangli and Fu, Zhe and Huang, Zhen and Zhang, Zhen and Xie, Zhenda and Hao, Zhewen and Shao, Zhihong and Wen, Zhiniu and Xu, Zhipeng and Zhang, Zhongyu and Li, Zhuoshu and Wang, Zihan and Gu, Zihui and Li, Zilin and Xie, Ziwei, <i>{{DeepSeek-V2}}: {{A Strong}}, {{Economical}}, and {{Efficient Mixture-of-Experts Language Model}}</i>, 2024.</p>
+
+<p>
+[5] DeepSeek-AI and Liu, Aixin and Feng, Bei and Xue, Bing and Wang, Bingxuan and Wu, Bochao and Lu, Chengda and Zhao, Chenggang and Deng, Chengqi and Zhang, Chenyu and Ruan, Chong and Dai, Damai and Guo, Daya and Yang, Dejian and Chen, Deli and Ji, Dongjie and Li, Erhang and Lin, Fangyun and Dai, Fucong and Luo, Fuli and Hao, Guangbo and Chen, Guanting and Li, Guowei and Zhang, H. and Bao, Han and Xu, Hanwei and Wang, Haocheng and Zhang, Haowei and Ding, Honghui and Xin, Huajian and Gao, Huazuo and Li, Hui and Qu, Hui and Cai, J. L. and Liang, Jian and Guo, Jianzhong and Ni, Jiaqi and Li, Jiashi and Wang, Jiawei and Chen, Jin and Chen, Jingchang and Yuan, Jingyang and Qiu, Junjie and Li, Junlong and Song, Junxiao and Dong, Kai and Hu, Kai and Gao, Kaige and Guan, Kang and Huang, Kexin and Yu, Kuai and Wang, Lean and Zhang, Lecong and Xu, Lei and Xia, Leyi and Zhao, Liang and Wang, Litong and Zhang, Liyue and Li, Meng and Wang, Miaojun and Zhang, Mingchuan and Zhang, Minghua and Tang, Minghui and Li, Mingming and Tian, Ning and Huang, Panpan and Wang, Peiyi and Zhang, Peng and Wang, Qiancheng and Zhu, Qihao and Chen, Qinyu and Du, Qiushi and Chen, R. J. and Jin, R. L. and Ge, Ruiqi and Zhang, Ruisong and Pan, Ruizhe and Wang, Runji and Xu, Runxin and Zhang, Ruoyu and Chen, Ruyi and Li, S. S. and Lu, Shanghao and Zhou, Shangyan and Chen, Shanhuang and Wu, Shaoqing and Ye, Shengfeng and Ye, Shengfeng and Ma, Shirong and Wang, Shiyu and Zhou, Shuang and Yu, Shuiping and Zhou, Shunfeng and Pan, Shuting and Wang, T. and Yun, Tao and Pei, Tian and Sun, Tianyu and Xiao, W. L. and Zeng, Wangding and Zhao, Wanjia and An, Wei and Liu, Wen and Liang, Wenfeng and Gao, Wenjun and Yu, Wenqin and Zhang, Wentao and Li, X. Q. and Jin, Xiangyue and Wang, Xianzu and Bi, Xiao and Liu, Xiaodong and Wang, Xiaohan and Shen, Xiaojin and Chen, Xiaokang and Zhang, Xiaokang and Chen, Xiaosha and Nie, Xiaotao and Sun, Xiaowen and Wang, Xiaoxiang and Cheng, Xin and Liu, Xin and Xie, Xin and Liu, Xingchao and Yu, Xingkai and Song, Xinnan and Shan, Xinxia and Zhou, Xinyi and Yang, Xinyu and Li, Xinyuan and Su, Xuecheng and Lin, Xuheng and Li, Y. K. and Wang, Y. Q. and Wei, Y. X. and Zhu, Y. X. and Zhang, Yang and Xu, Yanhong and Xu, Yanhong and Huang, Yanping and Li, Yao and Zhao, Yao and Sun, Yaofeng and Li, Yaohui and Wang, Yaohui and Yu, Yi and Zheng, Yi and Zhang, Yichao and Shi, Yifan and Xiong, Yiliang and He, Ying and Tang, Ying and Piao, Yishi and Wang, Yisong and Tan, Yixuan and Ma, Yiyang and Liu, Yiyuan and Guo, Yongqiang and Wu, Yu and Ou, Yuan and Zhu, Yuchen and Wang, Yuduan and Gong, Yue and Zou, Yuheng and He, Yujia and Zha, Yukun and Xiong, Yunfan and Ma, Yunxian and Yan, Yuting and Luo, Yuxiang and You, Yuxiang and Liu, Yuxuan and Zhou, Yuyang and Wu, Z. F. and Ren, Z. Z. and Ren, Zehui and Sha, Zhangli and Fu, Zhe and Xu, Zhean and Huang, Zhen and Zhang, Zhen and Xie, Zhenda and Zhang, Zhengyan and Hao, Zhewen and Gou, Zhibin and Ma, Zhicheng and Yan, Zhigang and Shao, Zhihong and Xu, Zhipeng and Wu, Zhiyu and Zhang, Zhongyu and Li, Zhuoshu and Gu, Zihui and Zhu, Zijia and Liu, Zijun and Li, Zilin and Xie, Ziwei and Song, Ziyang and Gao, Ziyi and Pan, Zizheng, <i>{{DeepSeek-V3 Technical Report}}</i>, 2024.</p>
+
+<p>
+[6] Guo, Daya and Zhu, Qihao and Yang, Dejian and Xie, Zhenda and Dong, Kai and Zhang, Wentao and Chen, Guanting and Bi, Xiao and Wu, Y. and Li, Y. K. and Luo, Fuli and Xiong, Yingfei and Liang, Wenfeng, <i>{{DeepSeek-Coder}}: {{When}} the {{Large Language Model Meets Programming}} &#x2013; {{The Rise}} of {{Code Intelligence}}</i>, 2024.</p>
+
+<p>
+[7] Shao, Zhihong and Wang, Peiyi and Zhu, Qihao and Xu, Runxin and Song, Junxiao and Bi, Xiao and Zhang, Haowei and Zhang, Mingchuan and Li, Y. K. and Wu, Y. and Guo, Daya, <i>{{DeepSeekMath}}: {{Pushing}} the {{Limits}} of {{Mathematical Reasoning}} in {{Open Language Models}}</i>, 2024.</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-02-12 Wed 22:07<br/></p> </div>
+</div>
+</body>
+</html>

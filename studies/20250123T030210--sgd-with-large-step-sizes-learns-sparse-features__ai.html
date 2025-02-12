@@ -1,13 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2025-01-24 Fri 02:09 -->
+<!-- 2025-02-12 Wed 22:07 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>SGD with Large Step Sizes Learns Sparse Features</title>
 <meta name="author" content="杨雪" />
 <meta name="generator" content="Org Mode" />
 <link rel='stylesheet' href='/static/org.css' type='text/css'/>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="preamble" class="status">
@@ -19,21 +51,54 @@
 </header>
 
 
-
-
 <div id="outline-container-org6b6c12b" class="outline-2">
 <h2 id="org6b6c12b"><span class="section-number-2">1.</span> 文献简述</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-orge09d7ca" class="outline-3">
+<h3 id="orge09d7ca"><span class="section-number-3">1.1.</span> Label Noise SGD Provably Prefers Flat Global Minimizers</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+很多实验表面，使用噪声标签进行训练可以提高模型泛化。这篇论文 (1) 证明了下面的标签噪声随机梯度下降算法更容易收敛到平坦的局部极小点（平坦的局部极小点具有更好的泛化性）。
+</p>
+
+
+<figure id="org9685a83">
+<img src="../images/20250125020415_sgd_ln.png" alt="20250125020415_sgd_ln.png">
+
+</figure>
+
+<p>
+更具体一点， 带标签噪声的 SGD 算法具有全局正则效应，其收敛到正则化损失 \(L(\theta)+\lambda R(\theta)\) 的稳定点，即使初始化在一个全局极小点处。并且学习率 (learning rate) 和批次大小 (batch size) 控制着损失项和正则项的平衡，更大学习率和更小的批次有更强的正则化效应。
+</p>
+
+<p>
+这篇论文的证明部分对计算机专业的同学很有难度，但结果清晰直观且非常重要，是很好的深度学习理论论文。推荐感兴趣的同学深入研究。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd337ef3" class="outline-3">
+<h3 id="orgd337ef3"><span class="section-number-3">1.2.</span> What Happens After Sgd Reaches Zero Loss?</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+过难，略！
+</p>
+</div>
+</div>
 </div>
 
 
 <div id="outline-container-org6bb0df8" class="outline-2">
 <h2 id="org6bb0df8"><span class="section-number-2">2.</span> 参考文献</h2>
 <div class="outline-text-2" id="text-2">
+<p>
+[1] Damian, Alex and Ma, Tengyu and Lee, Jason D., <i>Label {{Noise SGD Provably Prefers Flat Global Minimizers}}</i>, 2021.</p>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-24 Fri 01:33<br/></p> </div>
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-01-25 Sat 14:28<br/></p> </div>
 </div>
 </body>
 </html>
