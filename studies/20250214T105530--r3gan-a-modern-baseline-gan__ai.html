@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2025-02-14 Fri 12:23 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>R3GAN: A Modern Baseline GAN</title>
+<meta name="author" content="杨雪" />
+<meta name="generator" content="Org Mode" />
+<link rel='stylesheet' href='/static/org.css' type='text/css'/>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="preamble" class="status">
+<nav class='nav'> <a href='/about.html' class='button'>HOME</a> <a href='/index.html' class='button'>BLOG</a></nav><hr/>
+</div>
+<div id="content" class="content">
+<header>
+<h1 class="title">R3GAN: A Modern Baseline GAN</h1>
+</header><p>
+对抗式生成网络 (GAN) 可以在一次前向传递中生成高质量的图像，但也存在训练不稳定、模型坍塌等问题。针对这些问题，这篇 NIPS 2024 上的论文 (1) 从目标损失函数和网络结构两个方面出发提出了一个网络结构简单且训练稳定的 GAN 基线。
+</p>
+
+<p>
+首先回顾 GAN 最初的损失函数：
+</p>
+
+<p>
+\[\mathcal{L}(\theta,\psi)=\mathbb{E}_{z\thicksim p_z}\left[f\left(D_\psi(G_\theta(z))\right)\right]+\mathbb{E}_{x\thicksim p_\mathcal{D}}\left[f\left(-D_\psi(x)\right)\right].\]
+</p>
+
+<p>
+该损失函数通常会将假样本移出 D 设定的决策边界，而不是直接更新密度函数 pθ。这种退化情况就对应着模型坍塌，并且这种退化的局部最优解在上述损失函数的性能曲面中广泛存在。
+</p>
+
+<p>
+作者接着考察了 RpGAN (2)，其损失函数如下：
+</p>
+
+<p>
+\[\mathcal{L}(\theta,\psi)=\mathbb{E}_{z\thicksim p_{z},x\thicksim p_{\mathcal{D}}}\left[f\left(D_\psi(G_\theta(z))-D_\psi(x)\right)\right].\]
+</p>
+
+<p>
+RpGAN 通过耦合真实和虚假数据使假样本的真实性根据其耦合的真实样本进行评估，从而有效地在每个真实样本的邻域中保持决策边界，防止模式丢弃。不过实践中发现非正则化 RpGAN 并不总是收敛。文中证明在 RpGAN 的损失函数中引入梯度惩罚 (0-GP) 正则项就能保证收敛。这就得到 R3GAN 的最终损失函数：RpGAN + R1 + R2。
+</p>
+
+<p>
+在网络结构这部分，作者用 StyleGAN2 (3) 为基准，裁剪出了一个十分简单的网络结构。具体细节比较繁琐，不再多说。下图是裁剪出来的网络结构图：
+</p>
+
+
+<figure id="orgc0de73b">
+<img src="../images/20250214120804_r3gan.png" alt="20250214120804_r3gan.png">
+
+</figure>
+
+<p>
+最后的实验部分中，该基线 GAN 模型在同等参数的情况下取得了与当前 SOTA 模型相当的性能。R3GAN 没有多余的 Tricks 和复杂的网络结构就能取得不错的效果，值得继续研究。
+</p>
+
+
+<div id="outline-container-org7b7368c" class="outline-2">
+<h2 id="org7b7368c"><span class="section-number-2">1.</span> 参考文献</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+[1] Huang, Nick and Gokaslan, Aaron and Kuleshov, Volodymyr and Tompkin, James, <i>The {{GAN}} Is Dead; Long Live the {{GAN}}! {{A Modern GAN Baseline}}</i>, 2025.</p>
+
+<p>
+[2] Jolicoeur-Martineau, Alexia, <i>The {{Relativistic Discriminator}}: A Key Element Missing from Standard {{GAN}}</i>, 2018.</p>
+
+<p>
+[3] Karras, Tero and Aittala, Miika and Hellsten, Janne and Laine, Samuli and Lehtinen, Jaakko and Aila, Timo, <i>Training {{Generative Adversarial Networks}} with {{Limited Data}}</i>, Curran Associates, Inc., 2020.</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<div id='postamble'> <hr/> <p>Created with <a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.6.15) by YangXue <br>Updated: 2025-02-14 Fri 12:20<br/></p> </div>
+</div>
+</body>
+</html>
